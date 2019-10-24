@@ -1,6 +1,7 @@
 package dynazzviewer.entities
 
 import dynazzviewer.base.UniqueKey
+import dynazzviewer.base.ViewStatus
 import java.time.LocalDate
 import javax.persistence.*
 
@@ -13,6 +14,11 @@ class MediaPart(
 	var sortOrder : Int?,
 	var aired : LocalDate?
 ) : EntityModel, IdContainer, ExtReference(uniqueExtKey), UniqueKey {
+	var status : ViewStatus = ViewStatus.None
+	
+	@OneToOne(mappedBy = "mediaPart")
+	var mediaFile : MediaFile? = null
+		private set
 	
 	override val uniqueKey: String
 		get() = uniqueExtKey!!
