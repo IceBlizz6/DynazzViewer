@@ -8,6 +8,10 @@ import java.io.Closeable
 import javax.persistence.EntityManager
 
 internal open class DataContext(private val storage: SqlLiteStorage) : ReadOperation, Closeable {
+	override fun extRefByKey(uniqueKey: String): ExtReference {
+		return stream(ExtReference::class.java).where(matchAnyExtKey(listOf(uniqueKey))).onlyValue
+	}
+	
 	override fun mediaPartCollections() : List<MediaPartCollection> {
 		return stream(MediaPartCollection::class.java).toList()
 	}
