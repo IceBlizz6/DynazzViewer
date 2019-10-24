@@ -31,13 +31,13 @@ class TvMazeApi(
 	fun search(name: String): List<SearchShowResult> {
 		val queryString = name.replace(' ', '+')
 		val uri = "http://api.tvmaze.com/search/shows?q=$queryString"
-		val results = parser.parseJsonRequest(uri, CollectionParser.getArrayType())
+		val results = parser.parseJsonRequest(uri, Array<SearchShowResult>::class.java)
 		return results.toList()
 	}
 	
 	fun episodes(tvMazeId : String) : List<Episode> {
 		val uri = "http://api.tvmaze.com/shows/$tvMazeId/episodes?specials=1"
-		return parser.parseJsonRequest(uri, CollectionParser.getEpisodeArrayType()).toList()
+		return parser.parseJsonRequest(uri, Array<Episode>::class.java).toList()
 	}
 	
 	fun showDetails(tvMazeId : String) : ShowDetails {
