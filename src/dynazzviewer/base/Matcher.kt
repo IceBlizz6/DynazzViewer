@@ -6,9 +6,14 @@ class Matcher {
         updated: List<TUpdate>
     ): MatchResult<TOriginal, TUpdate> {
         return MatchResult<TOriginal, TUpdate>(
-            added = updated.filterNot { e -> original.any { f -> f.uniqueKey == e.uniqueKey } },
-            removed = original.filterNot { e -> updated.any { f -> f.uniqueKey == e.uniqueKey } },
-            matched = original.map { e -> e to updated.firstOrNull { f -> f.uniqueKey == e.uniqueKey } }.filter { e -> e.second != null }.toMap() as Map<TOriginal, TUpdate>
+            added = updated
+                .filterNot { e -> original.any { f -> f.uniqueKey == e.uniqueKey } },
+            removed = original
+                .filterNot { e -> updated.any { f -> f.uniqueKey == e.uniqueKey } },
+            matched = original
+                .map { e -> e to updated.firstOrNull { f -> f.uniqueKey == e.uniqueKey } }
+                .filter { e -> e.second != null }
+                .toMap() as Map<TOriginal, TUpdate>
         )
     }
 
@@ -17,9 +22,14 @@ class Matcher {
         updated: List<String>
     ): MatchResult<TOriginal, String> {
         return MatchResult<TOriginal, String>(
-            added = updated.filterNot { e -> original.any { f -> f.uniqueKey == e } },
-            removed = original.filterNot { e -> updated.any { f -> f == e.uniqueKey } },
-            matched = original.map { e -> e to updated.firstOrNull { f -> f == e.uniqueKey } }.filter { e -> e.second != null }.toMap() as Map<TOriginal, String>
+            added = updated
+                .filterNot { e -> original.any { f -> f.uniqueKey == e } },
+            removed = original
+                .filterNot { e -> updated.any { f -> f == e.uniqueKey } },
+            matched = original
+                .map { e -> e to updated.firstOrNull { f -> f == e.uniqueKey } }
+                .filter { e -> e.second != null }
+                .toMap() as Map<TOriginal, String>
         )
     }
 

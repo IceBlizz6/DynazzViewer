@@ -13,7 +13,8 @@ class ViewStatusController(
         storage.readWrite().use { context ->
             val mediaPart = context.mediaPartById(id)
             mediaPart.status = status
-            Optional.ofNullable(mediaPart.mediaFile).ifPresent { e -> e.status = status; mediaFileId = e.id }
+            Optional.ofNullable(mediaPart.mediaFile)
+                .ifPresent { e -> e.status = status; mediaFileId = e.id }
             context.save(mediaPart)
         }
         listener.updateMediaPart(id)
@@ -25,7 +26,8 @@ class ViewStatusController(
         storage.readWrite().use { context ->
             val mediaFile = context.mediaFileById(id)
             mediaFile.status = status
-            Optional.ofNullable(mediaFile.mediaPart).ifPresent { e -> e.status = status; mediaPartId = e.id }
+            Optional.ofNullable(mediaFile.mediaPart)
+                .ifPresent { e -> e.status = status; mediaPartId = e.id }
             context.save(mediaFile)
         }
         listener.updateMediaFile(id)

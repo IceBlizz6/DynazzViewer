@@ -5,7 +5,8 @@ import dynazzviewer.entities.MediaUnitTag
 import dynazzviewer.storage.ReadWriteOperation
 import javax.persistence.EntityTransaction
 
-internal class TransactionDataContext(storage: SqlLiteStorage) : DataContext(storage), ReadWriteOperation {
+internal class TransactionDataContext(storage: SqlLiteStorage) :
+    DataContext(storage), ReadWriteOperation {
     private val transaction: EntityTransaction = entityManager.transaction
 
     init {

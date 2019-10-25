@@ -68,11 +68,16 @@ class JikanApi(
         }
     }
 
-    private fun autoFillEpisodeAirDates(episodes: List<Episode>, start: LocalDate, end: LocalDate) {
+    private fun autoFillEpisodeAirDates(
+        episodes: List<Episode>,
+        start: LocalDate,
+        end: LocalDate
+    ) {
         val daysBetween = java.time.temporal.ChronoUnit.DAYS.between(start, end)
         val weeksDuration = daysBetween / EPISODE_AIR_DAYS_INTERVAL + 1
         val numberOfEpisodes = episodes.count()
-        if (weeksDuration == numberOfEpisodes.toLong() && daysBetween % EPISODE_AIR_DAYS_INTERVAL == 0L) {
+        if (weeksDuration == numberOfEpisodes.toLong() &&
+            daysBetween % EPISODE_AIR_DAYS_INTERVAL == 0L) {
             for (episode in episodes) {
                 val daysAfter = EPISODE_AIR_DAYS_INTERVAL * (episode.episodeId - 1)
                 episode.aired = start.plusDays(daysAfter.toLong()).atStartOfDay()
@@ -92,7 +97,8 @@ class JikanApi(
             episodes(code)
         }
         if (autoFillEpisodeAirDates) {
-            autoFillEpisodeAirDates(episodes, seriesData.aired.from.toLocalDate(), seriesData.aired.to.toLocalDate())
+            autoFillEpisodeAirDates(episodes, seriesData.aired.from.toLocalDate(),
+                seriesData.aired.to.toLocalDate())
         }
         val relatedList = seriesData
             .related
@@ -120,7 +126,8 @@ class JikanApi(
             episodes(code)
         }
         if (autoFillEpisodeAirDates) {
-            autoFillEpisodeAirDates(episodes, seriesData.aired.from.toLocalDate(), seriesData.aired.to.toLocalDate())
+            autoFillEpisodeAirDates(episodes, seriesData.aired.from.toLocalDate(),
+                seriesData.aired.to.toLocalDate())
         }
         return JikanSeries(seriesData, episodes)
     }

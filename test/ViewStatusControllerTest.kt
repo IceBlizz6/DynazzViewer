@@ -21,8 +21,20 @@ class ViewStatusControllerTest() {
     init {
         storage.readWrite().use { context ->
             val mediaUnit = MediaUnit(uniqueExtKey = null, name = "Test")
-            val mediaPartCollection = MediaPartCollection(parent = mediaUnit, name = "Default Collection", sortOrder = 1, uniqueExtKey = "partColl")
-            val mediaPart = MediaPart(parent = mediaPartCollection, uniqueExtKey = "part", sortOrder = null, name = "Test", aired = null)
+            val mediaPartCollection = MediaPartCollection(
+                parent = mediaUnit,
+                name = "Default Collection",
+                sortOrder = 1,
+                uniqueExtKey =
+                "partColl"
+            )
+            val mediaPart = MediaPart(
+                parent = mediaPartCollection,
+                uniqueExtKey = "part",
+                sortOrder = null,
+                name = "Test",
+                aired = null
+            )
             context.save(mediaUnit)
             context.save(mediaPartCollection)
             context.save(mediaPart)
@@ -62,9 +74,13 @@ class ViewStatusControllerTest() {
 
     @Test
     fun resolveViewStatusTest() {
-        Assert.assertEquals(ViewStatus.Skipped, controller.resolveViewStatus(ViewStatus.None, ViewStatus.Skipped))
-        Assert.assertEquals(ViewStatus.Viewed, controller.resolveViewStatus(ViewStatus.Skipped, ViewStatus.Viewed))
-        Assert.assertEquals(ViewStatus.Viewed, controller.resolveViewStatus(ViewStatus.Viewed, ViewStatus.Skipped))
-        Assert.assertEquals(ViewStatus.None, controller.resolveViewStatus(ViewStatus.None, ViewStatus.None))
+        Assert.assertEquals(ViewStatus.Skipped,
+            controller.resolveViewStatus(ViewStatus.None, ViewStatus.Skipped))
+        Assert.assertEquals(ViewStatus.Viewed,
+            controller.resolveViewStatus(ViewStatus.Skipped, ViewStatus.Viewed))
+        Assert.assertEquals(ViewStatus.Viewed,
+            controller.resolveViewStatus(ViewStatus.Viewed, ViewStatus.Skipped))
+        Assert.assertEquals(ViewStatus.None,
+            controller.resolveViewStatus(ViewStatus.None, ViewStatus.None))
     }
 }

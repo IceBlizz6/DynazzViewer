@@ -16,9 +16,20 @@ class LinkTest {
 
         storage.readWrite().use { context ->
             val mediaUnit = MediaUnit(uniqueExtKey = null, name = "Test")
-            val mediaPartCollection = MediaPartCollection(parent = mediaUnit, name = "Default Name", sortOrder = 1, uniqueExtKey = "partColl123")
+            val mediaPartCollection = MediaPartCollection(
+                parent = mediaUnit,
+                name = "Default Name",
+                sortOrder = 1,
+                uniqueExtKey = "partColl123"
+            )
             mediaUnit.children.add(mediaPartCollection)
-            val mediaPart = MediaPart(parent = mediaPartCollection, uniqueExtKey = "part2", sortOrder = null, name = "Test", aired = null)
+            val mediaPart = MediaPart(
+                parent = mediaPartCollection,
+                uniqueExtKey = "part2",
+                sortOrder = null,
+                name = "Test",
+                aired = null
+            )
             context.save(mediaUnit)
             context.save(mediaPartCollection)
             context.save(mediaPart)

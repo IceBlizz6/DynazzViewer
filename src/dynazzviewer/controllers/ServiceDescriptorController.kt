@@ -52,12 +52,18 @@ class ServiceDescriptorController(
     private fun match(description: DescriptionUnit, context: ReadOperation): MediaUnit? {
         val level1 = listOf(description.uniqueKey)
         val level2 = description.children.map { e -> e.uniqueKey }
-        val level3: List<String> = description.children.flatMap { e -> e.episodes }.map { e -> e.uniqueKey }
+        val level3: List<String> = description
+            .children
+            .flatMap { e -> e.episodes }
+            .map { e -> e.uniqueKey }
         val selectAll: List<String> = listOf(level1, level2, level3).flatten().filterNotNull()
         return context.matchExtKey(selectAll)
     }
 
-    private fun insert(description: DescriptionUnit, context: ReadWriteOperation): MediaUnit {
+    private fun insert(
+        description: DescriptionUnit,
+        context: ReadWriteOperation
+    ): MediaUnit {
         val mediaUnit = description.create(context)
         context.save(mediaUnit)
         for (season in description.children) {
@@ -73,7 +79,11 @@ class ServiceDescriptorController(
         return mediaUnit
     }
 
-    private fun update(description: DescriptionUnit, mediaUnit: MediaUnit, context: ReadWriteOperation) {
+    private fun update(
+        description: DescriptionUnit,
+        mediaUnit: MediaUnit,
+        context: ReadWriteOperation
+    ) {
         description.update(mediaUnit, context)
         context.save(mediaUnit)
     }

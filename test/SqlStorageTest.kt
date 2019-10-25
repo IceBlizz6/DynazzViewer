@@ -52,7 +52,12 @@ public class SqlStorageTest {
             val unit1 = MediaUnit(uniqueExtKey = null, name = "Test")
             unit1.uniqueExtKey = "Key1"
             context.save(unit1)
-            val child = MediaPartCollection(name = "test", parent = unit1, sortOrder = 0, uniqueExtKey = "partColl")
+            val child = MediaPartCollection(
+                name = "test",
+                parent = unit1,
+                sortOrder = 0,
+                uniqueExtKey = "partColl"
+            )
             child.uniqueExtKey = "Key1"
             try {
                 context.save(child)

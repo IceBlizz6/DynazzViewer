@@ -29,7 +29,10 @@ internal open class DataContext(private val storage: SqlLiteStorage) : ReadOpera
     }
 
     override fun matchExtKey(keys: List<String>): MediaUnit? {
-        return stream(ExtReference::class.java).where(matchAnyExtKey(keys)).findAny().map { e -> e.root }.orElse(null)
+        return stream(ExtReference::class.java)
+            .where(matchAnyExtKey(keys))
+            .findAny().map { e -> e.root }
+            .orElse(null)
     }
 
     override fun mediaFileById(id: Int): MediaFile {

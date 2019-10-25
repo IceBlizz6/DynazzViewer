@@ -62,10 +62,13 @@ class SqlLiteStorage : Storage {
         map.put("hibernate.connection.autocommit", false)
         map.put("hibernate.connection.provider_disables_autocommit", true)
         val persistenceProvider = HibernatePersistenceProvider()
-        entityManagerFactory = persistenceProvider.createContainerEntityManagerFactory(unitInfo, map)
+        entityManagerFactory = persistenceProvider
+            .createContainerEntityManagerFactory(unitInfo, map)
         streamProvider = JinqJPAStreamProvider(entityManagerFactory)
-        streamProvider.registerAssociationAttribute(IdContainer::class.java.getMethod("getId"), "id", false)
-        streamProvider.registerAssociationAttribute(NameContainer::class.java.getMethod("getName"), "name", false)
+        streamProvider.registerAssociationAttribute(
+            IdContainer::class.java.getMethod("getId"), "id", false)
+        streamProvider.registerAssociationAttribute(
+            NameContainer::class.java.getMethod("getName"), "name", false)
     }
 
     override fun read(): ReadOperation {
