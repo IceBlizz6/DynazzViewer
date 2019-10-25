@@ -2,15 +2,14 @@ package dynazzviewer.services.descriptors.tvmaze
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import dynazzviewer.services.descriptors.ResultHeader
-import java.time.LocalDate
 
 class SearchShowResult(
-	@JsonProperty("score", required = true)
-	val score : Double,
-	@JsonProperty("show", required = true)
-	val show : Show
+    @JsonProperty("score", required = true)
+       val score: Double,
+    @JsonProperty("show", required = true)
+       val show: Show
 ) {
-	fun toResultHeader() : ResultHeader {
-		return show.toResultHeader()
-	}
+    fun toResultHeader(): ResultHeader {
+        return show.toResultHeader()
+    }
 }

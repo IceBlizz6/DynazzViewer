@@ -3,9 +3,9 @@ package dynazzviewer.services.descriptors.tvmaze
 import com.fasterxml.jackson.annotation.JsonValue
 
 enum class ImageType(
-	@JsonValue
-	private val value : String
+    @JsonValue
+       private val value: String
 ) {
-	MEDIUM("medium"),
-	ORIGINAL("original"),
+    MEDIUM("medium"),
+    ORIGINAL("original"),
 }

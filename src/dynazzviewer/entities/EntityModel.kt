@@ -1,4 +1,3 @@
 package dynazzviewer.entities
 
-interface EntityModel {
-}
+interface EntityModel

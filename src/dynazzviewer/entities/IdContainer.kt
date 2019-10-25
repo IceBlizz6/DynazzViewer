@@ -1,5 +1,5 @@
 package dynazzviewer.entities
 
 interface IdContainer {
-	val id : Int
+    val id: Int
 }
