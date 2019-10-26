@@ -3,6 +3,7 @@ package dynazzviewer.services.descriptors
 import dynazzviewer.base.ExtDatabase
 import dynazzviewer.base.Matcher
 import dynazzviewer.base.UniqueKey
+import dynazzviewer.entities.AlternativeTitle
 import dynazzviewer.entities.MediaPartCollection
 import dynazzviewer.entities.MediaUnit
 import dynazzviewer.storage.ReadWriteOperation
@@ -17,7 +18,7 @@ class DescriptionPartCollection(
     val seasonNumber: Int?,
     val alternativeTitles: List<String>?
 ) : UniqueKey {
-    fun create(parent: MediaUnit): MediaPartCollection {
+    fun create(parent: MediaUnit, context: ReadWriteOperation): MediaPartCollection {
         val partCollection = MediaPartCollection(
             parent = parent,
             uniqueExtKey = uniqueKey,
@@ -25,7 +26,9 @@ class DescriptionPartCollection(
             sortOrder = sortOrder,
             seasonNumber = seasonNumber
         )
-        partCollection.alternativeTitles = alternativeTitles
+        if (alternativeTitles != null) {
+            updateAlternativeTitles(context, partCollection, alternativeTitles)
+        }
         return partCollection
     }
 
@@ -34,7 +37,13 @@ class DescriptionPartCollection(
         target.sortOrder = target.sortOrder
         val matchResult = Matcher().match(target.children, episodes)
         target.seasonNumber = seasonNumber
-        target.alternativeTitles = alternativeTitles
+        if (alternativeTitles == null) {
+            for (altTitle in target.alternativeTitles) {
+                context.delete(altTitle)
+            }
+        } else {
+            updateAlternativeTitles(context, target, alternativeTitles)
+        }
         for (added in matchResult.added) {
             val mediaPart = added.create(target)
             context.save(mediaPart)
@@ -44,6 +53,24 @@ class DescriptionPartCollection(
         }
         for (matched in matchResult.matched) {
             matched.value.update(matched.key)
+        }
+    }
+
+    private fun updateAlternativeTitles(
+        context: ReadWriteOperation,
+        parent: MediaPartCollection,
+        titles: List<String>
+    ) {
+        val matchResult = Matcher().matchWithString(parent.alternativeTitles, titles)
+        for (added in matchResult.added) {
+            val altTitle = AlternativeTitle(
+                parent = parent,
+                title = added
+            )
+            context.save(altTitle)
+        }
+        for (removed in matchResult.removed) {
+            context.delete(removed)
         }
     }
 }

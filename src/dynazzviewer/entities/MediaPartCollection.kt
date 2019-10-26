@@ -1,7 +1,6 @@
 package dynazzviewer.entities
 
 import dynazzviewer.base.UniqueKey
-import javax.persistence.ElementCollection
 import javax.persistence.Entity
 import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
@@ -22,8 +21,9 @@ class MediaPartCollection(
     lateinit var children: List<MediaPart>
         private set
 
-    @ElementCollection
-    var alternativeTitles: List<String>? = null
+    @OneToMany(mappedBy = "parent")
+    lateinit var alternativeTitles: List<AlternativeTitle>
+        private set
 
     override val root: MediaUnit
         get() = parent

@@ -54,7 +54,7 @@ class DescriptionUnit(
     private fun updateChildren(target: MediaUnit, context: ReadWriteOperation) {
         val matchResult = Matcher().match(target.children, children)
         for (added in matchResult.added) {
-            val child = added.create(target)
+            val child = added.create(target, context)
             context.save(child)
         }
         for (removed in matchResult.removed) {
