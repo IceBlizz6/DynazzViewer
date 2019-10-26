@@ -79,6 +79,9 @@ class Show(
            val url: String
     )
     fun toDescriptionPartCollection(episodes: List<Episode>): DescriptionPartCollection {
+        var alternativeTitles = listOfNotNull(title, englishTitle, japaneseTitle).toMutableList()
+        alternativeTitles.addAll(synonymTitles)
+
         return DescriptionPartCollection(
             name = title,
             extDatabaseCode = malId.toString(),
@@ -86,7 +89,8 @@ class Show(
             episodes = episodes.map { e -> e.toDescriptionPart(malId = malId.toString()) },
             uniqueKey = "MAL/$malId",
             sortOrder = aired.from.year * 400 + aired.from.dayOfYear,
-            seasonNumber = null
+            seasonNumber = null,
+            alternativeTitles = alternativeTitles
         )
     }
 }

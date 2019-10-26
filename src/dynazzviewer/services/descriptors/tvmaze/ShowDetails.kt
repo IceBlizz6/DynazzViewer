@@ -37,7 +37,8 @@ class ShowDetails(
                     name = "Season $seasonNumber",
                     uniqueKey = "TvMaze/$id/$seasonNumber",
                     sortOrder = seasonNumber,
-                    seasonNumber = seasonNumber
+                    seasonNumber = seasonNumber,
+                    alternativeTitles = null
                 )
             )
         }

@@ -92,6 +92,13 @@ class JikanApiTest {
         Assert.assertEquals(2, episodes.count())
         Assert.assertEquals(1, episodes[0].episodeNumber)
         Assert.assertEquals(2, episodes[1].episodeNumber)
+        val season = data.children[0]
+        Assert.assertNotNull(season.alternativeTitles)
+        Assert.assertEquals(3, season.alternativeTitles!!.count())
+        val titles = season.alternativeTitles!!
+        Assert.assertTrue(titles.contains("Kujira no Kora wa Sajou ni Manabu!"))
+        Assert.assertTrue(titles.contains("クジラの子らは砂上に学ぶ!"))
+        Assert.assertTrue(titles.contains("Kujira no Kora wa Sajou ni Utau Specials"))
     }
 
     @Test

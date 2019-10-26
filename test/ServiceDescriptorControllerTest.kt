@@ -57,7 +57,8 @@ class ServiceDescriptorControllerTest {
             episodes = listOf(descPart),
             uniqueKey = "uniq2",
             sortOrder = null,
-            seasonNumber = null
+            seasonNumber = null,
+            alternativeTitles = null
         )
         return DescriptionUnit(
             name = "Test Series",
@@ -90,7 +91,8 @@ class ServiceDescriptorControllerTest {
             episodes = listOf(descPart1, descPart2),
             uniqueKey = "uniq2",
             sortOrder = null,
-            seasonNumber = null
+            seasonNumber = null,
+            alternativeTitles = null
         )
         return DescriptionUnit(
             name = "Test Series",
