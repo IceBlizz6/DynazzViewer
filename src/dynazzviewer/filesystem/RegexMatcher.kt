@@ -14,8 +14,10 @@ class RegexMatcher(
         if (result == null) {
             return null
         } else {
-            val name = result.groupValues[nameGroup].replace('.', ' ')
-
+            val name = result
+                .groupValues[nameGroup]
+                .replace('.', ' ')
+                .trim()
             val season: Int?
             if (seasonGroup == null) {
                 season = null

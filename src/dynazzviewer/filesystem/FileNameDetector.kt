@@ -21,6 +21,12 @@ class FileNameDetector : FileDetector {
             nameGroup = 2,
             seasonGroup = null,
             episodeGroup = 3
+        ),
+        RegexMatcher(
+            regex = "^([A-Za-z.]+)[Ss][0]([0-9]+)[Ee][0]*([0-9]+)",
+            nameGroup = 1,
+            seasonGroup = 2,
+            episodeGroup = 3
         )
     )
 

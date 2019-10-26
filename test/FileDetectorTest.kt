@@ -123,6 +123,18 @@ class FileDetectorTest {
             2,
             14
         )
+        assertMatch(
+            "game.of.thrones.s08e02.1080p.web.h264-memento[ettv].mkv",
+            "game of thrones",
+            8,
+            2
+        )
+        assertMatch(
+            "Dark.Matter.S01E12.720p.HDTV.x264-KILLERS.mkv",
+            "Dark Matter",
+            1,
+            12
+        )
     }
 
     private fun assertMatch(fileName: String, seriesName: String, season: Int?, episode: Int?) {
