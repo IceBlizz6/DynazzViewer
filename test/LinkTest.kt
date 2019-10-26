@@ -20,7 +20,8 @@ class LinkTest {
                 parent = mediaUnit,
                 name = "Default Name",
                 sortOrder = 1,
-                uniqueExtKey = "partColl123"
+                uniqueExtKey = "partColl123",
+                seasonNumber = null
             )
             mediaUnit.children.add(mediaPartCollection)
             val mediaPart = MediaPart(

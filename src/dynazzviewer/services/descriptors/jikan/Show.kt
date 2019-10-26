@@ -85,7 +85,8 @@ class Show(
             extDatabase = ExtDatabase.MyAnimeList,
             episodes = episodes.map { e -> e.toDescriptionPart(malId = malId.toString()) },
             uniqueKey = "MAL/$malId",
-            sortOrder = aired.from.year * 400 + aired.from.dayOfYear
+            sortOrder = aired.from.year * 400 + aired.from.dayOfYear,
+            seasonNumber = null
         )
     }
 }

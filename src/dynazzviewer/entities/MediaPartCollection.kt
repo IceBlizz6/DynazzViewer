@@ -11,7 +11,8 @@ class MediaPartCollection(
        val parent: MediaUnit,
     uniqueExtKey: String,
     var name: String,
-    var sortOrder: Int?
+    var sortOrder: Int?,
+    var seasonNumber: Int?
 ) : EntityModel, ExtReference(uniqueExtKey), UniqueKey {
     override val uniqueKey: String
         get() = uniqueExtKey!!

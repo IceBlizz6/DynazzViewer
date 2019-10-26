@@ -36,7 +36,8 @@ class ShowDetails(
                     extDatabaseCode = null,
                     name = "Season $seasonNumber",
                     uniqueKey = "TvMaze/$id/$seasonNumber",
-                    sortOrder = seasonNumber
+                    sortOrder = seasonNumber,
+                    seasonNumber = seasonNumber
                 )
             )
         }

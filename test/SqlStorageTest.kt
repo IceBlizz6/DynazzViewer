@@ -56,7 +56,8 @@ public class SqlStorageTest {
                 name = "test",
                 parent = unit1,
                 sortOrder = 0,
-                uniqueExtKey = "partColl"
+                uniqueExtKey = "partColl",
+                seasonNumber = null
             )
             child.uniqueExtKey = "Key1"
             try {

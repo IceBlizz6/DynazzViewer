@@ -56,7 +56,8 @@ class ServiceDescriptorControllerTest {
             extDatabaseCode = null,
             episodes = listOf(descPart),
             uniqueKey = "uniq2",
-            sortOrder = null
+            sortOrder = null,
+            seasonNumber = null
         )
         return DescriptionUnit(
             name = "Test Series",
@@ -88,7 +89,8 @@ class ServiceDescriptorControllerTest {
             extDatabaseCode = null,
             episodes = listOf(descPart1, descPart2),
             uniqueKey = "uniq2",
-            sortOrder = null
+            sortOrder = null,
+            seasonNumber = null
         )
         return DescriptionUnit(
             name = "Test Series",

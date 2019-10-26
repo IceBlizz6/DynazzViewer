@@ -26,7 +26,8 @@ class ViewStatusControllerTest() {
                 name = "Default Collection",
                 sortOrder = 1,
                 uniqueExtKey =
-                "partColl"
+                "partColl",
+                seasonNumber = null
             )
             val mediaPart = MediaPart(
                 parent = mediaPartCollection,

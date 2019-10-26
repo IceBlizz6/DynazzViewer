@@ -13,14 +13,16 @@ class DescriptionPartCollection(
     val extDatabaseCode: String?,
     val extDatabase: ExtDatabase?,
     override val uniqueKey: String,
-    val sortOrder: Int?
+    val sortOrder: Int?,
+    val seasonNumber: Int?
 ) : UniqueKey {
     fun create(parent: MediaUnit): MediaPartCollection {
         return MediaPartCollection(
             parent = parent,
             uniqueExtKey = uniqueKey,
             name = name,
-            sortOrder = sortOrder
+            sortOrder = sortOrder,
+            seasonNumber = seasonNumber
         )
     }
 
@@ -28,6 +30,7 @@ class DescriptionPartCollection(
         target.name = name
         target.sortOrder = target.sortOrder
         val matchResult = Matcher().match(target.children, episodes)
+        target.seasonNumber = seasonNumber
         for (added in matchResult.added) {
             val mediaPart = added.create(target)
             context.save(mediaPart)
