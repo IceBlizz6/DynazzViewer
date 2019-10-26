@@ -65,7 +65,7 @@ class DescriptionPartCollection(
         for (added in matchResult.added) {
             val altTitle = AlternativeTitle(
                 parent = parent,
-                title = added
+                name = added
             )
             context.save(altTitle)
         }

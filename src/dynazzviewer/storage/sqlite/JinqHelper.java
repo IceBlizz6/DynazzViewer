@@ -1,14 +1,10 @@
 package dynazzviewer.storage.sqlite;
 
-import dynazzviewer.entities.ExtReference;
-import dynazzviewer.entities.IdContainer;
-import dynazzviewer.entities.NameContainer;
+import dynazzviewer.entities.*;
 import org.jinq.jpa.JPQL;
-import org.jinq.jpa.JinqJPAStreamProvider;
 import org.jinq.orm.stream.JinqStream;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Jinq references in Java while waiting for Kotlin support
@@ -22,6 +18,10 @@ public class JinqHelper {
     public static <T extends NameContainer> JinqStream.Where<T, Exception> containsName(String partialName) {
         String targetPartialName = "%" + partialName + "%";
         return e -> JPQL.like(e.getName(), targetPartialName);
+    }
+
+    public static <T extends NameContainer> JinqStream.Where<T, Exception> likeName(String likePattern) {
+        return e -> JPQL.like(e.getName(), likePattern);
     }
 
     public static <T extends IdContainer> JinqStream.Where<T, Exception> fromId(Integer id) {
