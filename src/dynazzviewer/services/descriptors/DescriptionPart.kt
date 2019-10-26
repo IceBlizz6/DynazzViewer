@@ -9,7 +9,8 @@ class DescriptionPart(
     private val index: Int,
     val aired: LocalDate?,
     private val name: String,
-    override val uniqueKey: String
+    override val uniqueKey: String,
+    val episodeNumber: Int?
 ) : UniqueKey {
     fun create(parent: MediaPartCollection): MediaPart {
         return MediaPart(
@@ -17,7 +18,8 @@ class DescriptionPart(
             sortOrder = index,
             name = name,
             uniqueExtKey = uniqueKey,
-            aired = aired
+            aired = aired,
+            episodeNumber = episodeNumber
         )
     }
 
@@ -25,5 +27,6 @@ class DescriptionPart(
         target.name = name
         target.sortOrder = index
         target.aired = aired
+        target.episodeNumber = episodeNumber
     }
 }

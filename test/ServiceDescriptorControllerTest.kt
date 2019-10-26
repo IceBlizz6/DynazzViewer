@@ -47,7 +47,8 @@ class ServiceDescriptorControllerTest {
             name = "Test",
             uniqueKey = "uniq1",
             index = 1,
-            aired = null
+            aired = null,
+            episodeNumber = null
         )
         val descPartCollection = DescriptionPartCollection(
             name = "Test",
@@ -71,13 +72,15 @@ class ServiceDescriptorControllerTest {
             name = "Test",
             uniqueKey = "uniq1",
             index = 1,
-            aired = null
+            aired = null,
+            episodeNumber = null
         )
         val descPart2 = DescriptionPart(
             name = "Test",
             uniqueKey = "uniq4",
             index = 2,
-            aired = null
+            aired = null,
+            episodeNumber = null
         )
         val descPartCollection = DescriptionPartCollection(
             name = "Test",

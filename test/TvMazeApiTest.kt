@@ -32,6 +32,9 @@ class TvMazeApiTest {
         Assert.assertNotNull(result)
         Assert.assertEquals("Star Trek: Discovery", result!!.name)
         Assert.assertEquals(2, result.children.count())
+        val firstSeason = result.children.first()
+        Assert.assertEquals(5, firstSeason.episodes[4].episodeNumber)
+        Assert.assertEquals(10, firstSeason.episodes[9].episodeNumber)
     }
 
     @Test

@@ -14,7 +14,8 @@ class MediaPart(
     uniqueExtKey: String,
     var name: String,
     var sortOrder: Int?,
-    var aired: LocalDate?
+    var aired: LocalDate?,
+    var episodeNumber: Int?
 ) : EntityModel, IdContainer, ExtReference(uniqueExtKey), UniqueKey {
     var status: ViewStatus = ViewStatus.None
 

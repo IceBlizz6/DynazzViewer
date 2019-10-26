@@ -28,7 +28,8 @@ class LinkTest {
                 uniqueExtKey = "part2",
                 sortOrder = null,
                 name = "Test",
-                aired = null
+                aired = null,
+                episodeNumber = null
             )
             context.save(mediaUnit)
             context.save(mediaPartCollection)

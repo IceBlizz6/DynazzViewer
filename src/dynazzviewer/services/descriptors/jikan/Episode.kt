@@ -31,7 +31,8 @@ class Episode(
             index = episodeId,
             name = title,
             aired = aired?.toLocalDate(),
-            uniqueKey = "MAL/$malId/$episodeId"
+            uniqueKey = "MAL/$malId/$episodeId",
+            episodeNumber = episodeId
         )
     }
 }

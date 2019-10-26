@@ -21,6 +21,8 @@ class JikanApiTest {
         Assert.assertEquals(2019, episodeAirDate.year)
         Assert.assertEquals(7, episodeAirDate.monthValue)
         Assert.assertEquals(10, episodeAirDate.dayOfMonth)
+        Assert.assertEquals(1, episodes[0].episodeId)
+        Assert.assertEquals(2, episodes[1].episodeId)
     }
 
     @Test
@@ -69,7 +71,6 @@ class JikanApiTest {
         val jikanApi = JikanApi(client, fetchRelated = true)
         val data = jikanApi.queryLookup(ExtDatabase.MyAnimeList, "34712")
         Assert.assertNotNull(data)
-        // Assert.assertEquals(4, client.callCount)
         Assert.assertEquals(2, data!!.children.count())
         Assert.assertTrue(data.children.filter { e -> e.extDatabaseCode == "34712" }.any())
         Assert.assertTrue(data.children.filter { e -> e.extDatabaseCode == "37272" }.any())
@@ -89,6 +90,8 @@ class JikanApiTest {
         Assert.assertEquals(1, data!!.children.count())
         val episodes = data.children[0].episodes
         Assert.assertEquals(2, episodes.count())
+        Assert.assertEquals(1, episodes[0].episodeNumber)
+        Assert.assertEquals(2, episodes[1].episodeNumber)
     }
 
     @Test

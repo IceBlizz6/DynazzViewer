@@ -21,7 +21,8 @@ class Episode(
             index = episode,
             name = name,
             aired = airDate,
-            uniqueKey = "TvMaze/$id/$season/$episode"
+            uniqueKey = "TvMaze/$id/$season/$episode",
+            episodeNumber = episode
         )
     }
 }
