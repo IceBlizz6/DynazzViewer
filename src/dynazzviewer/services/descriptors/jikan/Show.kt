@@ -7,75 +7,75 @@ import dynazzviewer.services.descriptors.DescriptionPartCollection
 import java.time.LocalDateTime
 
 class Show(
-    @JsonProperty("request_hash")
+    @JsonProperty("request_hash", required = true)
        val requestHash: String,
-    @JsonProperty("request_cached")
+    @JsonProperty("request_cached", required = true)
        val requestCached: Boolean,
-    @JsonProperty("request_cache_expiry")
+    @JsonProperty("request_cache_expiry", required = true)
        val requestCacheExpiry: Int,
-    @JsonProperty("mal_id")
+    @JsonProperty("mal_id", required = true)
        val malId: Int,
-    @JsonProperty("url")
+    @JsonProperty("url", required = true)
        val url: String,
-    @JsonProperty("image_url")
+    @JsonProperty("image_url", required = true)
        val imageUrl: String,
     @JsonProperty("trailer_url", required = true)
        val trailerUrl: String?,
-    @JsonProperty("title")
+    @JsonProperty("title", required = true)
        val title: String,
-    @JsonProperty("title_english")
+    @JsonProperty("title_english", required = true)
        val englishTitle: String?,
-    @JsonProperty("title_japanese")
+    @JsonProperty("title_japanese", required = true)
        val japaneseTitle: String,
-    @JsonProperty("title_synonyms")
+    @JsonProperty("title_synonyms", required = true)
        val synonymTitles: List<String>,
-    @JsonProperty("type")
+    @JsonProperty("type", required = true)
        val type: MalType,
-    @JsonProperty("source")
+    @JsonProperty("source", required = true)
        val source: String,
-    @JsonProperty("episodes")
+    @JsonProperty("episodes", required = true)
        val episodes: Int,
-    @JsonProperty("status")
+    @JsonProperty("status", required = true)
        val status: SeriesStatus,
-    @JsonProperty("airing")
+    @JsonProperty("airing", required = true)
        val airing: Boolean,
-    @JsonProperty("aired")
+    @JsonProperty("aired", required = true)
        val aired: Aired,
-    @JsonProperty("score")
+    @JsonProperty("score", required = true)
        val score: Double,
-    @JsonProperty("rank")
+    @JsonProperty("rank", required = true)
        val rank: Int,
-    @JsonProperty("related")
+    @JsonProperty("related", required = true)
        val related: Map<RelatedType, List<Related>>,
-    @JsonProperty("genres")
+    @JsonProperty("genres", required = true)
        val genres: List<Genre>
 ) {
     class Aired(
-        @JsonProperty("from")
+        @JsonProperty("from", required = true)
            @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss[xxx]")
            val from: LocalDateTime,
-        @JsonProperty("to")
+        @JsonProperty("to", required = true)
            @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss[xxx]")
            val to: LocalDateTime
     )
     class Related(
-        @JsonProperty("mal_id")
+        @JsonProperty("mal_id", required = true)
            val malId: Int,
-        @JsonProperty("type")
+        @JsonProperty("type", required = true)
            val type: MalType,
-        @JsonProperty("name")
+        @JsonProperty("name", required = true)
            val name: String,
-        @JsonProperty("url")
+        @JsonProperty("url", required = true)
            val url: String
     )
     class Genre(
-        @JsonProperty("mal_id")
+        @JsonProperty("mal_id", required = true)
            val malId: Int,
-        @JsonProperty("type")
+        @JsonProperty("type", required = true)
            val type: String,
-        @JsonProperty("name")
+        @JsonProperty("name", required = true)
            val name: String,
-        @JsonProperty("url")
+        @JsonProperty("url", required = true)
            val url: String
     )
     fun toDescriptionPartCollection(episodes: List<Episode>): DescriptionPartCollection {

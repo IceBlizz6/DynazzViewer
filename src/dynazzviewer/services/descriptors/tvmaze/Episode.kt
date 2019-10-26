@@ -5,15 +5,15 @@ import dynazzviewer.services.descriptors.DescriptionPart
 import java.time.LocalDate
 
 class Episode(
-    @JsonProperty("id")
+    @JsonProperty("id", required = true)
        val id: Int,
-    @JsonProperty("name")
+    @JsonProperty("name", required = true)
        val name: String,
-    @JsonProperty("season")
+    @JsonProperty("season", required = true)
        val season: Int,
-    @JsonProperty("episode")
+    @JsonProperty("number", required = true)
        val episode: Int,
-    @JsonProperty("airdate")
+    @JsonProperty("airdate", required = true)
        val airDate: LocalDate
 ) {
     fun toDescriptionPart(): DescriptionPart {

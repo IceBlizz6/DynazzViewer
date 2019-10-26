@@ -7,19 +7,19 @@ import dynazzviewer.services.descriptors.DescriptionUnit
 import java.time.LocalDate
 
 class ShowDetails(
-    @JsonProperty("id")
+    @JsonProperty("id", required = true)
        val id: Int,
-    @JsonProperty("name")
+    @JsonProperty("name", required = true)
        val name: String,
-    @JsonProperty("genres")
+    @JsonProperty("genres", required = true)
        val genres: List<String>,
-    @JsonProperty("status")
+    @JsonProperty("status", required = true)
        val status: String,
-    @JsonProperty("premiered")
+    @JsonProperty("premiered", required = true)
        val premiered: LocalDate,
-    @JsonProperty("externals")
+    @JsonProperty("externals", required = true)
        val externals: Map<String, String?>,
-    @JsonProperty("image")
+    @JsonProperty("image", required = true)
        val images: Map<ImageType, String>
 ) {
     fun toDescriptionUnit(episodes: List<Episode>): DescriptionUnit {

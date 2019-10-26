@@ -7,29 +7,29 @@ import dynazzviewer.services.descriptors.ResultHeader
 import java.time.LocalDateTime
 
 class ResultItem(
-    @JsonProperty("mal_id")
+    @JsonProperty("mal_id", required = true)
        val malId: Int,
-    @JsonProperty("url")
+    @JsonProperty("url", required = true)
        val url: String,
-    @JsonProperty("image_url")
+    @JsonProperty("image_url", required = true)
        val imageUrl: String,
-    @JsonProperty("title")
+    @JsonProperty("title", required = true)
        val title: String,
-    @JsonProperty("airing")
+    @JsonProperty("airing", required = true)
        val airing: Boolean,
-    @JsonProperty("type")
+    @JsonProperty("type", required = true)
        val type: MalType,
-    @JsonProperty("episodes")
+    @JsonProperty("episodes", required = true)
        val episodes: Int,
-    @JsonProperty("score")
+    @JsonProperty("score", required = true)
        val score: Double,
-    @JsonProperty("start_date")
+    @JsonProperty("start_date", required = true)
        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss[xxx]")
        val startDate: LocalDateTime?,
-    @JsonProperty("end_date")
+    @JsonProperty("end_date", required = true)
        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss[xxx]")
        val endDate: LocalDateTime?,
-    @JsonProperty("rated")
+    @JsonProperty("rated", required = true)
        val rated: String?
 ) {
     fun toResultHeader(): ResultHeader {
