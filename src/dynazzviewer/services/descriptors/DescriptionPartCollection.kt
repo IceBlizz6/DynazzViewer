@@ -15,7 +15,7 @@ class DescriptionPartCollection(
     override val uniqueKey: String,
     val sortOrder: Int?,
     val seasonNumber: Int?,
-    val alternativeTitles : List<String>?
+    val alternativeTitles: List<String>?
 ) : UniqueKey {
     fun create(parent: MediaUnit): MediaPartCollection {
         val partCollection = MediaPartCollection(
@@ -38,10 +38,9 @@ class DescriptionPartCollection(
         for (added in matchResult.added) {
             val mediaPart = added.create(target)
             context.save(mediaPart)
-            target.children.add(mediaPart)
         }
         for (removed in matchResult.removed) {
-            target.children.remove(removed)
+            context.delete(removed)
         }
         for (matched in matchResult.matched) {
             matched.value.update(matched.key)

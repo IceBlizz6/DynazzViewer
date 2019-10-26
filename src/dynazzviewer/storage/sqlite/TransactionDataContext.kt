@@ -7,6 +7,7 @@ import javax.persistence.EntityTransaction
 
 internal class TransactionDataContext(storage: SqlLiteStorage) :
     DataContext(storage), ReadWriteOperation {
+
     private val transaction: EntityTransaction = entityManager.transaction
 
     init {
@@ -32,6 +33,10 @@ internal class TransactionDataContext(storage: SqlLiteStorage) :
 
     override fun save(entity: EntityModel) {
         entityManager.persist(entity)
+    }
+
+    override fun delete(entity: EntityModel) {
+        entityManager.remove(entity)
     }
 
     override fun close() {

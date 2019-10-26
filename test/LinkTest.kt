@@ -13,7 +13,6 @@ class LinkTest {
     @Test
     fun linkTest() {
         val storage: Storage = SqlLiteStorage(TestConfiguration())
-
         storage.readWrite().use { context ->
             val mediaUnit = MediaUnit(uniqueExtKey = null, name = "Test")
             val mediaPartCollection = MediaPartCollection(
@@ -23,7 +22,6 @@ class LinkTest {
                 uniqueExtKey = "partColl123",
                 seasonNumber = null
             )
-            mediaUnit.children.add(mediaPartCollection)
             val mediaPart = MediaPart(
                 parent = mediaPartCollection,
                 uniqueExtKey = "part2",
@@ -36,14 +34,12 @@ class LinkTest {
             context.save(mediaPartCollection)
             context.save(mediaPart)
         }
-
         storage.readWrite().use { context ->
             val mediaFile = MediaFile("Default Name")
             mediaFile.status = ViewStatus.Viewed
             mediaFile.mediaPart = context.mediaParts().first()
             context.save(mediaFile)
         }
-
         storage.read().use { context ->
             Assert.assertEquals(ViewStatus.Viewed, context.mediaParts().first().mediaFile!!.status)
         }

@@ -13,8 +13,8 @@ class MediaUnit(
     var tags: MutableList<MediaUnitTag> = mutableListOf()
         private set
 
-    @OneToMany
-    var children: MutableList<MediaPartCollection> = mutableListOf()
+    @OneToMany(mappedBy = "parent")
+    lateinit var children: List<MediaPartCollection>
         private set
 
     @OneToMany

@@ -56,10 +56,9 @@ class DescriptionUnit(
         for (added in matchResult.added) {
             val child = added.create(target)
             context.save(child)
-            target.children.add(child)
         }
         for (removed in matchResult.removed) {
-            target.children.remove(removed)
+            context.delete(removed)
         }
         for (matched in matchResult.matched) {
             matched.value.update(matched.key, context)

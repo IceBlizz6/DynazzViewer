@@ -7,4 +7,6 @@ interface ReadWriteOperation : ReadOperation {
     fun tagsGetOrCreate(tagNames: List<String>): List<MediaUnitTag>
 
     fun save(entity: EntityModel)
+
+    fun delete(entity: EntityModel)
 }
