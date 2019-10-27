@@ -4,4 +4,6 @@ interface FileConfiguration {
     val videoExtensions: Set<String>
 
     val extensionFilter: Set<String>
+
+    val cacheDirectoryPath: String
 }

@@ -1,5 +1,6 @@
 package filesystem
 
+import dynazzviewer.base.Configuration
 import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.MediaFile
 import dynazzviewer.filesystem.FileCache
@@ -138,7 +139,11 @@ class FileRepositoryTest {
         override fun saveCacheFile(path: String, content: Set<String>) = Unit
     }
 
-    class MockFileConfiguration : FileConfiguration, dynazzviewer.base.Configuration {
+    class MockFileConfiguration : FileConfiguration,
+        Configuration {
+        override val cacheDirectoryPath: String
+            get() = throw RuntimeException()
+
         override val videoExtensions: Set<String>
             get() = setOf("mkv")
 
