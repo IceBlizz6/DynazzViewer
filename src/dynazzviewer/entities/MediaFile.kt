@@ -2,6 +2,7 @@ package dynazzviewer.entities
 
 import dynazzviewer.base.ViewStatus
 import java.io.Serializable
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -10,6 +11,7 @@ import javax.persistence.OneToOne
 
 @Entity
 data class MediaFile(
+    @Column(unique = true)
     override var name: String,
     var status: ViewStatus = ViewStatus.None,
     @OneToOne

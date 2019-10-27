@@ -1,5 +1,6 @@
 package dynazzviewer.storage
 
+import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.AlternativeTitle
 import dynazzviewer.entities.ExtReference
 import dynazzviewer.entities.MediaFile
@@ -26,6 +27,8 @@ interface ReadOperation : Closeable {
     fun mediaFileById(id: Int): MediaFile
 
     fun mediaFiles(): List<MediaFile>
+
+    fun mediaFilesByName(names: Set<String>): Map<String, Pair<Int, ViewStatus>>
 
     fun mediaFilesByPartialName(partialName: String): List<MediaFile>
 

@@ -1,5 +1,6 @@
 package dynazzviewer.storage.sqlite
 
+import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.AlternativeTitle
 import dynazzviewer.entities.ExtReference
 import dynazzviewer.entities.MediaFile
@@ -24,6 +25,12 @@ internal open class DataContext(private val storage: SqlLiteStorage) : ReadOpera
         return stream(AlternativeTitle::class.java)
             .where(likeName(sqlLikeString))
             .toList()
+    }
+
+    override fun mediaFilesByName(names: Set<String>): Map<String, Pair<Int, ViewStatus>> {
+        val source = stream(MediaFile::class.java)
+        val lookup = JinqHelper.mediaFiles(source, names)
+        return lookup.map { e -> e.one to Pair(e.two, e.three) }.toMap()
     }
 
     override fun mediaUnitsLike(sqlLikeString: String): List<MediaUnit> {
