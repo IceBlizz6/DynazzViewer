@@ -25,6 +25,13 @@
             <version>${kotlin.version}</version>
         </dependency>
 
+        <!-- UI frameworks -->
+        <dependency>
+            <groupId>no.tornado</groupId>
+            <artifactId>tornadofx</artifactId>
+            <version>1.7.19</version>
+        </dependency>
+
         <!-- API service communication -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

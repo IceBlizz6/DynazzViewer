@@ -6,8 +6,8 @@ import dynazzviewer.entities.MediaFile
 import dynazzviewer.filesystem.FileCache
 import dynazzviewer.filesystem.FileConfiguration
 import dynazzviewer.filesystem.FileEntryFactory
-import dynazzviewer.filesystem.FileRepository
 import dynazzviewer.filesystem.FileSource
+import dynazzviewer.filesystem.FileSystemRepository
 import dynazzviewer.filesystem.hierarchy.FileName
 import dynazzviewer.filesystem.hierarchy.InvalidPathException
 import dynazzviewer.storage.Storage
@@ -21,13 +21,13 @@ import org.junit.Test
 class FileRepositoryTest {
     private val storage: Storage
     private val source: MockFileSource
-    private val repository: FileRepository
+    private val repository: FileSystemRepository
 
     init {
         val configuration = MockFileConfiguration()
         source = MockFileSource()
         storage = SqlLiteStorage(configuration)
-        repository = FileRepository(
+        repository = FileSystemRepository(
             cache = FileCache(source),
             factory = FileEntryFactory(
                 storage = storage,
