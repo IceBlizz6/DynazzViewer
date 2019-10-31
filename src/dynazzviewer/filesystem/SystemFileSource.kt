@@ -5,15 +5,21 @@ import java.io.BufferedWriter
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
+import java.nio.file.Files
 import java.util.stream.Collectors
+import kotlin.streams.toList
 
 class SystemFileSource(
     private val configuration: FileConfiguration
 ) : FileSource {
     override fun listFiles(path: String): Set<String> {
         val allowedExtensions = configuration.extensionFilter
-        val files = File(path).listFiles { e -> allowedExtensions.contains(e.extension) }
-        return files.map { e -> e.canonicalPath }.toSet()
+        return Files.walk(File(path).toPath())
+            .filter { Files.isRegularFile(it) }
+            .map { e -> e.toString() }
+            .filter { allowedExtensions.contains(File(it).extension) }
+            .toList()
+            .toSet()
     }
 
     override fun readCacheFile(path: String): Set<String> {
