@@ -141,6 +141,9 @@ class FileRepositoryTest {
 
     class MockFileConfiguration : FileConfiguration,
         Configuration {
+        override val rootDirectoryPaths: Set<String>
+            get() = throw RuntimeException()
+
         override val cacheDirectoryPath: String
             get() = throw RuntimeException()
 
