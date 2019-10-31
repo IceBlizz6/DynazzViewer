@@ -35,15 +35,28 @@ class MainController : Controller() {
         val systemFileSource = SystemFileSource(configuration)
         val fileCache = FileCache(systemFileSource)
         fileRepository = FileSystemRepository(fileCache, fileEntryFactory)
+        for (path in configuration.rootDirectoryPaths) {
+            loadRootDirectory(path)
+        }
     }
 
     fun addRootDirectories(directories: List<File>) {
         for (directory in directories) {
-            addRootDirectory(directory.canonicalPath)
+            val path = directory.canonicalPath
+            if (!configuration.rootDirectoryPaths.contains(path)) {
+                addRootDirectory(path)
+            }
         }
     }
 
     private fun addRootDirectory(path: String) {
+        val storedPaths = configuration.rootDirectoryPaths.toMutableSet()
+        storedPaths.add(path)
+        configuration.rootDirectoryPaths = storedPaths
+        loadRootDirectory(path)
+    }
+
+    private fun loadRootDirectory(path: String) {
         val factory = NodeFactory(fileRepository)
         val rootDir = factory.createRootViewModel(path, true)
         fileSystemRoot.children.add(rootDir)
