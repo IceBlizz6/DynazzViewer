@@ -8,10 +8,10 @@ import dynazzviewer.services.filesystem.VideoFile
 class FileSystemRepository(
     private val cache: FileCache,
     private val factory: FileEntryFactory
-) {
+) : FileRepository {
     private val roots = mutableListOf<RootDirectory>()
 
-    fun add(rootPath: String): List<VideoFile> {
+    override fun add(rootPath: String): List<VideoFile> {
         val root = RootDirectory(rootPath)
         val filePaths = cache.readRoot(root)
         roots.add(root)
