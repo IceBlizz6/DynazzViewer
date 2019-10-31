@@ -56,6 +56,15 @@ class MainController : Controller() {
         loadRootDirectory(path)
     }
 
+    fun removeRootDirectory(path: String) {
+        val storedPaths = configuration.rootDirectoryPaths.toMutableSet()
+        storedPaths.remove(path)
+        configuration.rootDirectoryPaths = storedPaths
+        fileRepository.remove(path)
+        val childNode = fileSystemRoot.children.single { it.name == path }
+        fileSystemRoot.children.remove(childNode)
+    }
+
     private fun loadRootDirectory(path: String) {
         val factory = NodeFactory(fileRepository)
         val rootDir = factory.createRootViewModel(path, true)

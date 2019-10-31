@@ -55,7 +55,21 @@ class FileSystemView : View() {
                             textAlignment = TextAlignment.CENTER
                         }
                     }
-                    is DirectoryViewModel -> label(it.name)
+                    is DirectoryViewModel -> {
+                        label(it.name)
+                        contextmenu {
+                            if (it.isRoot) {
+                                item("Remove") {
+                                    action {
+                                        selected()
+                                            .filterIsInstance<DirectoryViewModel>()
+                                            .filter { it.isRoot }
+                                            .forEach { mainViewModel.removeRootDirectory(it.name) }
+                                    }
+                                }
+                            }
+                        }
+                    }
                     else -> throw UnknownViewModelException("Unknown FS node type: $it")
                 }
             }
@@ -63,5 +77,9 @@ class FileSystemView : View() {
         populate {
             it.value.children
         }
+    }
+
+    private fun selected(): List<NodeViewModel> {
+        return root.selectionModel.selectedItems.map { e -> e.value }
     }
 }

@@ -10,6 +10,7 @@ import dynazzviewer.ui.viewmodels.DirectoryViewModel
 import dynazzviewer.ui.viewmodels.NodeFactory
 import dynazzviewer.ui.viewmodels.VideoFileViewModel
 import java.io.File
+import java.lang.RuntimeException
 import org.junit.Assert
 import org.junit.Test
 
@@ -61,6 +62,8 @@ class NodeFactoryTest {
     }
 
     class MockFileRepository : FileRepository {
+        override fun remove(rootPath: String): Boolean = throw RuntimeException("Not implemented")
+
         override fun add(rootPath: String): List<VideoFile> {
             val root = RootDirectory("H:${File.separatorChar}downloads")
             return listOf(

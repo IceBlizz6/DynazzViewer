@@ -18,7 +18,7 @@ class FileSystemRepository(
         return factory.files(root, filePaths)
     }
 
-    fun remove(rootPath: String): Boolean {
+    override fun remove(rootPath: String): Boolean {
         val root = roots.singleOrNull { e -> e.rootPath == rootPath }
         if (root == null) {
             return false
