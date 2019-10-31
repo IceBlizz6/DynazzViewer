@@ -46,9 +46,7 @@ class SystemFileSource(
 
     private fun cacheFileName(path: String): String {
         val root = configuration.cacheDirectoryPath
-        return root + File.separatorChar + path
-            .replace(":", "__")
-            .replace("/", "__")
-            .replace("\\", "__")
+        val nonAlphaNumericRegex = "[^a-zA-Z\\d]".toRegex()
+        return root + File.separatorChar + path.replace(nonAlphaNumericRegex, "__")
     }
 }
