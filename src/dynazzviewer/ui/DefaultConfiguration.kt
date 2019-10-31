@@ -50,7 +50,7 @@ class DefaultConfiguration(
 
     private fun readSet(key: String, defaultValue: Set<String>): Set<String> {
         val storedValue = config.string(key)
-        if (storedValue == null) {
+        if (storedValue == null || storedValue.isEmpty()) {
             return defaultValue
         } else {
             return storedValue
