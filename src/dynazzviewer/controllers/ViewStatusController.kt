@@ -1,6 +1,7 @@
 package dynazzviewer.controllers
 
 import dynazzviewer.base.ViewStatus
+import dynazzviewer.entities.MediaFile
 import dynazzviewer.storage.Storage
 import java.util.Optional
 
@@ -19,6 +20,11 @@ class ViewStatusController(
         }
         listener.updateMediaPart(id)
         Optional.ofNullable(mediaFileId).ifPresent { e -> listener.updateMediaFile(e) }
+    }
+
+    fun setMediaFileStatus(status: ViewStatus, fileName: String) {
+        val fileId = getOrCreateMediaFile(fileName)
+        setMediaFileStatus(status, fileId)
     }
 
     fun setMediaFileStatus(status: ViewStatus, id: Int) {
@@ -51,5 +57,19 @@ class ViewStatusController(
 
     fun resolveViewStatus(vararg statusList: ViewStatus): ViewStatus {
         return statusList.max()!!
+    }
+
+    private fun getOrCreateMediaFile(fileName: String): Int {
+        storage.readWrite().use { context ->
+            val mapLookup = context.mediaFilesByName(setOf(fileName))
+            val entry: Pair<Int, ViewStatus>? = mapLookup[fileName]
+            if (entry == null) {
+                val mediaFile = MediaFile(name = fileName)
+                context.save(mediaFile)
+                return mediaFile.id
+            } else {
+                return entry.first
+            }
+        }
     }
 }

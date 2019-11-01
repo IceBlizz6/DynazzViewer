@@ -49,9 +49,17 @@ class ViewStatusControllerTest() {
     }
 
     @Test
-    fun setMediaFileStatusTest() {
-        controller.setMediaFileStatus(ViewStatus.Viewed, mediaFileId)
+    fun setMediaFileStatusByNameTest() {
+        controller.setMediaFileStatus(ViewStatus.Viewed, "Default Name")
+        storage.read().use { context ->
+            val mediaFile = context.mediaFiles().first()
+            Assert.assertEquals(ViewStatus.Viewed, mediaFile.status)
+        }
+    }
 
+    @Test
+    fun setMediaFileStatusByIdTest() {
+        controller.setMediaFileStatus(ViewStatus.Viewed, mediaFileId)
         storage.read().use { context ->
             Assert.assertEquals(ViewStatus.Viewed, context.mediaFiles().first().status)
             Assert.assertEquals(ViewStatus.Viewed, context.mediaFiles().first().mediaPart!!.status)
