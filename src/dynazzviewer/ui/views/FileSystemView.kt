@@ -1,5 +1,6 @@
 package dynazzviewer.ui.views
 
+import dynazzviewer.base.ViewStatus
 import dynazzviewer.ui.MainController
 import dynazzviewer.ui.viewmodels.DirectoryViewModel
 import dynazzviewer.ui.viewmodels.NodeViewModel
@@ -37,12 +38,17 @@ class FileSystemView : View() {
             graphic = hbox {
                 when (it) {
                     is VideoFileViewModel -> {
-                        if (it.isViewed) {
+                        if (it.viewStatus == ViewStatus.Viewed) {
                             circle {
                                 fill = Color.GREEN
                                 radius = 7.0
                             }
-                        } else {
+                        } else if (it.viewStatus == ViewStatus.Skipped) {
+                            circle {
+                                fill = Color.ORANGE
+                                radius = 7.0
+                            }
+                        } else if (it.viewStatus == ViewStatus.None) {
                             rectangle {
                                 fill = Color.LIGHTBLUE
                                 width = 10.0

@@ -1,6 +1,5 @@
 package dynazzviewer.ui.viewmodels
 
-import dynazzviewer.base.ViewStatus
 import dynazzviewer.filesystem.FileRepository
 import java.io.File
 
@@ -14,10 +13,12 @@ class NodeFactory(
         val map = mutableMapOf<String, DirectoryViewModel>()
         for (videoFile in videoFiles) {
             val parent = getOrCreateParent(rootViewModel, videoFile.path.path, map)
-            parent.children.add(VideoFileViewModel(
+            parent.children.add(
+                VideoFileViewModel(
                     videoFile.name.name,
-                    videoFile.viewStatus == ViewStatus.Viewed)
+                    videoFile.viewStatus
                 )
+            )
         }
         return rootViewModel
     }

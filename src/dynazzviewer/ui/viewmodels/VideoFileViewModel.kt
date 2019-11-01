@@ -1,14 +1,16 @@
 package dynazzviewer.ui.viewmodels
 
-import javafx.beans.property.SimpleBooleanProperty
+import dynazzviewer.base.ViewStatus
+import javafx.beans.property.SimpleObjectProperty
 import tornadofx.getValue
 import tornadofx.setValue
 
 class VideoFileViewModel(
     name: String,
-    isViewed: Boolean
+    viewStatus: ViewStatus
 ) : NodeViewModel(name) {
-    private val isViewedProperty: SimpleBooleanProperty = SimpleBooleanProperty(isViewed)
+    private val viewStatusProperty: SimpleObjectProperty<ViewStatus> =
+        SimpleObjectProperty(viewStatus)
 
-    var isViewed by isViewedProperty
+    var viewStatus: ViewStatus by viewStatusProperty
 }
