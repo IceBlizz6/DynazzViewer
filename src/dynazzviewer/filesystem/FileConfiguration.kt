@@ -5,7 +5,7 @@ interface FileConfiguration {
 
     val extensionFilter: Set<String>
 
-    val rootDirectoryPaths: Set<String>
+    var rootDirectoryPaths: Set<String>
 
     val cacheDirectoryPath: String
 }

@@ -7,10 +7,6 @@ import dynazzviewer.filesystem.FileSystemRepository
 import dynazzviewer.filesystem.SystemFileSource
 import dynazzviewer.storage.Storage
 import dynazzviewer.storage.sqlite.SqlLiteStorage
-import dynazzviewer.ui.viewmodels.NodeFactory
-import dynazzviewer.ui.viewmodels.NodeViewModel
-import dynazzviewer.ui.viewmodels.RootNodeViewModel
-import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
 import tornadofx.Controller
@@ -23,11 +19,11 @@ class MainController : Controller() {
 
     private val configuration: DefaultConfiguration = DefaultConfiguration(config)
 
-    val fileSystemRoot: NodeViewModel = RootNodeViewModel()
-
     private val storage: Storage
 
     private val fileRepository: FileRepository
+
+    val fileSystemController: FileSystemController
 
     init {
         storage = SqlLiteStorage(configuration)
@@ -35,39 +31,10 @@ class MainController : Controller() {
         val systemFileSource = SystemFileSource(configuration)
         val fileCache = FileCache(systemFileSource)
         fileRepository = FileSystemRepository(fileCache, fileEntryFactory)
-        for (path in configuration.rootDirectoryPaths) {
-            loadRootDirectory(path)
-        }
-    }
-
-    fun addRootDirectories(directories: List<File>) {
-        for (directory in directories) {
-            val path = directory.canonicalPath
-            if (!configuration.rootDirectoryPaths.contains(path)) {
-                addRootDirectory(path)
-            }
-        }
-    }
-
-    private fun addRootDirectory(path: String) {
-        val storedPaths = configuration.rootDirectoryPaths.toMutableSet()
-        storedPaths.add(path)
-        configuration.rootDirectoryPaths = storedPaths
-        loadRootDirectory(path)
-    }
-
-    fun removeRootDirectory(path: String) {
-        val storedPaths = configuration.rootDirectoryPaths.toMutableSet()
-        storedPaths.remove(path)
-        configuration.rootDirectoryPaths = storedPaths
-        fileRepository.remove(path)
-        val childNode = fileSystemRoot.children.single { it.name == path }
-        fileSystemRoot.children.remove(childNode)
-    }
-
-    private fun loadRootDirectory(path: String) {
-        val factory = NodeFactory(fileRepository)
-        val rootDir = factory.createRootViewModel(path, true)
-        fileSystemRoot.children.add(rootDir)
+        this.fileSystemController = FileSystemController(
+            storage = storage,
+            fileRepository = fileRepository,
+            configuration = configuration
+        )
     }
 }

@@ -15,5 +15,5 @@ abstract class NodeViewModel(
     private val nameProperty: SimpleStringProperty = SimpleStringProperty(name)
 
     val children: ObservableList<NodeViewModel> by childrenProperty
-    var name by nameProperty
+    var name: String by nameProperty
 }

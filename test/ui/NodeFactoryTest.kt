@@ -11,6 +11,7 @@ import dynazzviewer.ui.viewmodels.NodeFactory
 import dynazzviewer.ui.viewmodels.VideoFileViewModel
 import java.io.File
 import java.lang.RuntimeException
+import javax.transaction.NotSupportedException
 import org.junit.Assert
 import org.junit.Test
 
@@ -62,6 +63,10 @@ class NodeFactoryTest {
     }
 
     class MockFileRepository : FileRepository {
+        override fun updateFileName(fileName: FileName): Map<RootDirectory, Set<VideoFile>> {
+            throw NotSupportedException()
+        }
+
         override fun remove(rootPath: String): Boolean = throw RuntimeException("Not implemented")
 
         override fun add(rootPath: String): List<VideoFile> {

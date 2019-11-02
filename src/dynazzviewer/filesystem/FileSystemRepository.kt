@@ -37,7 +37,7 @@ class FileSystemRepository(
         return update(filePaths)
     }
 
-    fun updateFileName(fileName: FileName): Map<RootDirectory, Set<VideoFile>> {
+    override fun updateFileName(fileName: FileName): Map<RootDirectory, Set<VideoFile>> {
         val filePaths = cache.filePathsByName(fileName)
         return update(filePaths)
     }

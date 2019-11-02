@@ -15,9 +15,10 @@ import javafx.scene.text.TextAlignment
 import tornadofx.*
 
 class FileSystemView : View() {
-    private val mainViewModel: MainController by inject()
+    private val mainController: MainController by inject()
+    private val controller = mainController.fileSystemController
 
-    override val root = treeview<NodeViewModel>(TreeItem(mainViewModel.fileSystemRoot)) {
+    override val root = treeview<NodeViewModel>(TreeItem(controller.fileSystemRoot)) {
         isShowRoot = false
         selectionModel.selectionMode = SelectionMode.MULTIPLE
         setOnDragOver {
@@ -29,7 +30,7 @@ class FileSystemView : View() {
         }
         setOnDragDropped {
             if (it.dragboard.hasFiles() && it.dragboard.files.all { e -> e.isDirectory }) {
-                mainViewModel.addRootDirectories(it.dragboard.files)
+                controller.addRootDirectories(it.dragboard.files)
             }
             it.isDropCompleted = true
             it.consume()
@@ -41,12 +42,14 @@ class FileSystemView : View() {
                         if (it.viewStatus == ViewStatus.Viewed) {
                             circle {
                                 fill = Color.GREEN
-                                radius = 7.0
+                                radius = 5.0
+                                alignment = Pos.CENTER_LEFT
                             }
                         } else if (it.viewStatus == ViewStatus.Skipped) {
                             circle {
-                                fill = Color.ORANGE
-                                radius = 7.0
+                                fill = Color.ORANGERED
+                                radius = 5.0
+                                alignment = Pos.CENTER_LEFT
                             }
                         } else if (it.viewStatus == ViewStatus.None) {
                             rectangle {
@@ -60,6 +63,29 @@ class FileSystemView : View() {
                             text = it.name
                             textAlignment = TextAlignment.CENTER
                         }
+                        contextmenu {
+                            item("Flag viewed").action {
+                                controller.setVideoViewStatus(
+                                    selectedVideoFiles(),
+                                    ViewStatus.Viewed
+                                )
+                                refresh()
+                            }
+                            item("Undo flag").action {
+                                controller.setVideoViewStatus(
+                                    selectedVideoFiles(),
+                                    ViewStatus.None
+                                )
+                                refresh()
+                            }
+                            item("Skip").action {
+                                controller.setVideoViewStatus(
+                                    selectedVideoFiles(),
+                                    ViewStatus.Skipped
+                                )
+                                refresh()
+                            }
+                        }
                     }
                     is DirectoryViewModel -> {
                         label(it.name)
@@ -70,7 +96,7 @@ class FileSystemView : View() {
                                         selected()
                                             .filterIsInstance<DirectoryViewModel>()
                                             .filter { it.isRoot }
-                                            .forEach { mainViewModel.removeRootDirectory(it.name) }
+                                            .forEach { controller.removeRootDirectory(it.name) }
                                     }
                                 }
                             }
@@ -87,5 +113,10 @@ class FileSystemView : View() {
 
     private fun selected(): List<NodeViewModel> {
         return root.selectionModel.selectedItems.map { e -> e.value }
+    }
+
+    private fun selectedVideoFiles(): List<VideoFileViewModel> {
+        return selected()
+            .filterIsInstance(VideoFileViewModel::class.java)
     }
 }
