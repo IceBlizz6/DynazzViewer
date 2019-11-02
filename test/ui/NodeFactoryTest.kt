@@ -19,7 +19,11 @@ class NodeFactoryTest {
     @Test
     fun subFolderTest() {
         val nodeFactory = NodeFactory(MockFileRepository())
-        val root = DirectoryViewModel("H:${File.separatorChar}downloads", true)
+        val root = DirectoryViewModel(
+            name = "H:${File.separatorChar}downloads",
+            fullPath = "H:${File.separatorChar}downloads",
+            isRoot = true
+        )
         val map = mutableMapOf<String, DirectoryViewModel>()
         val dir = nodeFactory.getOrCreateParent(
             root,

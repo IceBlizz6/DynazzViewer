@@ -85,6 +85,13 @@ class FileSystemView : View() {
                                 )
                                 refresh()
                             }
+                            if (controller.playVideoEnabled) {
+                                item("Play video") {
+                                    action {
+                                        controller.playVideos(selectedVideoFiles())
+                                    }
+                                }
+                            }
                         }
                     }
                     is DirectoryViewModel -> {

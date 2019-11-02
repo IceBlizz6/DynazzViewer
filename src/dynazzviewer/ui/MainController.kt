@@ -34,7 +34,8 @@ class MainController : Controller() {
         this.fileSystemController = FileSystemController(
             storage = storage,
             fileRepository = fileRepository,
-            configuration = configuration
+            fileConfiguration = configuration,
+            userConfiguration = configuration
         )
     }
 }

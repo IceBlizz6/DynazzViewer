@@ -8,13 +8,17 @@ import tornadofx.ConfigProperties
 
 class DefaultConfiguration(
     private val config: ConfigProperties
-) : Configuration, FileConfiguration {
+) : Configuration, FileConfiguration, UserConfiguration {
     companion object {
         const val cacheDirectory = "cache"
         const val userDirectory = "user"
         const val configPropertiesFileName = "config.properties"
         private const val listSeparator = "|"
     }
+
+    override var mediaPlayerApplicationPath: String?
+        get() = config.string("mediaPlayerApplicationPath")
+        set(value) = config.set("mediaPlayerApplicationPath", value)
 
     override var videoExtensions: Set<String>
         get() = readSet("VideoExtensions", setOf("mkv", "avi"))

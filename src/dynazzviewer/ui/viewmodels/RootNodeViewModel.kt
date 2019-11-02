@@ -1,3 +1,3 @@
 package dynazzviewer.ui.viewmodels
 
-class RootNodeViewModel() : NodeViewModel("Root")
+class RootNodeViewModel() : NodeViewModel("Root", "Root")

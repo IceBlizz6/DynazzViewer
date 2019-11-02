@@ -15,14 +15,15 @@ import java.io.File
 import java.nio.file.Paths
 
 class FileSystemController(
-    val storage: Storage,
-    val configuration: FileConfiguration,
-    val fileRepository: FileRepository
+    private val storage: Storage,
+    private val fileConfiguration: FileConfiguration,
+    private val userConfiguration: UserConfiguration,
+    private val fileRepository: FileRepository
 ) : UpdateListener {
     val fileSystemRoot: NodeViewModel = RootNodeViewModel()
 
     init {
-        for (path in configuration.rootDirectoryPaths) {
+        for (path in fileConfiguration.rootDirectoryPaths) {
             loadRootDirectory(path)
         }
     }
@@ -30,23 +31,23 @@ class FileSystemController(
     fun addRootDirectories(directories: List<File>) {
         for (directory in directories) {
             val path = directory.canonicalPath
-            if (!configuration.rootDirectoryPaths.contains(path)) {
+            if (!fileConfiguration.rootDirectoryPaths.contains(path)) {
                 addRootDirectory(path)
             }
         }
     }
 
     private fun addRootDirectory(path: String) {
-        val storedPaths = configuration.rootDirectoryPaths.toMutableSet()
+        val storedPaths = fileConfiguration.rootDirectoryPaths.toMutableSet()
         storedPaths.add(path)
-        configuration.rootDirectoryPaths = storedPaths
+        fileConfiguration.rootDirectoryPaths = storedPaths
         loadRootDirectory(path)
     }
 
     fun removeRootDirectory(path: String) {
-        val storedPaths = configuration.rootDirectoryPaths.toMutableSet()
+        val storedPaths = fileConfiguration.rootDirectoryPaths.toMutableSet()
         storedPaths.remove(path)
-        configuration.rootDirectoryPaths = storedPaths
+        fileConfiguration.rootDirectoryPaths = storedPaths
         fileRepository.remove(path)
         val childNode = fileSystemRoot.children.single { it.name == path }
         fileSystemRoot.children.remove(childNode)
@@ -89,6 +90,17 @@ class FileSystemController(
         }
         return node as VideoFileViewModel
     }
+
+    fun playVideos(videoFiles: List<VideoFileViewModel>) {
+        val applicationPath: String? = userConfiguration.mediaPlayerApplicationPath
+        if (applicationPath != null) {
+            val videoPaths = videoFiles.joinToString(" ") { "\"" + it.fullPath + "\"" }
+            Runtime.getRuntime().exec("$applicationPath $videoPaths")
+        }
+    }
+
+    val playVideoEnabled: Boolean
+        get() = userConfiguration.mediaPlayerApplicationPath != null
 
     override fun updateMediaUnit(id: Int, recursive: Boolean) = Unit
 

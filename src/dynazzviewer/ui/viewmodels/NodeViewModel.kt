@@ -8,7 +8,8 @@ import tornadofx.getValue
 import tornadofx.setValue
 
 abstract class NodeViewModel(
-    name: String
+    name: String,
+    val fullPath: String
 ) {
     private val childrenProperty = SimpleListProperty<NodeViewModel>(
         FXCollections.observableArrayList(listOf()))

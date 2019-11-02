@@ -7,8 +7,9 @@ import tornadofx.setValue
 
 class VideoFileViewModel(
     name: String,
+    fullPath: String,
     viewStatus: ViewStatus
-) : NodeViewModel(name) {
+) : NodeViewModel(name, fullPath) {
     private val viewStatusProperty: SimpleObjectProperty<ViewStatus> =
         SimpleObjectProperty(viewStatus)
 
