@@ -15,7 +15,9 @@ class FileCache(
         val paths: Set<String>
         if (source.isCached(root.rootPath)) {
             val rootCache = source.readCacheFile(root.rootPath)
-            return rootCache.map { e -> FilePath(e) }.toSet()
+            val filePaths = rootCache.map { e -> FilePath(e) }.toSet()
+            cacheRoot(root, filePaths)
+            return filePaths
         } else {
             paths = source.listFiles(root.rootPath)
             val filePaths = paths.map { e -> FilePath(e) }.toSet()
@@ -29,9 +31,13 @@ class FileCache(
     }
 
     private fun save(root: RootDirectory, filePaths: Set<FilePath>) {
+        cacheRoot(root, filePaths)
+        source.saveCacheFile(root.rootPath, filePaths.map { e -> e.path }.toSet())
+    }
+
+    private fun cacheRoot(root: RootDirectory, filePaths: Set<FilePath>) {
         rootToFilePaths[root] = filePaths.toMutableSet()
         updateNameCache(filePaths)
-        source.saveCacheFile(root.rootPath, filePaths.map { e -> e.path }.toSet())
     }
 
     fun update(root: RootDirectory, subDirectory: String, filePaths: Set<FilePath>) {
