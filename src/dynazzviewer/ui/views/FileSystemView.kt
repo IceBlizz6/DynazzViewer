@@ -85,6 +85,9 @@ class FileSystemView : View() {
                                 )
                                 refresh()
                             }
+                            item("Open in explorer").action {
+                                controller.showExplorer(selectedVideoFiles())
+                            }
                             if (controller.playVideoEnabled) {
                                 item("Play video") {
                                     action {

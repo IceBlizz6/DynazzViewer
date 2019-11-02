@@ -11,6 +11,7 @@ import dynazzviewer.ui.viewmodels.NodeFactory
 import dynazzviewer.ui.viewmodels.NodeViewModel
 import dynazzviewer.ui.viewmodels.RootNodeViewModel
 import dynazzviewer.ui.viewmodels.VideoFileViewModel
+import java.awt.Desktop
 import java.io.File
 import java.nio.file.Paths
 
@@ -97,6 +98,16 @@ class FileSystemController(
             val videoPaths = videoFiles.joinToString(" ") { "\"" + it.fullPath + "\"" }
             Runtime.getRuntime().exec("$applicationPath $videoPaths")
         }
+    }
+
+    fun showExplorer(videoFiles: List<VideoFileViewModel>) {
+        val desktop = Desktop.getDesktop()
+        videoFiles
+            .map { it.fullPath }
+            .map { File(it) }
+            .map { it.parentFile }
+            .distinctBy { it.path }
+            .forEach { desktop.open(it) }
     }
 
     val playVideoEnabled: Boolean
