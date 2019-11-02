@@ -18,7 +18,10 @@ class DefaultConfiguration(
 
     override var mediaPlayerApplicationPath: String?
         get() = config.string("mediaPlayerApplicationPath")
-        set(value) = config.set("mediaPlayerApplicationPath", value)
+        set(value) {
+            assignNullIfEmpty("mediaPlayerApplicationPath", value)
+            config.save()
+        }
 
     override var videoExtensions: Set<String>
         get() = readSet("VideoExtensions", setOf("mkv", "avi"))
@@ -43,6 +46,23 @@ class DefaultConfiguration(
     init {
         ensureDirectoryExists(cacheDirectoryPath)
         ensureDirectoryExists(rootStorageDirectory)
+    }
+
+    private fun assignNullIfEmpty(key: String, value: String?) {
+        val assignableValue = nullIfEmpty(value)
+        if (assignableValue == null) {
+            config.remove(key)
+        } else {
+            config["mediaPlayerApplicationPath"] = assignableValue
+        }
+    }
+
+    private fun nullIfEmpty(value: String?): String? {
+        if (value != null && value.isEmpty()) {
+            return null
+        } else {
+            return value
+        }
     }
 
     private fun ensureDirectoryExists(path: String) {

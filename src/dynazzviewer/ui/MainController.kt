@@ -17,7 +17,7 @@ class MainController : Controller() {
         DefaultConfiguration.configPropertiesFileName
     )
 
-    private val configuration: DefaultConfiguration = DefaultConfiguration(config)
+    val configuration: DefaultConfiguration = DefaultConfiguration(config)
 
     private val storage: Storage
 

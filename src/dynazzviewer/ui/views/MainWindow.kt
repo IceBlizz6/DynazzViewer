@@ -7,6 +7,15 @@ class MainWindow : View("DynazzViewer") {
     override val root = borderpane {
         minWidth = 800.0
         minHeight = 600.0
+        top {
+            menubar {
+                menu("Options") {
+                    item("Configuration").action {
+                        find<ConfigurationView>().openModal(block = true)
+                    }
+                }
+            }
+        }
         center {
             tabpane {
                 tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
