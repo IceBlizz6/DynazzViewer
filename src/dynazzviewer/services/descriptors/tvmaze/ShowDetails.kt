@@ -46,9 +46,9 @@ class ShowDetails(
         return DescriptionUnit(
             name = name,
             children = seasonList,
-            imageUrls = listOf(imageUrl),
+            imageUrls = setOf(imageUrl),
             uniqueKey = "TvMaze/$id",
-            tags = genres
+            tags = genres.toSet()
         )
     }
 }

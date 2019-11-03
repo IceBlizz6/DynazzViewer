@@ -14,7 +14,7 @@ internal class TransactionDataContext(storage: SqlLiteStorage) :
         transaction.begin()
     }
 
-    override fun tagsGetOrCreate(tagNames: List<String>): List<MediaUnitTag> {
+    override fun tagsGetOrCreate(tagNames: Set<String>): List<MediaUnitTag> {
         val tags = tagsByName(tagNames).toMutableList()
         if (tagNames.count() != tags.size) {
             val existing = tags.map { e -> e.name }

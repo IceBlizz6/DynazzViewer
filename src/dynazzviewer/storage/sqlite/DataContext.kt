@@ -47,7 +47,7 @@ internal open class DataContext(private val storage: SqlLiteStorage) : ReadOpera
         return stream(MediaPartCollection::class.java).toList()
     }
 
-    fun tagsByName(tagNames: List<String>): List<MediaUnitTag> {
+    fun tagsByName(tagNames: Collection<String>): List<MediaUnitTag> {
         return stream(MediaUnitTag::class.java).where<Exception>(matchAnyName(tagNames)).toList()
     }
 

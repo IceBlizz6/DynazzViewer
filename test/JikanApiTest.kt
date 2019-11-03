@@ -1,14 +1,75 @@
+import base.TestConfiguration
 import base.TestWebClient
 import dynazzviewer.base.ExtDatabase
+import dynazzviewer.controllers.ServiceDescriptorController
+import dynazzviewer.controllers.UpdateListener
 import dynazzviewer.services.HttpWebJsonParser
 import dynazzviewer.services.WebJsonParser
 import dynazzviewer.services.descriptors.jikan.JikanApi
 import dynazzviewer.services.descriptors.jikan.MalYearSeason
+import dynazzviewer.storage.sqlite.SqlLiteStorage
 import java.time.LocalDate
 import org.junit.Assert
 import org.junit.Test
 
 class JikanApiTest {
+    @Test
+    fun completeSeriesTest() {
+        val map = mapOf(
+            "https://api.jikan.moe/v3/anime/11757" to
+                "jikan/series_11757.json",
+            "https://api.jikan.moe/v3/anime/11757/episodes/1" to
+                "jikan/episodes_11757.json",
+            "https://api.jikan.moe/v3/anime/20021" to
+                "jikan/series_20021.json",
+            "https://api.jikan.moe/v3/anime/20021/episodes/1" to
+                "jikan/episodes_20021.json",
+            "https://api.jikan.moe/v3/anime/21881" to
+                "jikan/series_21881.json",
+            "https://api.jikan.moe/v3/anime/21881/episodes/1" to
+                "jikan/episodes_21881.json",
+            "https://api.jikan.moe/v3/anime/31765" to
+                "jikan/series_31765.json",
+            "https://api.jikan.moe/v3/anime/31765/episodes/1" to
+                "jikan/episodes_31765.json",
+            "https://api.jikan.moe/v3/anime/36474" to
+                "jikan/series_36474.json",
+            "https://api.jikan.moe/v3/anime/36474/episodes/1" to
+                "jikan/episodes_36474.json",
+            "https://api.jikan.moe/v3/anime/39597" to
+                "jikan/series_39597.json",
+            "https://api.jikan.moe/v3/anime/39597/episodes/1" to
+                "jikan/episodes_39597.json",
+            "https://api.jikan.moe/v3/anime/40489" to
+                "jikan/series_40489.json",
+            "https://api.jikan.moe/v3/anime/40489/episodes/1" to
+                "jikan/episodes_40489.json",
+            "https://api.jikan.moe/v3/anime/40540" to
+                "jikan/series_40540.json",
+            "https://api.jikan.moe/v3/anime/40540/episodes/1" to
+                "jikan/episodes_40540.json"
+        )
+        val client = mockWebClient(map)
+        val storage = SqlLiteStorage(TestConfiguration())
+        val controller = ServiceDescriptorController(
+            descriptorServices = listOf(JikanApi(client)),
+            storage = storage,
+            listener = MockUpdateListener()
+        )
+        val series = controller.queryDescriptor(ExtDatabase.MyAnimeList, "11757")
+        Assert.assertNotNull(series!!)
+        controller.add(series)
+        storage.read().use { context ->
+            val mediaUnits = context.mediaUnits()
+            Assert.assertEquals(1, mediaUnits.count())
+            val mediaUnit = mediaUnits.single()
+            Assert.assertTrue(mediaUnit.tags.any { it.name == "Action" })
+            Assert.assertTrue(mediaUnit.images.any())
+            Assert.assertTrue(mediaUnit.id > 0)
+            Assert.assertTrue(mediaUnit.children.any())
+        }
+    }
+
     @Test
     fun episodesTest() {
         val client = mockWebClient(
@@ -123,5 +184,15 @@ class JikanApiTest {
 
     private fun mockWebClient(map: Map<String, String>): WebJsonParser {
         return HttpWebJsonParser(TestWebClient(map))
+    }
+
+    class MockUpdateListener : UpdateListener {
+        override fun updateMediaUnit(id: Int, recursive: Boolean) = Unit
+
+        override fun updateMediaPart(id: Int) = Unit
+
+        override fun updateMediaFile(id: Int) = Unit
+
+        override fun setMediaFileId(name: String, assignedId: Int) = Unit
     }
 }

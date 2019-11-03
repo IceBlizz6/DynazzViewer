@@ -16,8 +16,8 @@ class DescriptionModelTest {
                     name = "...",
                     uniqueKey = null,
                     children = listOf(),
-                    imageUrls = listOf("http://test/test.jpg"),
-                    tags = listOf("Action")
+                    imageUrls = setOf("http://test/test.jpg"),
+                    tags = setOf("Action")
             )
             descUnit.create(context)
         }

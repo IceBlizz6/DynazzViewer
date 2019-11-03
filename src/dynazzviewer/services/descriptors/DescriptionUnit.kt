@@ -8,8 +8,8 @@ import dynazzviewer.storage.ReadWriteOperation
 class DescriptionUnit(
     val name: String,
     val children: List<DescriptionPartCollection>,
-    val imageUrls: List<String>,
-    val tags: List<String>,
+    val imageUrls: Set<String>,
+    val tags: Set<String>,
     val uniqueKey: String?
 ) {
     fun create(context: ReadWriteOperation): MediaUnit {
@@ -44,7 +44,7 @@ class DescriptionUnit(
 
     private fun updateTags(target: MediaUnit, context: ReadWriteOperation) {
         val matchResult = Matcher().matchWithString(target.tags, tags)
-        val addedTags = context.tagsGetOrCreate(matchResult.added)
+        val addedTags = context.tagsGetOrCreate(matchResult.added.toSet())
         target.tags.addAll(addedTags)
         target.tags.removeAll(matchResult.removed)
     }

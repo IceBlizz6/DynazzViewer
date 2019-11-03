@@ -10,4 +10,10 @@ enum class RelatedType(
     ADAPTATION("Adaptation", false),
     SIDE_STORY("Side story", true),
     PARENT_STORY("Parent story", true),
+    OTHER("Other", false),
+    PREQUEL("Prequel", true),
+    SEQUEL("Sequel", true),
+    SUMMARY("Summary", false),
+    ALTERNATIVE_SETTING("Alternative setting", false),
+    FULL_STORY("Full story", true),
 }

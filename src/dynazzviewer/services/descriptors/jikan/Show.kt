@@ -56,7 +56,7 @@ class Show(
            val from: LocalDateTime,
         @JsonProperty("to", required = true)
            @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss[xxx]")
-           val to: LocalDateTime
+           val to: LocalDateTime?
     )
     class Related(
         @JsonProperty("mal_id", required = true)

@@ -62,10 +62,10 @@ class ServiceDescriptorControllerTest {
         )
         return DescriptionUnit(
             name = "Test Series",
-            imageUrls = listOf(),
+            imageUrls = setOf(),
             children = listOf(descPartCollection),
             uniqueKey = "uniq3",
-            tags = listOf("Action", "Comedy")
+            tags = setOf("Action", "Comedy")
         )
     }
 
@@ -96,10 +96,10 @@ class ServiceDescriptorControllerTest {
         )
         return DescriptionUnit(
             name = "Test Series",
-            imageUrls = listOf(),
+            imageUrls = setOf(),
             children = listOf(descPartCollection),
             uniqueKey = "uniq3",
-            tags = listOf("Action", "Comedy")
+            tags = setOf("Action", "Comedy")
         )
     }
 }

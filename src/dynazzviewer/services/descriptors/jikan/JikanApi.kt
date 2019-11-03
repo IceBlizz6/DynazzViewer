@@ -35,8 +35,10 @@ class JikanApi(
                 children = partCollections,
                 uniqueKey = null,
                 name = firstName,
-                tags = jikanSeries.flatMap { e -> e.show.genres.map { genre -> genre.name } },
-                imageUrls = jikanSeries.map { e -> e.show.imageUrl }
+                tags = jikanSeries
+                        .flatMap { e -> e.show.genres.map { genre -> genre.name } }
+                        .toSet(),
+                imageUrls = jikanSeries.map { e -> e.show.imageUrl }.toSet()
             )
         } else {
             return null
@@ -96,7 +98,7 @@ class JikanApi(
         } else {
             episodes(code)
         }
-        if (autoFillEpisodeAirDates) {
+        if (autoFillEpisodeAirDates && seriesData.aired.to != null) {
             autoFillEpisodeAirDates(episodes, seriesData.aired.from.toLocalDate(),
                 seriesData.aired.to.toLocalDate())
         }
@@ -125,7 +127,7 @@ class JikanApi(
         } else {
             episodes(code)
         }
-        if (autoFillEpisodeAirDates) {
+        if (autoFillEpisodeAirDates && seriesData.aired.to != null) {
             autoFillEpisodeAirDates(episodes, seriesData.aired.from.toLocalDate(),
                 seriesData.aired.to.toLocalDate())
         }

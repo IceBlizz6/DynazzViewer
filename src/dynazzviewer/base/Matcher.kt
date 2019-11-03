@@ -19,6 +19,13 @@ class Matcher {
 
     fun <TOriginal : UniqueKey> matchWithString(
         original: List<TOriginal>,
+        updated: Set<String>
+    ): MatchResult<TOriginal, String> {
+        return matchWithString(original, updated.toList())
+    }
+
+    fun <TOriginal : UniqueKey> matchWithString(
+        original: List<TOriginal>,
         updated: List<String>
     ): MatchResult<TOriginal, String> {
         return MatchResult<TOriginal, String>(
