@@ -17,6 +17,7 @@ class DescriptionUnit(
             uniqueExtKey = uniqueKey,
             name = name
         )
+        context.save(mediaUnit)
         imageUrls
                 .map { e -> MediaImage(mediaUnit = mediaUnit, url = e) }
                 .forEach { context.save(it) }
