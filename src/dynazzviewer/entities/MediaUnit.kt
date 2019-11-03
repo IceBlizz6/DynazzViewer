@@ -18,7 +18,7 @@ class MediaUnit(
         private set
 
     @OneToMany(mappedBy = "mediaUnit")
-    var images: List<MediaImage> = listOf()
+    lateinit var images: List<MediaImage>
         private set
 
     override val root: MediaUnit
