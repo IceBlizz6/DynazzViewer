@@ -26,8 +26,11 @@ class DescriptionPartCollection(
             sortOrder = sortOrder,
             seasonNumber = seasonNumber
         )
+        context.save(partCollection)
         if (alternativeTitles != null) {
-            updateAlternativeTitles(context, partCollection, alternativeTitles)
+            alternativeTitles
+                    .map { AlternativeTitle(partCollection, it) }
+                    .forEach { context.save(it) }
         }
         return partCollection
     }
