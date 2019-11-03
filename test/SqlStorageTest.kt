@@ -1,9 +1,6 @@
 import base.TestConfiguration
 import dynazzviewer.base.ViewStatus
-import dynazzviewer.entities.MediaFile
-import dynazzviewer.entities.MediaImage
-import dynazzviewer.entities.MediaPartCollection
-import dynazzviewer.entities.MediaUnit
+import dynazzviewer.entities.*
 import dynazzviewer.storage.sqlite.SqlLiteStorage
 import javax.persistence.PersistenceException
 import org.junit.Assert
@@ -13,6 +10,36 @@ public class SqlStorageTest {
     @Test
     fun createStorageTest() {
         val storage = SqlLiteStorage(TestConfiguration())
+    }
+
+    @Test
+    fun alternativeTitlesStorageTest() {
+        val storage = SqlLiteStorage(TestConfiguration())
+        storage.readWrite().use { context ->
+            val mediaUnit = MediaUnit(
+                    name = "Test",
+                    uniqueExtKey = null
+            )
+            val mediaPartCollection = MediaPartCollection(
+                    name = "Test",
+                    uniqueExtKey = "...",
+                    parent = mediaUnit,
+                    seasonNumber = null,
+                    sortOrder = null
+            )
+            val alternativeTitle = AlternativeTitle(
+                    name = "title",
+                    parent = mediaPartCollection
+            )
+            context.save(mediaUnit)
+            context.save(mediaPartCollection)
+            context.save(alternativeTitle)
+        }
+        storage.read().use { context ->
+            val mediaUnit = context.mediaUnits().single()
+            val mediaPartCollection = mediaUnit.children.single()
+            Assert.assertEquals(1, mediaPartCollection.alternativeTitles.count())
+        }
     }
 
     @Test
