@@ -1,6 +1,7 @@
 import base.TestConfiguration
 import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.MediaFile
+import dynazzviewer.entities.MediaImage
 import dynazzviewer.entities.MediaPartCollection
 import dynazzviewer.entities.MediaUnit
 import dynazzviewer.storage.sqlite.SqlLiteStorage
@@ -12,6 +13,27 @@ public class SqlStorageTest {
     @Test
     fun createStorageTest() {
         val storage = SqlLiteStorage(TestConfiguration())
+    }
+
+    @Test
+    fun imageListStorageTest() {
+        val storage = SqlLiteStorage(TestConfiguration())
+        storage.readWrite().use { context ->
+            val mediaUnit = MediaUnit(
+                    name = "Test",
+                    uniqueExtKey = null
+            )
+            val image = MediaImage(
+                    mediaUnit,
+                    "http:/test.com/img.jpg"
+            )
+            context.save(mediaUnit)
+            context.save(image)
+        }
+        storage.read().use { context ->
+            val mediaUnit = context.mediaUnits().single()
+            Assert.assertEquals(1, mediaUnit.images.count())
+        }
     }
 
     @Test

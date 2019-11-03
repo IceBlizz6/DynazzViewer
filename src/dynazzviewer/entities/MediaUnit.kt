@@ -17,8 +17,8 @@ class MediaUnit(
     lateinit var children: List<MediaPartCollection>
         private set
 
-    @OneToMany
-    var images: MutableList<MediaImage> = mutableListOf()
+    @OneToMany(mappedBy = "mediaUnit")
+    var images: List<MediaImage> = listOf()
         private set
 
     override val root: MediaUnit

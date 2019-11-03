@@ -17,9 +17,9 @@ class DescriptionUnit(
             uniqueExtKey = uniqueKey,
             name = name
         )
-        mediaUnit.images.addAll(
-            imageUrls.map { e -> MediaImage(mediaUnit = mediaUnit, url = e) }
-        )
+        imageUrls
+                .map { e -> MediaImage(mediaUnit = mediaUnit, url = e) }
+                .forEach { context.save(it) }
         mediaUnit.tags.addAll(
             context.tagsGetOrCreate(tags)
         )
@@ -35,13 +35,10 @@ class DescriptionUnit(
 
     private fun updateImages(target: MediaUnit, context: ReadWriteOperation) {
         val matchResult = Matcher().matchWithString(target.images, imageUrls)
-        val addedImages = matchResult.added.map { e ->
-            val image = MediaImage(mediaUnit = target, url = e)
-            context.save(image)
-            image
-        }
-        target.images.addAll(addedImages)
-        target.images.removeAll(matchResult.removed)
+        matchResult.added
+                .map { e -> MediaImage(mediaUnit = target, url = e) }
+                .forEach { context.save(it) }
+        matchResult.removed.forEach { context.delete(it) }
     }
 
     private fun updateTags(target: MediaUnit, context: ReadWriteOperation) {
