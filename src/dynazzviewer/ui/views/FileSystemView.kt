@@ -89,7 +89,7 @@ class FileSystemView : View() {
                                 controller.showExplorer(selectedVideoFiles())
                             }
                             if (controller.playVideoEnabled) {
-                                item("Play video") {
+                                item("Play video(s)") {
                                     action {
                                         controller.playVideos(selectedVideoFiles())
                                     }
