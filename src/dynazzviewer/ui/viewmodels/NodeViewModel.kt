@@ -17,4 +17,17 @@ abstract class NodeViewModel(
 
     val children: ObservableList<NodeViewModel> by childrenProperty
     var name: String by nameProperty
+
+    fun videoFiles(): List<VideoFileViewModel> {
+        val list = mutableListOf<VideoFileViewModel>()
+        list.addAll(
+            children.filterIsInstance<VideoFileViewModel>()
+        )
+        list.addAll(
+            children
+                .filterIsInstance<DirectoryViewModel>()
+                .flatMap { it.videoFiles() }
+        )
+        return list
+    }
 }

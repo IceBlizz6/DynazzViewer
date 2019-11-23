@@ -100,6 +100,27 @@ class FileSystemView : View() {
                     is DirectoryViewModel -> {
                         label(it.name)
                         contextmenu {
+                            item("Flag all as viewed").action {
+                                controller.setVideoViewStatusRecursive(
+                                    selected(),
+                                    ViewStatus.Viewed
+                                )
+                                refresh()
+                            }
+                            item("Undo all flags").action {
+                                controller.setVideoViewStatusRecursive(
+                                    selected(),
+                                    ViewStatus.None
+                                )
+                                refresh()
+                            }
+                            item("Flag all as skipped").action {
+                                controller.setVideoViewStatusRecursive(
+                                    selected(),
+                                    ViewStatus.Skipped
+                                )
+                                refresh()
+                            }
                             if (it.isRoot) {
                                 item("Remove") {
                                     action {

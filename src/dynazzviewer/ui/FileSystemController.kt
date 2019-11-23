@@ -60,6 +60,13 @@ class FileSystemController(
         fileSystemRoot.children.add(rootDir)
     }
 
+    fun setVideoViewStatusRecursive(nodes: List<NodeViewModel>, status: ViewStatus) {
+        val videoFiles = nodes
+            .flatMap { it.videoFiles() }
+            .distinct()
+        setVideoViewStatus(videoFiles, status)
+    }
+
     fun setVideoViewStatus(videoFiles: List<VideoFileViewModel>, status: ViewStatus) {
         val distinctNames = videoFiles
             .map { it.name }
