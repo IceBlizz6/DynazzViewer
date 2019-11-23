@@ -1,5 +1,6 @@
 package dynazzviewer.ui.viewmodels
 
+import java.nio.file.Paths
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
@@ -41,5 +42,14 @@ abstract class NodeViewModel(
             list.flatMap { it.directories() }
         )
         return list
+    }
+
+    fun lookup(path: String): NodeViewModel {
+        val pathSteps = Paths.get(path)
+        var current = this
+        for (pathStep in pathSteps) {
+            current = current.children.single { it.name == pathStep.toString() }
+        }
+        return current
     }
 }

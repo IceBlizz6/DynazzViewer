@@ -1,6 +1,8 @@
 package dynazzviewer.ui.viewmodels
 
 import dynazzviewer.filesystem.FileRepository
+import dynazzviewer.filesystem.hierarchy.FilePath
+import dynazzviewer.filesystem.hierarchy.RootDirectory
 import dynazzviewer.services.filesystem.VideoFile
 import java.io.File
 
@@ -25,9 +27,36 @@ class NodeFactory(
         return rootViewModel
     }
 
-    fun refreshDirectory(fileSystemRoot: RootNodeViewModel, targetDirectory: DirectoryViewModel) {
-        val updatedEntries = fileRepository.refreshDirectory(targetDirectory.fullPath)
-        targetDirectory.children.clear()
+    fun refreshDirectory(fileSystemRoot: RootNodeViewModel, directoryPath: FilePath) {
+        val updatedEntries = fileRepository.refreshDirectory(directoryPath.path)
+        val matches = findMatching(fileSystemRoot, directoryPath.path)
+        for (match in matches) {
+            match.value.children.clear()
+        }
+        fillDirectory(fileSystemRoot, updatedEntries)
+    }
+
+    private fun findMatching(
+        fileSystemRoot: RootNodeViewModel,
+        directoryPath: String
+    ): Map<DirectoryViewModel, DirectoryViewModel> {
+        val map = mutableMapOf<DirectoryViewModel, DirectoryViewModel>()
+        for (root in fileSystemRoot.childrenAsDirectories) {
+            if (root.fullPath == directoryPath) {
+                map[root] = root
+            } else if (root.fullPath.startsWith(directoryPath)) {
+                map[root] = root.lookup(directoryPath) as DirectoryViewModel
+            } else if (directoryPath.startsWith(root.fullPath)) {
+                map[root] = root
+            }
+        }
+        return map
+    }
+
+    private fun fillDirectory(
+        fileSystemRoot: RootNodeViewModel,
+        updatedEntries: Map<RootDirectory, Set<VideoFile>>
+    ) {
         for (entry in updatedEntries) {
             val rootViewModel = fileSystemRoot
                 .childrenAsDirectories

@@ -6,6 +6,7 @@ import dynazzviewer.controllers.ViewStatusController
 import dynazzviewer.filesystem.FileConfiguration
 import dynazzviewer.filesystem.FileRepository
 import dynazzviewer.filesystem.hierarchy.FileName
+import dynazzviewer.filesystem.hierarchy.FilePath
 import dynazzviewer.storage.Storage
 import dynazzviewer.ui.viewmodels.DirectoryViewModel
 import dynazzviewer.ui.viewmodels.NodeFactory
@@ -71,7 +72,7 @@ class FileSystemController(
 
     fun refreshDirectory(directory: DirectoryViewModel) {
         val factory = NodeFactory(fileRepository)
-        factory.refreshDirectory(fileSystemRoot, directory)
+        factory.refreshDirectory(fileSystemRoot, FilePath(directory.fullPath))
     }
 
     fun setVideoViewStatus(videoFiles: List<VideoFileViewModel>, status: ViewStatus) {
