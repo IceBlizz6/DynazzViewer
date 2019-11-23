@@ -78,7 +78,7 @@ class FileSystemView : View() {
                                 )
                                 refresh()
                             }
-                            item("Skip").action {
+                            item("Flag skipped").action {
                                 controller.setVideoViewStatus(
                                     selectedVideoFiles(),
                                     ViewStatus.Skipped
