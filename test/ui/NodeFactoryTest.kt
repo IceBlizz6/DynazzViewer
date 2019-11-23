@@ -66,6 +66,10 @@ class NodeFactoryTest {
     }
 
     class MockFileRepository : FileRepository {
+        override fun refreshDirectory(directoryPath: String): Map<RootDirectory, Set<VideoFile>> {
+            throw NotSupportedException()
+        }
+
         override fun updateFileName(fileName: FileName): Map<RootDirectory, Set<VideoFile>> {
             throw NotSupportedException()
         }

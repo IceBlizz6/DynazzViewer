@@ -25,6 +25,51 @@ class NodeFactory(
         return rootViewModel
     }
 
+    fun refreshDirectory(fileSystemRoot: RootNodeViewModel, targetDirectory: DirectoryViewModel) {
+        val updatedEntries = fileRepository.refreshDirectory(targetDirectory.fullPath)
+        targetDirectory.children.clear()
+        for (entry in updatedEntries) {
+            val rootViewModel = fileSystemRoot
+                .childrenAsDirectories
+                .single { it.name == entry.key.rootPath }
+            refreshDirectoryNode(rootViewModel, entry.value)
+        }
+    }
+
+    private fun refreshDirectoryNode(
+        rootViewModel: DirectoryViewModel,
+        videoFiles: Set<VideoFile>
+    ) {
+        val cacheMap = mutableMapOf<String, DirectoryViewModel>()
+        cacheMap[rootViewModel.name] = rootViewModel
+        cacheMap.putAll(
+            rootViewModel.directories().map { it.fullPath to it }
+        )
+        for (videoFile in videoFiles) {
+            refreshDirectoryVideoFile(rootViewModel, videoFile, cacheMap)
+        }
+    }
+
+    private fun refreshDirectoryVideoFile(
+        rootViewModel: DirectoryViewModel,
+        videoFile: VideoFile,
+        cacheMap: MutableMap<String, DirectoryViewModel>
+    ) {
+        val parent = getOrCreateParent(
+            rootViewModel = rootViewModel,
+            path = videoFile.path.path,
+            map = cacheMap
+        )
+        val child: NodeViewModel? = parent
+            .children
+            .singleOrNull { it.fullPath == videoFile.path.path }
+        if (child != null) {
+            parent.children.remove(child)
+        }
+        val viewModel = createVideoFileViewModel(parent, videoFile)
+        parent.children.add(viewModel)
+    }
+
     fun getOrCreateParent(
         rootViewModel: DirectoryViewModel,
         path: String,

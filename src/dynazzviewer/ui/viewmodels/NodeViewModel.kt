@@ -32,4 +32,14 @@ abstract class NodeViewModel(
         )
         return list
     }
+
+    fun directories(): List<DirectoryViewModel> {
+        val list = children
+            .filterIsInstance<DirectoryViewModel>()
+            .toMutableList()
+        list.addAll(
+            list.flatMap { it.directories() }
+        )
+        return list
+    }
 }

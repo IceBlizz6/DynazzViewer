@@ -124,6 +124,9 @@ class FileSystemView : View() {
                             item("Open in explorer").action {
                                 controller.showExplorer(selected())
                             }
+                            item("Refresh").action {
+                                controller.refreshDirectory(it)
+                            }
                             if (it.isRoot) {
                                 item("Remove") {
                                     action {

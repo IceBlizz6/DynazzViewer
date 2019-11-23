@@ -9,5 +9,7 @@ interface FileRepository {
 
     fun remove(rootPath: String): Boolean
 
+    fun refreshDirectory(directoryPath: String): Map<RootDirectory, Set<VideoFile>>
+
     fun updateFileName(fileName: FileName): Map<RootDirectory, Set<VideoFile>>
 }

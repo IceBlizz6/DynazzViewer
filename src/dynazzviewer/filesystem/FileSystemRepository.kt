@@ -27,7 +27,7 @@ class FileSystemRepository(
         }
     }
 
-    fun refreshDirectory(directoryPath: String): Map<RootDirectory, Set<VideoFile>> {
+    override fun refreshDirectory(directoryPath: String): Map<RootDirectory, Set<VideoFile>> {
         val filePaths = cache.readSubDirectory(directoryPath)
         for (root in roots) {
             if (directoryPath.startsWith(root.rootPath)) {

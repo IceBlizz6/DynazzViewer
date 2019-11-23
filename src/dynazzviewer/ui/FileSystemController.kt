@@ -22,7 +22,7 @@ class FileSystemController(
     private val userConfiguration: UserConfiguration,
     private val fileRepository: FileRepository
 ) : UpdateListener {
-    val fileSystemRoot: NodeViewModel = RootNodeViewModel()
+    val fileSystemRoot: RootNodeViewModel = RootNodeViewModel()
     private val desktop: Desktop = Desktop.getDesktop()
 
     init {
@@ -67,6 +67,11 @@ class FileSystemController(
             .flatMap { it.videoFiles() }
             .distinct()
         setVideoViewStatus(videoFiles, status)
+    }
+
+    fun refreshDirectory(directory: DirectoryViewModel) {
+        val factory = NodeFactory(fileRepository)
+        factory.refreshDirectory(fileSystemRoot, directory)
     }
 
     fun setVideoViewStatus(videoFiles: List<VideoFileViewModel>, status: ViewStatus) {
