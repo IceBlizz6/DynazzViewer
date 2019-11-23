@@ -7,6 +7,7 @@ import dynazzviewer.filesystem.FileConfiguration
 import dynazzviewer.filesystem.FileRepository
 import dynazzviewer.filesystem.hierarchy.FileName
 import dynazzviewer.storage.Storage
+import dynazzviewer.ui.viewmodels.DirectoryViewModel
 import dynazzviewer.ui.viewmodels.NodeFactory
 import dynazzviewer.ui.viewmodels.NodeViewModel
 import dynazzviewer.ui.viewmodels.RootNodeViewModel
@@ -22,6 +23,7 @@ class FileSystemController(
     private val fileRepository: FileRepository
 ) : UpdateListener {
     val fileSystemRoot: NodeViewModel = RootNodeViewModel()
+    private val desktop: Desktop = Desktop.getDesktop()
 
     init {
         for (path in fileConfiguration.rootDirectoryPaths) {
@@ -56,7 +58,7 @@ class FileSystemController(
 
     private fun loadRootDirectory(path: String) {
         val factory = NodeFactory(fileRepository)
-        val rootDir = factory.createRootViewModel(path, true)
+        val rootDir = factory.createRootViewModel(path)
         fileSystemRoot.children.add(rootDir)
     }
 
@@ -107,13 +109,20 @@ class FileSystemController(
         }
     }
 
-    fun showExplorer(videoFiles: List<VideoFileViewModel>) {
-        val desktop = Desktop.getDesktop()
-        videoFiles
+    fun showExplorer(nodes: List<NodeViewModel>) {
+        val selectedDirectories = mutableSetOf<NodeViewModel>()
+        selectedDirectories.addAll(
+            nodes
+                .filterIsInstance<VideoFileViewModel>()
+                .map { it.parent }
+        )
+        selectedDirectories.addAll(
+            nodes
+                .filterIsInstance<DirectoryViewModel>()
+        )
+        selectedDirectories
             .map { it.fullPath }
             .map { File(it) }
-            .map { it.parentFile }
-            .distinctBy { it.path }
             .forEach { desktop.open(it) }
     }
 

@@ -86,7 +86,7 @@ class FileSystemView : View() {
                                 refresh()
                             }
                             item("Open in explorer").action {
-                                controller.showExplorer(selectedVideoFiles())
+                                controller.showExplorer(selected())
                             }
                             if (controller.playVideoEnabled) {
                                 item("Play video(s)") {
@@ -120,6 +120,9 @@ class FileSystemView : View() {
                                     ViewStatus.Skipped
                                 )
                                 refresh()
+                            }
+                            item("Open in explorer").action {
+                                controller.showExplorer(selected())
                             }
                             if (it.isRoot) {
                                 item("Remove") {

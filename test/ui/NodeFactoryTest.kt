@@ -22,7 +22,7 @@ class NodeFactoryTest {
         val root = DirectoryViewModel(
             name = "H:${File.separatorChar}downloads",
             fullPath = "H:${File.separatorChar}downloads",
-            isRoot = true
+            assignedParent = null
         )
         val map = mutableMapOf<String, DirectoryViewModel>()
         val dir = nodeFactory.getOrCreateParent(
@@ -46,8 +46,7 @@ class NodeFactoryTest {
     fun nodeFactoryTest() {
         val nodeFactory = NodeFactory(MockFileRepository())
         val directory = nodeFactory.createRootViewModel(
-            "H:${File.separatorChar}downloads",
-            true
+            "H:${File.separatorChar}downloads"
         )
         Assert.assertEquals(2, directory.children.count())
         val secondFile = directory.children.singleOrNull { it.name == "File2.mkv" }

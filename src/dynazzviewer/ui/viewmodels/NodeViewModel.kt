@@ -18,6 +18,8 @@ abstract class NodeViewModel(
     val children: ObservableList<NodeViewModel> by childrenProperty
     var name: String by nameProperty
 
+    abstract val parent: NodeViewModel
+
     fun videoFiles(): List<VideoFileViewModel> {
         val list = mutableListOf<VideoFileViewModel>()
         list.addAll(
