@@ -22,6 +22,9 @@ class MainWindow : View("DynazzViewer") {
                 tab(text = "Files") {
                     this += find<FileSystemView>()
                 }
+                tab("Find media") {
+                    this += find<MediaSearchView>()
+                }
             }
         }
     }

@@ -7,4 +7,7 @@ class ResultHeader(
     val imageUrl: String,
     val extDb: ExtDatabase,
     val extDbCode: String
-)
+) {
+    val extReference: Pair<ExtDatabase, String>
+        get() = Pair(extDb, extDbCode)
+}

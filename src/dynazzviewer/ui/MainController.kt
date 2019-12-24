@@ -1,10 +1,14 @@
 package dynazzviewer.ui
 
+import dynazzviewer.controllers.ServiceDescriptorController
 import dynazzviewer.filesystem.FileCache
 import dynazzviewer.filesystem.FileEntryFactory
 import dynazzviewer.filesystem.FileRepository
 import dynazzviewer.filesystem.FileSystemRepository
 import dynazzviewer.filesystem.SystemFileSource
+import dynazzviewer.services.HttpWebJsonParser
+import dynazzviewer.services.descriptors.jikan.JikanApi
+import dynazzviewer.services.descriptors.tvmaze.TvMazeApi
 import dynazzviewer.storage.Storage
 import dynazzviewer.storage.sqlite.SqlLiteStorage
 import java.nio.file.Path
@@ -25,6 +29,8 @@ class MainController : Controller() {
 
     val fileSystemController: FileSystemController
 
+    val serviceController: ServiceDescriptorController
+
     init {
         storage = SqlLiteStorage(configuration)
         val fileEntryFactory = FileEntryFactory(configuration, storage)
@@ -36,6 +42,22 @@ class MainController : Controller() {
             fileRepository = fileRepository,
             fileConfiguration = configuration,
             userConfiguration = configuration
+        )
+
+        serviceController = ServiceDescriptorController(
+            storage = storage,
+            listener = fileSystemController,
+            descriptorServices = listOf(
+                JikanApi(
+                    fetchRelated = true,
+                    autoFillEpisodeAirDates = true,
+                    autoFillEpisodes = true,
+                    parser = HttpWebJsonParser()
+                ),
+                TvMazeApi(
+                    parser = HttpWebJsonParser()
+                )
+            )
         )
     }
 }
