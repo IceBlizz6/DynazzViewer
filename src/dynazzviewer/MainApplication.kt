@@ -1,6 +1,6 @@
-package dynazzviewer.ui
+package dynazzviewer
 
-import dynazzviewer.ui.views.MainWindow
+import dynazzviewer.ui.tornado.views.MainWindow
 import tornadofx.App
 
 class MainApplication : App(MainWindow::class) {

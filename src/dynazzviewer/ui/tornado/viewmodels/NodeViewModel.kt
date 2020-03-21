@@ -1,4 +1,4 @@
-package dynazzviewer.ui.viewmodels
+package dynazzviewer.ui.tornado.viewmodels
 
 import java.nio.file.Paths
 import javafx.beans.property.SimpleListProperty

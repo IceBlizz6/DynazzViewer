@@ -1,9 +1,9 @@
-package dynazzviewer.ui.views
+package dynazzviewer.ui.tornado.views
 
 import dynazzviewer.base.ExtDatabase
 import dynazzviewer.services.descriptors.ResultHeader
-import dynazzviewer.ui.MainController
-import dynazzviewer.ui.inputmodels.MediaSearchModel
+import dynazzviewer.ui.tornado.MainController
+import dynazzviewer.ui.tornado.inputmodels.MediaSearchModel
 import javafx.collections.ObservableList
 import javafx.geometry.Pos
 import javafx.scene.Parent

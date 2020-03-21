@@ -6,9 +6,9 @@ import dynazzviewer.filesystem.hierarchy.FileName
 import dynazzviewer.filesystem.hierarchy.FilePath
 import dynazzviewer.filesystem.hierarchy.RootDirectory
 import dynazzviewer.services.filesystem.VideoFile
-import dynazzviewer.ui.viewmodels.DirectoryViewModel
-import dynazzviewer.ui.viewmodels.NodeFactory
-import dynazzviewer.ui.viewmodels.VideoFileViewModel
+import dynazzviewer.ui.tornado.viewmodels.DirectoryViewModel
+import dynazzviewer.ui.tornado.viewmodels.NodeFactory
+import dynazzviewer.ui.tornado.viewmodels.VideoFileViewModel
 import java.io.File
 import java.lang.RuntimeException
 import javax.transaction.NotSupportedException

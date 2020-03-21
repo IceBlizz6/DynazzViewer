@@ -1,4 +1,4 @@
-package dynazzviewer.ui.viewmodels
+package dynazzviewer.ui.tornado.viewmodels
 
 class DirectoryViewModel(
     name: String,

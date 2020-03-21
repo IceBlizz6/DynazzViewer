@@ -1,4 +1,4 @@
-package dynazzviewer.ui.viewmodels
+package dynazzviewer.ui.tornado.viewmodels
 
 class NodeComparator : Comparator<NodeViewModel> {
     override fun compare(first: NodeViewModel?, second: NodeViewModel?): Int {

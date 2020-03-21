@@ -1,6 +1,6 @@
-package dynazzviewer.ui.inputmodels
+package dynazzviewer.ui.tornado.inputmodels
 
-import dynazzviewer.ui.DefaultConfiguration
+import dynazzviewer.ui.tornado.DefaultConfiguration
 import javafx.beans.property.SimpleStringProperty
 
 class ConfigurationModel(

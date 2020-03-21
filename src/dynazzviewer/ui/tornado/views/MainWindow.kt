@@ -1,4 +1,4 @@
-package dynazzviewer.ui.views
+package dynazzviewer.ui.tornado.views
 
 import javafx.scene.control.TabPane
 import tornadofx.*

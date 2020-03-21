@@ -1,8 +1,8 @@
 package ui
 
 import dynazzviewer.base.ViewStatus
-import dynazzviewer.ui.viewmodels.DirectoryViewModel
-import dynazzviewer.ui.viewmodels.VideoFileViewModel
+import dynazzviewer.ui.tornado.viewmodels.DirectoryViewModel
+import dynazzviewer.ui.tornado.viewmodels.VideoFileViewModel
 import org.junit.Assert
 import org.junit.Test
 

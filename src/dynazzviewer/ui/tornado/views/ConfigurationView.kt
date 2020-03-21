@@ -1,7 +1,7 @@
-package dynazzviewer.ui.views
+package dynazzviewer.ui.tornado.views
 
-import dynazzviewer.ui.MainController
-import dynazzviewer.ui.inputmodels.ConfigurationModel
+import dynazzviewer.ui.tornado.MainController
+import dynazzviewer.ui.tornado.inputmodels.ConfigurationModel
 import tornadofx.*
 
 class ConfigurationView : View("Configuration") {

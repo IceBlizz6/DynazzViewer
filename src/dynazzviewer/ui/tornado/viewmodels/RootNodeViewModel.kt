@@ -1,4 +1,4 @@
-package dynazzviewer.ui.viewmodels
+package dynazzviewer.ui.tornado.viewmodels
 
 class RootNodeViewModel() : NodeViewModel("Root", "Root") {
     val childrenAsDirectories: List<DirectoryViewModel>

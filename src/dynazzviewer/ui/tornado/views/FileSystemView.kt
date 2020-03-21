@@ -1,11 +1,11 @@
-package dynazzviewer.ui.views
+package dynazzviewer.ui.tornado.views
 
 import dynazzviewer.base.ViewStatus
-import dynazzviewer.ui.MainController
-import dynazzviewer.ui.viewmodels.DirectoryViewModel
-import dynazzviewer.ui.viewmodels.NodeViewModel
-import dynazzviewer.ui.viewmodels.UnknownViewModelException
-import dynazzviewer.ui.viewmodels.VideoFileViewModel
+import dynazzviewer.ui.tornado.MainController
+import dynazzviewer.ui.tornado.viewmodels.DirectoryViewModel
+import dynazzviewer.ui.tornado.viewmodels.NodeViewModel
+import dynazzviewer.ui.tornado.viewmodels.UnknownViewModelException
+import dynazzviewer.ui.tornado.viewmodels.VideoFileViewModel
 import javafx.geometry.Pos
 import javafx.scene.control.SelectionMode
 import javafx.scene.control.TreeItem

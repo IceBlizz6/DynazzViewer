@@ -1,4 +1,4 @@
-package dynazzviewer.ui.viewmodels
+package dynazzviewer.ui.tornado.viewmodels
 
 import dynazzviewer.base.ViewStatus
 import javafx.beans.property.SimpleObjectProperty

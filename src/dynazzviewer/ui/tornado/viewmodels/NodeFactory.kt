@@ -1,4 +1,4 @@
-package dynazzviewer.ui.viewmodels
+package dynazzviewer.ui.tornado.viewmodels
 
 import dynazzviewer.filesystem.FileRepository
 import dynazzviewer.filesystem.hierarchy.FilePath

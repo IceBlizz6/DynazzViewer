@@ -8,8 +8,8 @@ import dynazzviewer.filesystem.FileSource
 import dynazzviewer.filesystem.FileSystemRepository
 import dynazzviewer.filesystem.hierarchy.FilePath
 import dynazzviewer.storage.sqlite.SqlLiteStorage
-import dynazzviewer.ui.viewmodels.NodeFactory
-import dynazzviewer.ui.viewmodels.RootNodeViewModel
+import dynazzviewer.ui.tornado.viewmodels.NodeFactory
+import dynazzviewer.ui.tornado.viewmodels.RootNodeViewModel
 import java.io.File
 import javax.transaction.NotSupportedException
 import org.junit.Assert

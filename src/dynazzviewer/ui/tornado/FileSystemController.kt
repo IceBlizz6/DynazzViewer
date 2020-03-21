@@ -1,4 +1,4 @@
-package dynazzviewer.ui
+package dynazzviewer.ui.tornado
 
 import dynazzviewer.base.ViewStatus
 import dynazzviewer.controllers.UpdateListener
@@ -8,11 +8,11 @@ import dynazzviewer.filesystem.FileRepository
 import dynazzviewer.filesystem.hierarchy.FileName
 import dynazzviewer.filesystem.hierarchy.FilePath
 import dynazzviewer.storage.Storage
-import dynazzviewer.ui.viewmodels.DirectoryViewModel
-import dynazzviewer.ui.viewmodels.NodeFactory
-import dynazzviewer.ui.viewmodels.NodeViewModel
-import dynazzviewer.ui.viewmodels.RootNodeViewModel
-import dynazzviewer.ui.viewmodels.VideoFileViewModel
+import dynazzviewer.ui.tornado.viewmodels.DirectoryViewModel
+import dynazzviewer.ui.tornado.viewmodels.NodeFactory
+import dynazzviewer.ui.tornado.viewmodels.NodeViewModel
+import dynazzviewer.ui.tornado.viewmodels.RootNodeViewModel
+import dynazzviewer.ui.tornado.viewmodels.VideoFileViewModel
 import java.awt.Desktop
 import java.io.File
 import java.nio.file.Paths

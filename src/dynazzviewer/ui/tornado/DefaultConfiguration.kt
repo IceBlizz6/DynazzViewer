@@ -1,4 +1,4 @@
-package dynazzviewer.ui
+package dynazzviewer.ui.tornado
 
 import dynazzviewer.base.Configuration
 import dynazzviewer.filesystem.FileConfiguration

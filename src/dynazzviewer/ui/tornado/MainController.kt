@@ -1,4 +1,4 @@
-package dynazzviewer.ui
+package dynazzviewer.ui.tornado
 
 import dynazzviewer.controllers.ServiceDescriptorController
 import dynazzviewer.filesystem.FileCache

@@ -1,4 +1,4 @@
-package dynazzviewer.ui.inputmodels
+package dynazzviewer.ui.tornado.inputmodels
 
 import dynazzviewer.base.ExtDatabase
 import javafx.beans.property.SimpleObjectProperty
