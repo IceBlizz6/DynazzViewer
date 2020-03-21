@@ -25,7 +25,14 @@
             <version>${kotlin.version}</version>
         </dependency>
 
-        <!-- UI frameworks -->
+        <!-- Web UI framework -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.2.5.RELEASE</version>
+        </dependency>
+
+        <!-- Desktop UI framework -->
         <dependency>
             <groupId>no.tornado</groupId>
             <artifactId>tornadofx</artifactId>
