@@ -11,11 +11,20 @@ class FileSystemRepository(
 ) : FileRepository {
     private val roots = mutableListOf<RootDirectory>()
 
-    override fun add(rootPath: String): List<VideoFile> {
+    override fun add(rootPath: String): Set<VideoFile> {
         val root = RootDirectory(rootPath)
         val filePaths = cache.readRoot(root)
         roots.add(root)
         return factory.files(root, filePaths)
+    }
+
+    override fun list(): Map<String, Set<VideoFile>> {
+        val map = mutableMapOf<String, Set<VideoFile>>()
+        for (root in roots) {
+            val filePaths = cache.readRoot(root)
+            map.put(root.rootPath, factory.files(root, filePaths))
+        }
+        return map
     }
 
     override fun remove(rootPath: String): Boolean {

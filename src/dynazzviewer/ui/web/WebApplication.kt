@@ -6,7 +6,6 @@ import dynazzviewer.filesystem.FileSystemRepository
 import dynazzviewer.filesystem.SystemFileSource
 import dynazzviewer.storage.sqlite.SqlLiteStorage
 import dynazzviewer.ui.config.DefaultConfiguration
-import dynazzviewer.ui.tornado.FileSystemController
 import graphql.schema.GraphQLSchema
 import io.leangen.graphql.GraphQLSchemaGenerator
 import java.nio.file.Path
@@ -38,15 +37,15 @@ open class WebApplication {
         val storage = SqlLiteStorage(configuration)
         val fileEntryFactory = FileEntryFactory(configuration, storage)
         val fileRepository = FileSystemRepository(fileCache, fileEntryFactory)
-        val fileSystemController = FileSystemController(
+        val fileController = FileSystemController(
             storage = storage,
-            fileRepository = fileRepository,
             fileConfiguration = configuration,
-            userConfiguration = configuration
+            userConfiguration = configuration,
+            fileRepository = fileRepository
         )
 
         return GraphQLSchemaGenerator()
-            .withOperationsFromSingleton(FileSystemGraph(fileSystemController))
+            .withOperationsFromSingleton(FileSystemGraph(fileController))
             .generate()
     }
 }

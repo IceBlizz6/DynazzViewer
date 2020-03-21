@@ -5,7 +5,9 @@ import dynazzviewer.filesystem.hierarchy.RootDirectory
 import dynazzviewer.services.filesystem.VideoFile
 
 interface FileRepository {
-    fun add(rootPath: String): List<VideoFile>
+    fun list(): Map<String, Set<VideoFile>>
+
+    fun add(rootPath: String): Set<VideoFile>
 
     fun remove(rootPath: String): Boolean
 

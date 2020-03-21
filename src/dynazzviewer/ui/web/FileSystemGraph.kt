@@ -1,27 +1,31 @@
 package dynazzviewer.ui.web
 
-import dynazzviewer.ui.tornado.FileSystemController
-import dynazzviewer.ui.tornado.viewmodels.RootNodeViewModel
+import dynazzviewer.filesystem.FileRepository
+import dynazzviewer.services.filesystem.VideoFile
 import io.leangen.graphql.annotations.GraphQLMutation
 import io.leangen.graphql.annotations.GraphQLQuery
 import java.io.File
 
 class FileSystemGraph(
-    private val fileSystemController: FileSystemController
+    private val controller: FileSystemController
 ) {
     @GraphQLQuery
-    fun fileSystemRoots(): RootNodeViewModel {
-        return fileSystemController.fileSystemRoot
+    fun fileSystemRoots(): Map<String, Set<VideoFile>> {
+        return controller.list()
     }
 
     @GraphQLMutation
     fun addRootDirectory(rootPath: String) {
-        val file = File(rootPath)
-        fileSystemController.addRootDirectories(listOf(file))
+        controller.addRootDirectory(rootPath)
     }
 
     @GraphQLMutation
     fun removeRootDirectory(rootPath: String) {
-        fileSystemController.removeRootDirectory(rootPath)
+        controller.removeRootDirectory(rootPath)
+    }
+
+    @GraphQLMutation
+    fun refreshRootDirectory(rootPath: String) {
+        controller.refreshDirectory(rootPath)
     }
 }
