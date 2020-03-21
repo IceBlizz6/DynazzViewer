@@ -37,6 +37,24 @@
             <version>2.2.5.RELEASE</version>
         </dependency>
 
+        <!-- Web GraphQL -->
+        <dependency>
+            <groupId>com.graphql-java-kickstart</groupId>
+            <artifactId>graphql-spring-boot-starter</artifactId>
+            <version>7.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java-kickstart</groupId>
+            <artifactId>graphiql-spring-boot-starter</artifactId>
+            <version>7.0.0</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.leangen.graphql</groupId>
+            <artifactId>spqr</artifactId>
+            <version>0.10.1</version>
+        </dependency>
+
         <!-- Desktop UI framework -->
         <dependency>
             <groupId>no.tornado</groupId>
@@ -108,6 +126,13 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
+    </repositories>
+
     <build>
         <sourceDirectory>${project.basedir}/src</sourceDirectory>
         <resources>
@@ -168,6 +193,9 @@
                     <compilerPlugins>
                         <plugin>jpa</plugin>
                     </compilerPlugins>
+                    <args>
+                        <arg>-java-parameters</arg>
+                    </args>
                     <jvmTarget>1.8</jvmTarget>
                 </configuration>
                 <dependencies>
