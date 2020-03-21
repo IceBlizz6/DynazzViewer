@@ -8,6 +8,7 @@ import dynazzviewer.filesystem.FileRepository
 import dynazzviewer.filesystem.hierarchy.FileName
 import dynazzviewer.filesystem.hierarchy.FilePath
 import dynazzviewer.storage.Storage
+import dynazzviewer.ui.config.UserConfiguration
 import dynazzviewer.ui.tornado.viewmodels.DirectoryViewModel
 import dynazzviewer.ui.tornado.viewmodels.NodeFactory
 import dynazzviewer.ui.tornado.viewmodels.NodeViewModel

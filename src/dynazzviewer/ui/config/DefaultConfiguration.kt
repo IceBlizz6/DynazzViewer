@@ -1,13 +1,12 @@
-package dynazzviewer.ui.tornado
+package dynazzviewer.ui.config
 
 import dynazzviewer.base.Configuration
 import dynazzviewer.filesystem.FileConfiguration
 import dynazzviewer.storage.StorageMode
 import java.io.File
-import tornadofx.ConfigProperties
 
 class DefaultConfiguration(
-    private val config: ConfigProperties
+    private val config: SettingController
 ) : Configuration, FileConfiguration, UserConfiguration {
     companion object {
         const val cacheDirectory = "cache"
@@ -53,7 +52,7 @@ class DefaultConfiguration(
         if (assignableValue == null) {
             config.remove(key)
         } else {
-            config["mediaPlayerApplicationPath"] = assignableValue
+            config.set("mediaPlayerApplicationPath", assignableValue)
         }
     }
 
@@ -85,7 +84,7 @@ class DefaultConfiguration(
 
     private fun writeSet(key: String, value: Set<String>) {
         val valueString = value.joinToString(listSeparator)
-        config[key] = valueString
+        config.set(key, valueString)
         config.save()
     }
 }

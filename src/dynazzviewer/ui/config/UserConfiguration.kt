@@ -1,4 +1,4 @@
-package dynazzviewer.ui.tornado
+package dynazzviewer.ui.config
 
 interface UserConfiguration {
     var mediaPlayerApplicationPath: String?

@@ -11,6 +11,7 @@ import dynazzviewer.services.descriptors.jikan.JikanApi
 import dynazzviewer.services.descriptors.tvmaze.TvMazeApi
 import dynazzviewer.storage.Storage
 import dynazzviewer.storage.sqlite.SqlLiteStorage
+import dynazzviewer.ui.config.DefaultConfiguration
 import java.nio.file.Path
 import java.nio.file.Paths
 import tornadofx.Controller
@@ -21,7 +22,8 @@ class MainController : Controller() {
         DefaultConfiguration.configPropertiesFileName
     )
 
-    val configuration: DefaultConfiguration = DefaultConfiguration(config)
+    val configuration: DefaultConfiguration =
+        DefaultConfiguration(FxSettingsController(config))
 
     private val storage: Storage
 
