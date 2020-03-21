@@ -31,7 +31,7 @@ open class WebApplication {
             DefaultConfiguration.configPropertiesFileName
         )
         val settingsController = WebSettingsController()
-        val configuration: DefaultConfiguration = DefaultConfiguration(settingsController)
+        val configuration = DefaultConfiguration(settingsController)
         val systemFileSource = SystemFileSource(configuration)
         val fileCache = FileCache(systemFileSource)
         val storage = SqlLiteStorage(configuration)
@@ -46,6 +46,7 @@ open class WebApplication {
 
         return GraphQLSchemaGenerator()
             .withOperationsFromSingleton(FileSystemGraph(fileController))
+            .withOperationsFromSingleton(ConfigGraph(configuration))
             .generate()
     }
 }
