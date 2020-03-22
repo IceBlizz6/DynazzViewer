@@ -47,6 +47,7 @@ open class WebApplication {
         return GraphQLSchemaGenerator()
             .withOperationsFromSingleton(FileSystemGraph(fileController))
             .withOperationsFromSingleton(ConfigGraph(configuration))
+            .withOperationsFromSingleton(MediaListGraph(storage))
             .generate()
     }
 }

@@ -5,7 +5,6 @@ import dynazzviewer.controllers.UpdateListener
 import dynazzviewer.controllers.ViewStatusController
 import dynazzviewer.filesystem.FileConfiguration
 import dynazzviewer.filesystem.FileRepository
-import dynazzviewer.filesystem.hierarchy.FileName
 import dynazzviewer.filesystem.hierarchy.FilePath
 import dynazzviewer.filesystem.hierarchy.RootDirectory
 import dynazzviewer.services.filesystem.VideoFile
@@ -19,7 +18,7 @@ class FileSystemController(
     private val fileConfiguration: FileConfiguration,
     private val userConfiguration: UserConfiguration,
     private val fileRepository: FileRepository
-): UpdateListener {
+) : UpdateListener {
     private val desktop: Desktop = Desktop.getDesktop()
 
     init {
@@ -28,7 +27,7 @@ class FileSystemController(
         }
     }
 
-    fun list(): Map<String, Set<VideoFile>>  {
+    fun list(): Map<String, Set<VideoFile>> {
         return fileRepository.list()
     }
 
