@@ -29,9 +29,15 @@ module.exports = {
 	props: [ 'label', 'nodes' ],
 	data: function() {
 		return {
-			showChildren: false,
-			childrenDirectories: this.nodes.filter(el => el.children != undefined),
-			childrenFiles: this.nodes.filter(el => el.children == undefined),
+			showChildren: true,
+		}
+	},
+	computed: {
+		childrenDirectories: function() {
+			return this.nodes.filter(el => el.children != undefined).sort((a, b) => (a.name > b.name)? 1 : -1);
+		},
+		childrenFiles: function() {
+			return this.nodes.filter(el => el.children == undefined).sort((a, b) => (a.fileName.name > b.fileName.name)? 1 : -1);
 		}
 	},
 	methods: {
