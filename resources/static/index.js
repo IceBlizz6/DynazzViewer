@@ -18,6 +18,17 @@ const videoFileQuery = `
 	}
 `;
 
+function mutateVideoFileState(state, path) {
+	return `
+		mutation {
+			setViewStatus(
+				videoFilePaths: ["${path}"],
+				status: ${state}
+			)
+     	}
+	`;
+}
+
 function resolvePath(rootPath, filePath) {
 	if (filePath.startsWith(rootPath)) {
 		let pathList = [];
@@ -59,18 +70,36 @@ function filePathsToTree(rootPath, filePaths) {
 
 async function run() {
 	let sourceData = await graphqlAsyncRequest(videoFileQuery);
-	let treeRoots = sourceData.data.listVideoFiles
-		.map(el => filePathsToTree(el.root, el.files));
+	let sourceVideoFiles = sourceData.data.listVideoFiles
+	let treeRoots = sourceVideoFiles.map(el => filePathsToTree(el.root, el.files));
 
 	var app = new Vue({
 		el: '#app',
 		data: {
-			roots: treeRoots
+			videoFiles: sourceVideoFiles.flatMap(el => el.files),
+			roots: treeRoots,
 		},
 		created: function () {
 		},
 		components: {
 			'tree-menu': 'url:components/filetree.vue'
+		},
+		methods: {
+			setViewed: async function(node,updatedViewStatus) {
+				let query = mutateVideoFileState(updatedViewStatus, node.filePath.path)
+				let response = await graphqlAsyncRequest(query);
+				let responseItems = Object.entries(response.data.setViewStatus);
+				responseItems.forEach(el => {
+					let nodes = this.videoFilesByName(el[0]);
+					nodes.forEach(node => {
+						node.mediaFileId = el[1];
+						node.viewStatus = updatedViewStatus;
+					});
+				});
+			},
+			videoFilesByName: function(nodeName) {
+				return this.videoFiles.filter(el => el.fileName.name == nodeName);
+			}
 		}
 	});
 }

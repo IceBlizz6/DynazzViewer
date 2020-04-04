@@ -15,8 +15,8 @@ class FileSystemGraph(
     }
 
     @GraphQLMutation
-    fun setViewStatus(videoFilePaths: Set<String>, status: ViewStatus) {
-        controller.setViewStatus(videoFilePaths, status)
+    fun setViewStatus(videoFilePaths: Set<String>, status: ViewStatus): Map<String, Int> {
+        return controller.setViewStatus(videoFilePaths, status)
     }
 
     @GraphQLMutation

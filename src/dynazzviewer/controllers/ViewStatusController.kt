@@ -22,9 +22,10 @@ class ViewStatusController(
         Optional.ofNullable(mediaFileId).ifPresent { e -> listener.updateMediaFile(e) }
     }
 
-    fun setMediaFileStatus(status: ViewStatus, fileName: String) {
+    fun setMediaFileStatus(status: ViewStatus, fileName: String): Int {
         val fileId = getOrCreateMediaFile(fileName)
         setMediaFileStatus(status, fileId)
+        return fileId
     }
 
     fun setMediaFileStatus(status: ViewStatus, id: Int) {

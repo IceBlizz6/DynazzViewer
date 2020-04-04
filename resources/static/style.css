@@ -7,7 +7,6 @@
 }
 
 .file-node {
-	cursor: pointer;
 }
 
 .file-node:hover {
@@ -22,4 +21,17 @@
 .tree-children-list {
 	list-style-type: none;
 	padding-left: 15px;
+}
+
+.toolbar-action {
+	visibility: hidden;
+}
+
+.toolbar-action:hover {
+	cursor: pointer;
+	border-style: solid;
+}
+
+.tree-item-header:hover .toolbar-action {
+	visibility: visible;
 }

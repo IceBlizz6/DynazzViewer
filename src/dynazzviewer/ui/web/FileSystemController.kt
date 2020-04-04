@@ -50,11 +50,16 @@ class FileSystemController(
         return fileRepository.refreshDirectory(directoryPath)
     }
 
-    fun setViewStatus(videoFilePaths: Set<String>, status: ViewStatus) {
+    fun setViewStatus(videoFilePaths: Set<String>, status: ViewStatus): Map<String, Int> {
         val controller = ViewStatusController(storage, this)
-        for (path in videoFilePaths) {
-            controller.setMediaFileStatus(status, FilePath(path).fileName.name)
-        }
+        return videoFilePaths
+                .map { path ->
+                    run {
+                        val name = FilePath(path).fileName.name
+                        name to controller.setMediaFileStatus(status, name)
+                    }
+                }
+                .toMap()
     }
 
     fun playVideos(videoFilePaths: List<String>): Boolean {
