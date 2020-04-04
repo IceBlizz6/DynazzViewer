@@ -1,0 +1,25 @@
+.directory-node {
+	cursor: pointer;
+}
+
+.directory-node:hover {
+	background-color: lightgray;
+}
+
+.file-node {
+	cursor: pointer;
+}
+
+.file-node:hover {
+	background-color: lightgray;
+}
+
+.tree-icon {
+	max-height: 18px;
+	vertical-align: middle;
+}
+
+.tree-children-list {
+	list-style-type: none;
+	padding-left: 15px;
+}
