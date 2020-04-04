@@ -7,7 +7,6 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.nio.file.Files
 import java.util.stream.Collectors
-import kotlin.streams.toList
 
 class SystemFileSource(
     private val configuration: FileConfiguration
@@ -15,11 +14,10 @@ class SystemFileSource(
     override fun listFiles(path: String): Set<String> {
         val allowedExtensions = configuration.extensionFilter
         return Files.walk(File(path).toPath())
-            .filter { Files.isRegularFile(it) }
-            .map { e -> e.toString() }
-            .filter { allowedExtensions.contains(File(it).extension) }
-            .toList()
-            .toSet()
+                .filter { Files.isRegularFile(it) }
+                .map { e -> e.toString() }
+                .filter { allowedExtensions.contains(File(it).extension) }
+                .collect(Collectors.toSet())
     }
 
     override fun readCacheFile(path: String): Set<String> {
