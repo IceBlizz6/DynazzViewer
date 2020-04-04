@@ -33,7 +33,7 @@ class FileSystemController(
 
     fun addRootDirectory(path: String) {
         val storedPaths = fileConfiguration.rootDirectoryPaths.toMutableSet()
-        storedPaths.add(path)
+        storedPaths.add(path.replace(File.separator, "/"))
         fileConfiguration.rootDirectoryPaths = storedPaths
         fileRepository.add(path)
     }

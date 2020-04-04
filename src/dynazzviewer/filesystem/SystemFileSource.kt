@@ -15,7 +15,7 @@ class SystemFileSource(
         val allowedExtensions = configuration.extensionFilter
         return Files.walk(File(path).toPath())
                 .filter { Files.isRegularFile(it) }
-                .map { e -> e.toString() }
+                .map { e -> e.toString().replace(File.separator, "/") }
                 .filter { allowedExtensions.contains(File(it).extension) }
                 .collect(Collectors.toSet())
     }
