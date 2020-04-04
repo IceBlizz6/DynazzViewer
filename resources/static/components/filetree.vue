@@ -9,9 +9,10 @@
 				v-if="showChildren"
 				v-for="node in childrenDirectories"
 				:nodes="node.children"
-				:label="node.name">
+				:label="node.name"
+				:key="node.name">
 			</tree-menu>
-			<li v-for="node in childrenFiles" v-if="showChildren">
+			<li v-for="node in childrenFiles" v-if="showChildren" :key="node.fileName.name">
 				<div class="tree-item-header file-node">
 					<img v-if="node.viewStatus == 'None'" class="tree-icon" src="/assets/VideoFileNeutral.png">
 					<img v-if="node.viewStatus == 'Viewed'" class="tree-icon" src="/assets/VideoFileViewed.png">
