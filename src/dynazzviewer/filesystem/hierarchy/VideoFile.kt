@@ -6,9 +6,9 @@ import dynazzviewer.filesystem.hierarchy.FilePath
 import dynazzviewer.filesystem.hierarchy.RootDirectory
 
 class VideoFile(
-    name: FileName,
-    path: FilePath,
+    fileName: FileName,
+    filePath: FilePath,
     root: RootDirectory,
     val mediaFileId: Int?,
     val viewStatus: ViewStatus
-) : FileEntry(root, path, name)
+) : FileEntry(root, filePath, fileName)

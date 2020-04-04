@@ -6,6 +6,6 @@ import dynazzviewer.filesystem.hierarchy.RootDirectory
 
 abstract class FileEntry(
     val root: RootDirectory,
-    val path: FilePath,
-    val name: FileName
+    val filePath: FilePath,
+    val fileName: FileName
 )

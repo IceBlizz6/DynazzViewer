@@ -22,8 +22,8 @@ class FileEntryFactory(
                     val entryLookup: Pair<Int, ViewStatus>? = storageLookup[fileName.name]
                     val videoFile = VideoFile(
                         root = root,
-                        name = fileName,
-                        path = filePath,
+                        fileName = fileName,
+                        filePath = filePath,
                         viewStatus = entryLookup?.second ?: ViewStatus.None,
                         mediaFileId = entryLookup?.first
                     )
