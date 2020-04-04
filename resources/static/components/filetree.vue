@@ -18,6 +18,10 @@
 					<img v-if="node.viewStatus == 'Viewed'" class="tree-icon" src="/assets/videofiles/Viewed.png">
 					<img v-if="node.viewStatus == 'Skipped'" class="tree-icon" src="/assets/videofiles/Skipped.png">
 					<span>{{ node.fileName.name }}</span>
+					<span class="toolbar-action" @click="$root.playVideo(node)">
+						<img class="tree-icon" src="/assets/videofiles/Play.png">
+						Play
+					</span>
 					<span class="toolbar-action" @click="$root.setViewed(node, 'None')">
 						<img class="tree-icon" src="/assets/videofiles/Neutral.png">
 						Undo

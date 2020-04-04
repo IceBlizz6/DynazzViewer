@@ -29,6 +29,14 @@ function mutateVideoFileState(state, path) {
 	`;
 }
 
+function playVideoQuery(path) {
+	return `
+		mutation {
+			playVideo(path: "${path}")
+		}
+	`;
+}
+
 function resolvePath(rootPath, filePath) {
 	if (filePath.startsWith(rootPath)) {
 		let pathList = [];
@@ -99,7 +107,11 @@ async function run() {
 			},
 			videoFilesByName: function(nodeName) {
 				return this.videoFiles.filter(el => el.fileName.name == nodeName);
-			}
+			},
+			playVideo: function(node) {
+				let query = playVideoQuery(node.filePath.path);
+				graphqlAsyncRequest(query);
+			},
 		}
 	});
 }
