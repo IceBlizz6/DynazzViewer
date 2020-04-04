@@ -34,6 +34,10 @@
 						<img class="tree-icon" src="/assets/videofiles/Skipped.png">
 						Skipped
 					</span>
+					<span class="toolbar-action" @click="$root.showExplorer(node)">
+						<img class="tree-icon" src="/assets/FolderOpen.png">
+						Show
+					</span>
 				</div>
 			</li>
 		</ul>

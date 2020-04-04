@@ -37,6 +37,14 @@ function playVideoQuery(path) {
 	`;
 }
 
+function showExplorerQuery(path) {
+	return `
+		mutation {
+			showExplorer(path: "${path}")
+		}
+	`;
+}
+
 function resolvePath(rootPath, filePath) {
 	if (filePath.startsWith(rootPath)) {
 		let pathList = [];
@@ -112,6 +120,10 @@ async function run() {
 				let query = playVideoQuery(node.filePath.path);
 				graphqlAsyncRequest(query);
 			},
+			showExplorer: function(node) {
+				let query = showExplorerQuery(node.filePath.path);
+				graphqlAsyncRequest(query);
+			}
 		}
 	});
 }

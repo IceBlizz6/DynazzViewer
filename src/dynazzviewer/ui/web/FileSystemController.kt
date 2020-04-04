@@ -74,7 +74,12 @@ class FileSystemController(
     }
 
     fun showExplorer(path: String) {
-        desktop.open(File(path))
+        val target = File(path)
+        if (target.isFile) {
+            desktop.open(target.parentFile)
+        } else {
+            desktop.open(target)
+        }
     }
 
     val playVideoEnabled: Boolean
