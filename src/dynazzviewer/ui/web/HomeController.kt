@@ -14,7 +14,12 @@ class HomeController {
 
     @GetMapping("/")
     fun index(): String {
-        return "index"
+        return "fileview"
+    }
+
+    @GetMapping("/fileview")
+    fun fileView(): String {
+        return "fileview"
     }
 
     @ResponseBody
