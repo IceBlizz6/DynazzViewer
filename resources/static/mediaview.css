@@ -1,0 +1,47 @@
+.series-item:hover {
+	background-color: lightgray;
+}
+
+.series-header {
+	font-size: 30px;
+}
+
+.series-list {
+	width: 50%;
+}
+
+.series-sidebar {
+	border-left: solid;
+	overflow-y: scroll;
+	position: fixed;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	width: 50%;
+}
+
+.tree-icon {
+	max-height: 18px;
+	vertical-align: middle;
+}
+
+.toolbar {
+	display: inline;
+}
+
+.toolbar-action {
+	visibility: hidden;
+}
+
+.episode-item:hover .toolbar-action {
+	visibility: visible;
+}
+
+.episode-item:hover {
+	background-color: lightgray;
+}
+
+.toolbar-action:hover {
+	cursor: pointer;
+	border-style: solid;
+}

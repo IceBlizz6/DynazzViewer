@@ -1,0 +1,51 @@
+<html>
+<head>
+	<script src="https://unpkg.com/vue"></script>
+	<script src="https://unpkg.com/http-vue-loader"></script>
+	<script src="moment.min.js"></script>
+	<script src="base.js"></script>
+	<script defer src="mediaview.js"></script>
+	<link rel="stylesheet" href="mediaview.css">
+</head>
+<body>
+<main id="app">
+	<article class="series-list">
+		<media-series
+				v-for="mediaItem in this.source.listMediaUnits"
+				:source="mediaItem">
+		</media-series>
+	</article>
+	<article class="series-sidebar" v-if="this.selected != null">
+		<span class="series-header">{{ selected.name }}</span>
+		<div>
+			<img v-if="selected.images.length > 0" :src="selected.images[0].url">
+		</div>
+		<section v-for="season in selected.children">
+			<p>{{ season.name }}</p>
+			<ul>
+				<li class="episode-item" v-for="episode in season.children">
+					<img v-if="episode.status == 'None'" class="tree-icon" src="/assets/videofiles/Neutral.png">
+					<img v-if="episode.status == 'Viewed'" class="tree-icon" src="/assets/videofiles/Viewed.png">
+					<img v-if="episode.status == 'Skipped'" class="tree-icon" src="/assets/videofiles/Skipped.png">
+					{{ episode.name }}
+					<div class="toolbar">
+						<span class="toolbar-action" @click="setEpisodeWatch(episode, 'None')">
+							<img class="tree-icon" src="/assets/videofiles/Neutral.png">
+							Undo
+						</span>
+						<span class="toolbar-action" @click="setEpisodeWatch(episode, 'Viewed')">
+							<img class="tree-icon" src="/assets/videofiles/Viewed.png">
+							Viewed
+						</span>
+						<span class="toolbar-action" @click="setEpisodeWatch(episode, 'Skipped')">
+							<img class="tree-icon" src="/assets/videofiles/Skipped.png">
+							Skipped
+						</span>
+					</div>
+				</li>
+			</ul>
+		</section>
+	</article>
+</main>
+</body>
+</html>

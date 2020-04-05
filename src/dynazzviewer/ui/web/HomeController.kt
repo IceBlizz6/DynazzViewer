@@ -22,6 +22,11 @@ class HomeController {
         return "fileview"
     }
 
+    @GetMapping("/mediaview")
+    fun mediaView(): String {
+        return "mediaview"
+    }
+
     @ResponseBody
     @GetMapping(value = ["/schema"], produces = ["text/plain"])
     fun schemaDisplay(): String? {
