@@ -1,8 +1,7 @@
 package dynazzviewer.storage.sqlite
 
+import com.mysema.query.types.path.EntityPathBase
 import dynazzviewer.base.Configuration
-import dynazzviewer.entities.IdContainer
-import dynazzviewer.entities.NameContainer
 import dynazzviewer.storage.ReadOperation
 import dynazzviewer.storage.ReadWriteOperation
 import dynazzviewer.storage.Storage
@@ -23,8 +22,6 @@ import org.hibernate.cfg.AvailableSettings.USE_REFLECTION_OPTIMIZER
 import org.hibernate.cfg.AvailableSettings.USE_SECOND_LEVEL_CACHE
 import org.hibernate.cfg.AvailableSettings.USE_STRUCTURED_CACHE
 import org.hibernate.jpa.HibernatePersistenceProvider
-import org.jinq.jpa.JinqJPAStreamProvider
-import org.jinq.orm.stream.JinqStream
 
 class SqlLiteStorage : Storage {
     companion object {
@@ -33,7 +30,6 @@ class SqlLiteStorage : Storage {
     }
 
     private val entityManagerFactory: EntityManagerFactory
-    private val streamProvider: JinqJPAStreamProvider
 
     constructor(configuration: Configuration) {
         val unitInfo = HibernatePersistenceUnitInfo()
@@ -64,11 +60,6 @@ class SqlLiteStorage : Storage {
         val persistenceProvider = HibernatePersistenceProvider()
         entityManagerFactory = persistenceProvider
             .createContainerEntityManagerFactory(unitInfo, map)
-        streamProvider = JinqJPAStreamProvider(entityManagerFactory)
-        streamProvider.registerAssociationAttribute(
-            IdContainer::class.java.getMethod("getId"), "id", false)
-        streamProvider.registerAssociationAttribute(
-            NameContainer::class.java.getMethod("getName"), "name", false)
     }
 
     override fun read(): ReadOperation {
@@ -83,7 +74,10 @@ class SqlLiteStorage : Storage {
         return entityManagerFactory.createEntityManager()
     }
 
-    internal fun <T> stream(entityManager: EntityManager, entityType: Class<T>): JinqStream<T> {
-        return streamProvider.streamAll(entityManager, entityType)
+    internal fun <QTEntity : EntityPathBase<TEntity>, TEntity> stream(
+        entityManager: EntityManager,
+        source: QTEntity
+    ): QueryStream<QTEntity, TEntity> {
+        return JpaQueryStream(source, entityManager)
     }
 }

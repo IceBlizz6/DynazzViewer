@@ -1,93 +1,97 @@
 package dynazzviewer.storage.sqlite
 
+import com.mysema.query.types.path.EntityPathBase
 import dynazzviewer.base.ViewStatus
-import dynazzviewer.entities.AlternativeTitle
-import dynazzviewer.entities.ExtReference
-import dynazzviewer.entities.MediaFile
-import dynazzviewer.entities.MediaPart
-import dynazzviewer.entities.MediaPartCollection
-import dynazzviewer.entities.MediaUnit
-import dynazzviewer.entities.MediaUnitTag
+import dynazzviewer.entities.*
 import dynazzviewer.storage.ReadOperation
-import dynazzviewer.storage.sqlite.JinqHelper.containsName
-import dynazzviewer.storage.sqlite.JinqHelper.fromId
-import dynazzviewer.storage.sqlite.JinqHelper.likeName
-import dynazzviewer.storage.sqlite.JinqHelper.matchAnyExtKey
-import dynazzviewer.storage.sqlite.JinqHelper.matchAnyName
 import java.io.Closeable
 import javax.persistence.EntityManager
-import org.jinq.orm.stream.JinqStream
 
-internal open class DataContext(private val storage: SqlLiteStorage) : ReadOperation, Closeable {
+internal open class DataContext(
+    private val storage: SqlLiteStorage
+) : ReadOperation, Closeable {
     protected val entityManager: EntityManager = storage.createEntityManager()
 
     override fun alternativeTitleLike(sqlLikeString: String): List<AlternativeTitle> {
-        return stream(AlternativeTitle::class.java)
-            .where(likeName(sqlLikeString))
-            .toList()
+        return stream(QAlternativeTitle.alternativeTitle)
+            .filter { it.name.like(sqlLikeString) }
+            .fetchList()
     }
 
     override fun mediaFilesByName(names: Set<String>): Map<String, Pair<Int, ViewStatus>> {
-        val source = stream(MediaFile::class.java)
-        val lookup = JinqHelper.mediaFiles(source, names)
-        return lookup.map { e -> e.one to Pair(e.two, e.three) }.toMap()
+        return stream(QMediaFile.mediaFile)
+            .filter { it.name.`in`(names) }
+            .fetchListFields { field -> listOf(field.name, field.id, field.status) }
+            .map { e -> e.get(0, String::class.java)!! to
+                Pair(e.get(1, Int::class.java)!!, e.get(2, ViewStatus::class.java)!!) }
+            .toMap()
     }
 
     override fun mediaUnitsLike(sqlLikeString: String): List<MediaUnit> {
-        return stream(MediaUnit::class.java)
-            .where(likeName(sqlLikeString))
-            .toList()
+        return stream(QMediaUnit.mediaUnit)
+            .filter { it.name.like(sqlLikeString) }
+            .fetchList()
     }
 
     override fun extRefByKey(uniqueKey: String): ExtReference {
-        return stream(ExtReference::class.java).where(matchAnyExtKey(listOf(uniqueKey))).onlyValue
+        return stream(QExtReference.extReference)
+            .filter { it.uniqueExtKey.`in`(uniqueKey) }
+            .fetchSingle()
     }
 
     override fun mediaPartCollections(): List<MediaPartCollection> {
-        return stream(MediaPartCollection::class.java).toList()
+        return stream(QMediaPartCollection.mediaPartCollection)
+            .fetchList()
     }
 
     fun tagsByName(tagNames: Collection<String>): List<MediaUnitTag> {
-        return stream(MediaUnitTag::class.java).where<Exception>(matchAnyName(tagNames)).toList()
+        return stream(QMediaUnitTag.mediaUnitTag)
+            .filter { it.name.`in`(tagNames) }
+            .fetchList()
     }
 
     override fun matchExtKey(keys: List<String>): MediaUnit? {
-        return stream(ExtReference::class.java)
-            .where(matchAnyExtKey(keys))
-            .findAny().map { e -> e.root }
-            .orElse(null)
+        return stream(QExtReference.extReference)
+            .filter { it.uniqueExtKey.`in`(keys) }
+            .fetchSingleOrNull()?.root
     }
 
     override fun mediaFileById(id: Int): MediaFile {
-        return stream(MediaFile::class.java).where(fromId(id)).onlyValue
+        return stream(QMediaFile.mediaFile)
+            .filter { it.id.eq(id) }
+            .fetchSingle()
     }
 
     override fun mediaFilesByPartialName(partialName: String): List<MediaFile> {
-        return stream(MediaFile::class.java).where(containsName(partialName)).toList()
+        return stream(QMediaFile.mediaFile)
+            .filter { it.name.containsIgnoreCase(partialName) }
+            .fetchList()
     }
 
     override fun mediaFiles(): List<MediaFile> {
-        return stream(MediaFile::class.java).toList()
+        return stream(QMediaFile.mediaFile).fetchList()
     }
 
     override fun mediaUnitById(id: Int): MediaUnit {
-        return stream(MediaUnit::class.java).where(fromId(id)).onlyValue
+        return stream(QMediaUnit.mediaUnit)
+            .filter { it.id.eq(id) }
+            .fetchSingle()
     }
 
     override fun mediaPartById(id: Int): MediaPart {
-        return stream(MediaPart::class.java).where(fromId(id)).onlyValue
+        return stream(QMediaPart.mediaPart).filter { it.id.eq(id) }.fetchSingle()
     }
 
-    fun <T> stream(entityType: Class<T>): JinqStream<T> {
-        return storage.stream(entityManager, entityType)
+    fun <QT : EntityPathBase<T>, T> stream(source: QT): QueryStream<QT, T> {
+        return storage.stream(entityManager, source)
     }
 
     override fun mediaUnits(): List<MediaUnit> {
-        return stream(MediaUnit::class.java).toList()
+        return stream(QMediaUnit.mediaUnit).fetchList()
     }
 
     override fun mediaParts(): List<MediaPart> {
-        return stream(MediaPart::class.java).toList()
+        return stream(QMediaPart.mediaPart).fetchList()
     }
 
     override fun close() {
