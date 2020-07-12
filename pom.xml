@@ -8,6 +8,7 @@
     <packaging>jar</packaging>
 
     <properties>
+        <spring.version>2.2.5.RELEASE</spring.version>
         <kotlin.version>1.3.71</kotlin.version>
         <junit.version>4.12</junit.version>
         <jackson.version>2.10.0</jackson.version>
@@ -24,35 +25,40 @@
             <artifactId>kotlin-stdlib</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
 
         <!-- Web UI framework -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.2.5.RELEASE</version>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
-            <version>2.2.5.RELEASE</version>
+            <version>${spring.version}</version>
         </dependency>
 
         <!-- Web GraphQL -->
         <dependency>
-            <groupId>com.graphql-java-kickstart</groupId>
-            <artifactId>graphql-spring-boot-starter</artifactId>
-            <version>7.0.0</version>
+            <groupId>io.leangen.graphql</groupId>
+            <artifactId>spqr</artifactId>
+            <version>0.10.1</version>
         </dependency>
         <dependency>
             <groupId>com.graphql-java-kickstart</groupId>
             <artifactId>graphiql-spring-boot-starter</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.1</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>io.leangen.graphql</groupId>
-            <artifactId>spqr</artifactId>
-            <version>0.10.1</version>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java</artifactId>
+            <version>13.0</version>
         </dependency>
 
         <!-- API service communication -->
