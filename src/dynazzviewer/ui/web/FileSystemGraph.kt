@@ -1,7 +1,6 @@
 package dynazzviewer.ui.web
 
 import dynazzviewer.base.ViewStatus
-import dynazzviewer.services.filesystem.VideoFile
 import io.leangen.graphql.annotations.GraphQLMutation
 import io.leangen.graphql.annotations.GraphQLQuery
 
@@ -43,9 +42,4 @@ class FileSystemGraph(
     fun playVideo(path: String) {
         controller.playVideos(listOf(path))
     }
-
-    class RootEntry(
-        val root: String,
-        val files: Set<VideoFile>
-    )
 }

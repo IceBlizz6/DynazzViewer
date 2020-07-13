@@ -1,7 +1,9 @@
 package dynazzviewer.filesystem.hierarchy
 
+import dynazzviewer.entities.plugins.InferGraphQlNullity
 import java.io.File
 
+@InferGraphQlNullity
 class FileName(
     name: String
 ) {
