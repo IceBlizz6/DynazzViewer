@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import PageA from '@/views/PageA.vue'
+import FileView from '@/views/FileView.vue'
 import PageB from '@/views/PageB.vue'
 import NotFound from '@/views/NotFound.vue'
 
@@ -18,7 +18,7 @@ const routes: Array<RouteConfig> = [
 	{
 		path: URL_HOME,
 		name: 'Home',
-		component: PageA
+		component: FileView
 	},
 	{
 		path: '*',
