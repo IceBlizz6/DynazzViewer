@@ -23,7 +23,8 @@
     "eslint-plugin-vue": "^6.2.2",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
-    "eslint": "^6.7.2"
+    "eslint": "^6.7.2",
+    "graphql-typed-client": "^1.7.4"
   },
   "eslintConfig": {
     "root": true,
