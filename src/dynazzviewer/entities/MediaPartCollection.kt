@@ -10,10 +10,11 @@ class MediaPartCollection(
     @ManyToOne
        val parent: MediaUnit,
     uniqueExtKey: String,
+    databaseEntry: MediaDatabaseEntry?,
     var name: String,
     var sortOrder: Int?,
     var seasonNumber: Int?
-) : EntityModel, ExtReference(uniqueExtKey), UniqueKey {
+) : EntityModel, ExtReference(uniqueExtKey, databaseEntry), UniqueKey {
     override val uniqueKey: String
         get() = uniqueExtKey!!
 

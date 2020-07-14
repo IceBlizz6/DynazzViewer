@@ -7,8 +7,9 @@ import javax.persistence.OneToMany
 @Entity
 class MediaUnit(
     uniqueExtKey: String?,
+    databaseEntry: MediaDatabaseEntry?,
     override var name: String
-) : EntityModel, ExtReference(uniqueExtKey), NameContainer, IdContainer {
+) : EntityModel, ExtReference(uniqueExtKey, databaseEntry), NameContainer, IdContainer {
     @ManyToMany
     var tags: MutableList<MediaUnitTag> = mutableListOf()
         private set

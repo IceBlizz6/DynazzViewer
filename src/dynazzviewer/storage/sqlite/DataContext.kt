@@ -3,6 +3,7 @@ package dynazzviewer.storage.sqlite
 import com.mysema.query.types.path.EntityPathBase
 import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.*
+import dynazzviewer.storage.MediaIdentity
 import dynazzviewer.storage.ReadOperation
 import java.io.Closeable
 import javax.persistence.EntityManager
@@ -31,6 +32,23 @@ internal open class DataContext(
         return stream(QMediaUnit.mediaUnit)
             .filter { it.name.like(sqlLikeString) }
             .fetchList()
+    }
+
+    override fun mediaUnitExist(list: List<MediaIdentity>): Map<MediaIdentity, Boolean> {
+        val groups = list.groupBy { it.extDb }
+        val allMatches = mutableListOf<MediaIdentity>()
+        for (group in groups) {
+            val codes: List<String> = group.value.map { it.extDbCode }
+            val matches: List<String> = stream(QMediaDatabaseEntry.mediaDatabaseEntry)
+                .filter { it.mediaDatabase.eq(group.key) }
+                .filter { it.code.`in`(codes) }
+                .fetchList { it.code }
+            allMatches.addAll(group.value.filter { matches.contains(it.extDbCode) })
+        }
+
+        return list.map { identity ->
+            identity to allMatches.contains(identity)
+        }.toMap()
     }
 
     override fun extRefByKey(uniqueKey: String): ExtReference {

@@ -18,14 +18,16 @@ public class SqlStorageTest {
         storage.readWrite().use { context ->
             val mediaUnit = MediaUnit(
                     name = "Test",
-                    uniqueExtKey = null
+                    uniqueExtKey = null,
+                    databaseEntry = null
             )
             val mediaPartCollection = MediaPartCollection(
                     name = "Test",
                     uniqueExtKey = "...",
                     parent = mediaUnit,
                     seasonNumber = null,
-                    sortOrder = null
+                    sortOrder = null,
+                    databaseEntry = null
             )
             val alternativeTitle = AlternativeTitle(
                     name = "title",
@@ -48,7 +50,8 @@ public class SqlStorageTest {
         storage.readWrite().use { context ->
             val mediaUnit = MediaUnit(
                     name = "Test",
-                    uniqueExtKey = null
+                    uniqueExtKey = null,
+                    databaseEntry = null
             )
             val image = MediaImage(
                     mediaUnit,
@@ -98,7 +101,7 @@ public class SqlStorageTest {
     fun duplicateExternalUniqueKeyTest() {
         val storage = SqlLiteStorage(TestConfiguration())
         storage.readWrite().use { context ->
-            val unit1 = MediaUnit(uniqueExtKey = null, name = "Test")
+            val unit1 = MediaUnit(uniqueExtKey = null, name = "Test", databaseEntry = null)
             unit1.uniqueExtKey = "Key1"
             context.save(unit1)
             val child = MediaPartCollection(
@@ -106,7 +109,8 @@ public class SqlStorageTest {
                 parent = unit1,
                 sortOrder = 0,
                 uniqueExtKey = "partColl",
-                seasonNumber = null
+                seasonNumber = null,
+                databaseEntry = null
             )
             child.uniqueExtKey = "Key1"
             try {

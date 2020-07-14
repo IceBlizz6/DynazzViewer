@@ -32,7 +32,11 @@ class DescriptionModelTest {
     fun createPartCollectionTest() {
         val storage = SqlLiteStorage(TestConfiguration())
         storage.readWrite().use { context ->
-            val mediaUnit = MediaUnit("uniq_name", "name")
+            val mediaUnit = MediaUnit(
+                uniqueExtKey = "uniq_name",
+                name = "name",
+                databaseEntry = null
+            )
             val descriptionPartCollection = DescriptionPartCollection(
                     name = "test",
                     alternativeTitles = listOf("test"),

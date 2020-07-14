@@ -104,7 +104,8 @@ class SeriesNameMatcherTest {
     private fun createSeries(context: ReadWriteOperation, seriesTitle: String): MediaUnit {
         val mediaUnit = MediaUnit(
             name = seriesTitle,
-            uniqueExtKey = null
+            uniqueExtKey = null,
+            databaseEntry = null
         )
         context.save(mediaUnit)
         return mediaUnit
@@ -116,7 +117,8 @@ class SeriesNameMatcherTest {
             name = titles[0],
             seasonNumber = null,
             uniqueExtKey = (uniqueGenerator++).toString(),
-            sortOrder = null
+            sortOrder = null,
+            databaseEntry = null
         )
         for (altTitle in titles) {
             val altTitleEntity = AlternativeTitle(
@@ -132,7 +134,8 @@ class SeriesNameMatcherTest {
             sortOrder = null,
             uniqueExtKey = (uniqueGenerator++).toString(),
             episodeNumber = 1,
-            aired = null
+            aired = null,
+            databaseEntry = null
         )
         context.save(part)
     }

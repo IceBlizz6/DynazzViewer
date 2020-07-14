@@ -24,7 +24,10 @@ class DescriptionPartCollection(
             uniqueExtKey = uniqueKey,
             name = name,
             sortOrder = sortOrder,
-            seasonNumber = seasonNumber
+            seasonNumber = seasonNumber,
+            databaseEntry = if (extDatabase != null && extDatabaseCode != null) {
+                context.mediaEntryGetOrCreate(extDb = extDatabase, extDbCode = extDatabaseCode)
+            } else { null }
         )
         context.save(partCollection)
         if (alternativeTitles != null) {
@@ -48,7 +51,7 @@ class DescriptionPartCollection(
             updateAlternativeTitles(context, target, alternativeTitles)
         }
         for (added in matchResult.added) {
-            val mediaPart = added.create(target)
+            val mediaPart = added.create(target, context)
             context.save(mediaPart)
         }
         for (removed in matchResult.removed) {

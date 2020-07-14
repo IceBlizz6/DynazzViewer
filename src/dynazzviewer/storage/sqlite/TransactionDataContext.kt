@@ -1,12 +1,16 @@
 package dynazzviewer.storage.sqlite
 
+import dynazzviewer.base.ExtDatabase
 import dynazzviewer.entities.EntityModel
+import dynazzviewer.entities.MediaDatabaseEntry
 import dynazzviewer.entities.MediaUnitTag
+import dynazzviewer.entities.QMediaDatabaseEntry
 import dynazzviewer.storage.ReadWriteOperation
 import javax.persistence.EntityTransaction
 
-internal class TransactionDataContext(storage: SqlLiteStorage) :
-    DataContext(storage), ReadWriteOperation {
+internal class TransactionDataContext(
+    storage: SqlLiteStorage
+) : DataContext(storage), ReadWriteOperation {
 
     private val transaction: EntityTransaction = entityManager.transaction
 
@@ -29,6 +33,23 @@ internal class TransactionDataContext(storage: SqlLiteStorage) :
             }
         }
         return tags
+    }
+
+    override fun mediaEntryGetOrCreate(extDb: ExtDatabase, extDbCode: String): MediaDatabaseEntry {
+        val match = stream(QMediaDatabaseEntry.mediaDatabaseEntry)
+            .filter { it.mediaDatabase.eq(extDb).and(it.code.eq(extDbCode)) }
+            .fetchSingleOrNull()
+
+        if (match == null) {
+            val newEntry = MediaDatabaseEntry(
+                mediaDatabase = extDb,
+                code = extDbCode
+            )
+            save(newEntry)
+            return newEntry
+        } else {
+            return match
+        }
     }
 
     override fun save(entity: EntityModel) {

@@ -13,7 +13,8 @@ class InheritanceTest {
         storage.readWrite().use { context ->
             val mediaUnit = MediaUnit(
                 uniqueExtKey = "test123",
-                name = "root"
+                name = "root",
+                databaseEntry = null
             )
             context.save(mediaUnit)
         }

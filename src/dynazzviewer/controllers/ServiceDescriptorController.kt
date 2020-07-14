@@ -68,7 +68,7 @@ class ServiceDescriptorController(
         for (season in description.children) {
             val mediaPartCollection = season.create(parent = mediaUnit, context = context)
             for (episode in season.episodes) {
-                val mediaPart = episode.create(parent = mediaPartCollection)
+                val mediaPart = episode.create(parent = mediaPartCollection, context = context)
                 context.save(mediaPart)
             }
         }

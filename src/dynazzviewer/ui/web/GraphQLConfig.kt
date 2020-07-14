@@ -79,7 +79,7 @@ open class GraphQLConfig {
             .withOperationsFromSingleton(FileSystemGraph(fileController))
             .withOperationsFromSingleton(ConfigGraph(configuration))
             .withOperationsFromSingleton(MediaListGraph(storage))
-            .withOperationsFromSingleton(ApiServiceGraph(apiServiceController))
+            .withOperationsFromSingleton(ApiServiceGraph(apiServiceController, storage))
             .withSchemaTransformers(GraphInferNullTransformer())
             .generate()
     }

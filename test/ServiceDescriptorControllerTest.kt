@@ -1,5 +1,6 @@
 import base.TestConfiguration
 import base.TestUpdateListener
+import dynazzviewer.base.ExtDatabase
 import dynazzviewer.controllers.ServiceDescriptorController
 import dynazzviewer.services.descriptors.DescriptionPart
 import dynazzviewer.services.descriptors.DescriptionPartCollection
@@ -48,7 +49,9 @@ class ServiceDescriptorControllerTest {
             uniqueKey = "uniq1",
             index = 1,
             aired = null,
-            episodeNumber = null
+            episodeNumber = null,
+            extDatabase = ExtDatabase.MyAnimeList,
+            extCode = "1111"
         )
         val descPartCollection = DescriptionPartCollection(
             name = "Test",
@@ -75,14 +78,18 @@ class ServiceDescriptorControllerTest {
             uniqueKey = "uniq1",
             index = 1,
             aired = null,
-            episodeNumber = null
+            episodeNumber = null,
+            extDatabase = ExtDatabase.MyAnimeList,
+            extCode = "2222"
         )
         val descPart2 = DescriptionPart(
             name = "Test",
             uniqueKey = "uniq4",
             index = 2,
             aired = null,
-            episodeNumber = null
+            episodeNumber = null,
+            extDatabase = ExtDatabase.MyAnimeList,
+            extCode = "3333"
         )
         val descPartCollection = DescriptionPartCollection(
             name = "Test",

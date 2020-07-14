@@ -12,11 +12,12 @@ class MediaPart(
     @ManyToOne
        var parent: MediaPartCollection,
     uniqueExtKey: String,
+    databaseEntry: MediaDatabaseEntry?,
     var name: String,
     var sortOrder: Int?,
     var aired: LocalDate?,
     var episodeNumber: Int?
-) : EntityModel, IdContainer, ExtReference(uniqueExtKey), UniqueKey {
+) : EntityModel, IdContainer, ExtReference(uniqueExtKey, databaseEntry), UniqueKey {
     var status: ViewStatus = ViewStatus.None
 
     @OneToOne(mappedBy = "mediaPart")

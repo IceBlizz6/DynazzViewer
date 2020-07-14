@@ -24,7 +24,7 @@ class SqlQueryTest {
     fun queryByExtKey() {
         val storage = SqlLiteStorage(TestConfiguration())
         storage.readWrite().use { context ->
-            val mediaUnit = MediaUnit(uniqueExtKey = "Key1", name = "Test")
+            val mediaUnit = MediaUnit(uniqueExtKey = "Key1", name = "Test", databaseEntry = null)
             context.save(mediaUnit)
         }
         storage.read().use { context ->

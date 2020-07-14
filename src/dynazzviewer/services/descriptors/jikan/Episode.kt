@@ -2,6 +2,7 @@ package dynazzviewer.services.descriptors.jikan
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
+import dynazzviewer.base.ExtDatabase
 import dynazzviewer.services.descriptors.DescriptionPart
 import java.time.LocalDateTime
 
@@ -32,7 +33,9 @@ class Episode(
             name = title,
             aired = aired?.toLocalDate(),
             uniqueKey = "MAL/$malId/$episodeId",
-            episodeNumber = episodeId
+            episodeNumber = episodeId,
+            extDatabase = ExtDatabase.MyAnimeList,
+            extCode = malId
         )
     }
 }

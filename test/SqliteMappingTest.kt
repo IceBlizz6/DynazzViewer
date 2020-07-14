@@ -13,14 +13,16 @@ class SqliteMappingTest {
         storage.readWrite().use { context ->
             val mediaUnit = MediaUnit(
                 name = "Test",
-                uniqueExtKey = null
+                uniqueExtKey = null,
+                databaseEntry = null
             )
             val partCollection = MediaPartCollection(
                 parent = mediaUnit,
                 name = "Test2",
                 uniqueExtKey = "Key",
                 sortOrder = null,
-                seasonNumber = null
+                seasonNumber = null,
+                databaseEntry = null
             )
             context.save(mediaUnit)
             context.save(partCollection)

@@ -20,14 +20,15 @@ class ViewStatusControllerTest() {
 
     init {
         storage.readWrite().use { context ->
-            val mediaUnit = MediaUnit(uniqueExtKey = null, name = "Test")
+            val mediaUnit = MediaUnit(uniqueExtKey = null, name = "Test", databaseEntry = null)
             val mediaPartCollection = MediaPartCollection(
                 parent = mediaUnit,
                 name = "Default Collection",
                 sortOrder = 1,
                 uniqueExtKey =
                 "partColl",
-                seasonNumber = null
+                seasonNumber = null,
+                databaseEntry = null
             )
             val mediaPart = MediaPart(
                 parent = mediaPartCollection,
@@ -35,7 +36,8 @@ class ViewStatusControllerTest() {
                 sortOrder = null,
                 name = "Test",
                 aired = null,
-                episodeNumber = null
+                episodeNumber = null,
+                databaseEntry = null
             )
             context.save(mediaUnit)
             context.save(mediaPartCollection)

@@ -1,6 +1,7 @@
 package dynazzviewer.services.descriptors.tvmaze
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import dynazzviewer.base.ExtDatabase
 import dynazzviewer.services.descriptors.DescriptionPart
 import java.time.LocalDate
 
@@ -22,7 +23,9 @@ class Episode(
             name = name,
             aired = airDate,
             uniqueKey = "TvMaze/$id/$season/$episode",
-            episodeNumber = episode
+            episodeNumber = episode,
+            extDatabase = ExtDatabase.TvMaze,
+            extCode = id.toString()
         )
     }
 }

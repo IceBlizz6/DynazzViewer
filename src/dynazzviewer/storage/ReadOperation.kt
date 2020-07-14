@@ -1,12 +1,7 @@
 package dynazzviewer.storage
 
 import dynazzviewer.base.ViewStatus
-import dynazzviewer.entities.AlternativeTitle
-import dynazzviewer.entities.ExtReference
-import dynazzviewer.entities.MediaFile
-import dynazzviewer.entities.MediaPart
-import dynazzviewer.entities.MediaPartCollection
-import dynazzviewer.entities.MediaUnit
+import dynazzviewer.entities.*
 import java.io.Closeable
 
 interface ReadOperation : Closeable {
@@ -35,4 +30,6 @@ interface ReadOperation : Closeable {
     fun alternativeTitleLike(sqlLikeString: String): List<AlternativeTitle>
 
     fun mediaUnitsLike(sqlLikeString: String): List<MediaUnit>
+
+    fun mediaUnitExist(list: List<MediaIdentity>): Map<MediaIdentity, Boolean>
 }

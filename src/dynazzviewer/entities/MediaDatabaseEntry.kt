@@ -1,12 +1,11 @@
 package dynazzviewer.entities
 
 import dynazzviewer.base.ExtDatabase
+import javax.persistence.Entity
 import javax.persistence.Id
 
+@Entity
 class MediaDatabaseEntry(
-    @Id
-       var mediaDatabase: ExtDatabase,
-    @Id
-       var mediaRef: ExtReference,
-    var code: String
-) : EntityModel
+    @Id val mediaDatabase: ExtDatabase,
+    @Id val code: String
+) : EntityModel, java.io.Serializable

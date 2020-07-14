@@ -15,7 +15,8 @@ class DescriptionUnit(
     fun create(context: ReadWriteOperation): MediaUnit {
         val mediaUnit = MediaUnit(
             uniqueExtKey = uniqueKey,
-            name = name
+            name = name,
+            databaseEntry = null
         )
         context.save(mediaUnit)
         imageUrls
