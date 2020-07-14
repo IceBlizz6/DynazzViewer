@@ -1,5 +1,6 @@
 package dynazzviewer.storage
 
+import dynazzviewer.base.AnimeSeasonFlagState
 import dynazzviewer.base.ExtDatabase
 import dynazzviewer.entities.EntityModel
 import dynazzviewer.entities.MediaDatabaseEntry
@@ -13,4 +14,6 @@ interface ReadWriteOperation : ReadOperation {
     fun save(entity: EntityModel)
 
     fun delete(entity: EntityModel)
+
+    fun setAnimeSeasonFlag(malId: Int, flag: AnimeSeasonFlagState)
 }

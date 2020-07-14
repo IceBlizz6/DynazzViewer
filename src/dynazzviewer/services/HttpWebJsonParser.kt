@@ -12,6 +12,21 @@ class HttpWebJsonParser(
         return parseJsonContent(data, type)
     }
 
+    override fun <T> parseJsonRequestWithResponse(
+        uri: String,
+        type: Class<T>
+    ): WebJsonParser.Response<T> {
+        val data = client.requestData(uri)
+        return WebJsonParser.Response(
+            content = data,
+            inner = parseJsonContent(data, type)
+        )
+    }
+
+    override fun <T> parseRawString(rawContent: String, type: Class<T>): T {
+        return parseJsonContent(rawContent, type)
+    }
+
     private fun <T> parseJsonContent(data: String, type: Class<T>): T {
         val mapper = ObjectMapper()
         mapper.registerModule(JavaTimeModule())

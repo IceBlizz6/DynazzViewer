@@ -1,5 +1,6 @@
 package dynazzviewer.storage
 
+import dynazzviewer.base.AnimeSeasonFlagState
 import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.*
 import java.io.Closeable
@@ -32,4 +33,6 @@ interface ReadOperation : Closeable {
     fun mediaUnitsLike(sqlLikeString: String): List<MediaUnit>
 
     fun mediaUnitExist(list: List<MediaIdentity>): Map<MediaIdentity, Boolean>
+
+    fun animeSeasonSeries(malIds: List<Int>): Map<Int, AnimeSeasonFlagState>
 }

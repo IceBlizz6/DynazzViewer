@@ -1,6 +1,7 @@
 package dynazzviewer.storage.sqlite
 
 import com.mysema.query.types.path.EntityPathBase
+import dynazzviewer.base.AnimeSeasonFlagState
 import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.*
 import dynazzviewer.storage.MediaIdentity
@@ -49,6 +50,14 @@ internal open class DataContext(
         return list.map { identity ->
             identity to allMatches.contains(identity)
         }.toMap()
+    }
+
+    override fun animeSeasonSeries(malIds: List<Int>): Map<Int, AnimeSeasonFlagState> {
+        return stream(QAnimeSeasonFlag.animeSeasonFlag)
+            .filter { it.malId.`in`(malIds) }
+            .fetchList()
+            .map { it.malId to it.flag }
+            .toMap()
     }
 
     override fun extRefByKey(uniqueKey: String): ExtReference {

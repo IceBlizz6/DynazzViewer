@@ -164,8 +164,23 @@ class JikanApi(
         return parser.parseJsonRequest(uri, MalSeasonList::class.java).anime
     }
 
+    fun seasonWithResponse(year: Int, season: MalYearSeason): AnimeSeasonResponse {
+        val uri = "$BASE_URL/season/$year/${season.seasonName}"
+        val response = parser.parseJsonRequestWithResponse(uri, MalSeasonList::class.java)
+        return AnimeSeasonResponse(response.inner.anime, response.content)
+    }
+
+    fun parseSeason(content: String): List<AnimeSeasonEntry> {
+        return parser.parseRawString(content, MalSeasonList::class.java).anime
+    }
+
     private fun requestEpisodes(malId: Int, page: Int): EpisodeCollection {
         val uri = "$BASE_URL/anime/$malId/episodes/$page"
         return parser.parseJsonRequest(uri, EpisodeCollection::class.java)
     }
+
+    class AnimeSeasonResponse(
+        val series: List<AnimeSeasonEntry>,
+        val jsonContent: String
+    )
 }

@@ -1,5 +1,6 @@
 package dynazzviewer.ui.web
 
+import dynazzviewer.controllers.AnimeSeasonController
 import dynazzviewer.controllers.ServiceDescriptorController
 import dynazzviewer.filesystem.FileCache
 import dynazzviewer.filesystem.FileEntryFactory
@@ -75,11 +76,19 @@ open class GraphQLConfig {
             storage = storage
         )
 
+        val animeSeasonController = AnimeSeasonController(
+            storage = storage,
+            api = jikanApi,
+            config = configuration
+        )
+
         return GraphQLSchemaGenerator()
             .withOperationsFromSingleton(FileSystemGraph(fileController))
             .withOperationsFromSingleton(ConfigGraph(configuration))
             .withOperationsFromSingleton(MediaListGraph(storage))
-            .withOperationsFromSingleton(ApiServiceGraph(apiServiceController, storage))
+            .withOperationsFromSingleton(
+                ApiServiceGraph(apiServiceController, storage, animeSeasonController)
+            )
             .withSchemaTransformers(GraphInferNullTransformer())
             .generate()
     }

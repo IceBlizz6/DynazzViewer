@@ -1,10 +1,8 @@
 package dynazzviewer.storage.sqlite
 
+import dynazzviewer.base.AnimeSeasonFlagState
 import dynazzviewer.base.ExtDatabase
-import dynazzviewer.entities.EntityModel
-import dynazzviewer.entities.MediaDatabaseEntry
-import dynazzviewer.entities.MediaUnitTag
-import dynazzviewer.entities.QMediaDatabaseEntry
+import dynazzviewer.entities.*
 import dynazzviewer.storage.ReadWriteOperation
 import javax.persistence.EntityTransaction
 
@@ -49,6 +47,23 @@ internal class TransactionDataContext(
             return newEntry
         } else {
             return match
+        }
+    }
+
+    override fun setAnimeSeasonFlag(malId: Int, flag: AnimeSeasonFlagState) {
+        val entity = stream(QAnimeSeasonFlag.animeSeasonFlag)
+            .filter { it.malId.eq(malId) }
+            .fetchSingleOrNull()
+
+        if (entity == null) {
+            val flagEntity = AnimeSeasonFlag(
+                malId = malId,
+                flag = flag
+            )
+            save(flagEntity)
+        } else {
+            entity.flag = flag
+            save(entity)
         }
     }
 
