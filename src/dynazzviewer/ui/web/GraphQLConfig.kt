@@ -56,6 +56,7 @@ open class GraphQLConfig {
             .withOperationsFromSingleton(FileSystemGraph(fileController))
             .withOperationsFromSingleton(ConfigGraph(configuration))
             .withOperationsFromSingleton(MediaListGraph(storage))
+            .withSchemaTransformers(GraphInferNullTransformer())
             .generate()
     }
 

@@ -442,28 +442,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>net.bytebuddy</groupId>
-                <artifactId>byte-buddy-maven-plugin</artifactId>
-                <version>1.10.9</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>transform</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <initialization>
-                        <entryPoint>dynazzviewer.entities.plugins.GraphNonNullEntryPoint</entryPoint>
-                    </initialization>
-                    <transformations>
-                        <transformation>
-                            <plugin>dynazzviewer.entities.plugins.GraphNonNullPlugin</plugin>
-                        </transformation>
-                    </transformations>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 </project>
