@@ -1,9 +1,13 @@
 package dynazzviewer.ui.web
 
+import dynazzviewer.controllers.ServiceDescriptorController
 import dynazzviewer.filesystem.FileCache
 import dynazzviewer.filesystem.FileEntryFactory
 import dynazzviewer.filesystem.FileSystemRepository
 import dynazzviewer.filesystem.SystemFileSource
+import dynazzviewer.services.HttpWebJsonParser
+import dynazzviewer.services.descriptors.jikan.JikanApi
+import dynazzviewer.services.descriptors.tvmaze.TvMazeApi
 import dynazzviewer.storage.sqlite.SqlLiteStorage
 import dynazzviewer.ui.config.DefaultConfiguration
 import graphql.execution.ExecutionStrategy
@@ -52,10 +56,30 @@ open class GraphQLConfig {
             fileRepository = fileRepository
         )
 
+        val parser = HttpWebJsonParser()
+
+        val jikanApi = JikanApi(
+            parser = parser,
+            fetchRelated = true,
+            autoFillEpisodes = true,
+            autoFillEpisodeAirDates = true
+        )
+
+        val tvMazeApi = TvMazeApi(
+            parser = parser
+        )
+
+        val apiServiceController = ServiceDescriptorController(
+            descriptorServices = listOf(jikanApi, tvMazeApi),
+            listener = fileController,
+            storage = storage
+        )
+
         return GraphQLSchemaGenerator()
             .withOperationsFromSingleton(FileSystemGraph(fileController))
             .withOperationsFromSingleton(ConfigGraph(configuration))
             .withOperationsFromSingleton(MediaListGraph(storage))
+            .withOperationsFromSingleton(ApiServiceGraph(apiServiceController))
             .withSchemaTransformers(GraphInferNullTransformer())
             .generate()
     }
