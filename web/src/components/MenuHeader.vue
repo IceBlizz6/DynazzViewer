@@ -16,8 +16,13 @@ export default class MenuHeader extends Vue {
 
 <style scoped>
 header {
-    background-color: lightblue;
-    margin-bottom: 15px;
-    padding-left: 20px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	background-color: lightblue;
+	margin-bottom: 15px;
+	padding-left: 20px;
+	border-style: solid;
 }
 </style>
