@@ -1,10 +1,12 @@
 package dynazzviewer.controllers
 
 import dynazzviewer.base.AnimeSeasonFlagState
+import dynazzviewer.base.ExtDatabase
 import dynazzviewer.filesystem.FileConfiguration
 import dynazzviewer.services.descriptors.jikan.JikanApi
 import dynazzviewer.services.descriptors.jikan.MalType
 import dynazzviewer.services.descriptors.jikan.MalYearSeason
+import dynazzviewer.storage.MediaIdentity
 import dynazzviewer.storage.Storage
 import java.io.File
 import java.time.LocalDateTime
@@ -30,6 +32,13 @@ class AnimeSeasonController(
         file.writeText(json)
     }
 
+    class AnimeMediaIdentity(
+        override val extDbCode: String
+    ) : MediaIdentity {
+        override val extDb: ExtDatabase
+            get() = ExtDatabase.MyAnimeList
+    }
+
     fun load(year: Int, season: MalYearSeason): List<AnimeSeasonSeries> {
         val file = path(year, season)
         val json = file.readText()
@@ -37,6 +46,8 @@ class AnimeSeasonController(
 
         storage.read().use { context ->
             val storedFlags = context.animeSeasonSeries(series.map { it.malId })
+            val mediaIds = series.map { AnimeMediaIdentity(it.malId.toString()) }
+            val cacheExists = context.mediaUnitExist(mediaIds)
             return series.map {
                 AnimeSeasonSeries(
                     title = it.title,
@@ -47,7 +58,8 @@ class AnimeSeasonController(
                     malId = it.malId,
                     score = it.score,
                     url = it.url,
-                    flag = storedFlags[it.malId] ?: AnimeSeasonFlagState.None
+                    flag = storedFlags[it.malId] ?: AnimeSeasonFlagState.None,
+                    saved = cacheExists[mediaIds.single { media -> media.extDbCode == it.malId.toString() }]!!
                 )
             }
         }
@@ -91,6 +103,7 @@ class AnimeSeasonController(
         val airingStart: LocalDateTime,
         val episodes: Int,
         val score: Double,
-        val flag: AnimeSeasonFlagState
+        val flag: AnimeSeasonFlagState,
+        val saved: Boolean
     )
 }
