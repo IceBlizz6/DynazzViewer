@@ -42,11 +42,11 @@
     },
     "rules": {
       "vue/html-indent": [
-        "warn",
+        "error",
         "tab"
       ],
       "@typescript-eslint/indent": [
-        "warn",
+        "error",
         "tab"
       ]
     }
