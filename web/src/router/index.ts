@@ -1,29 +1,29 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import FileView from '@/views/FileView.vue'
-import PageB from '@/views/PageB.vue'
-import NotFound from '@/views/NotFound.vue'
+import MediaView from '@/views/MediaView.vue'
+import NotFoundView from '@/views/NotFoundView.vue'
 
 Vue.use(VueRouter)
 
-export const URL_LOGIN = '/'
-export const URL_HOME = '/home'
+export const MediaViewUrl = '/media'
+export const FileViewUrl = '/'
 
 const routes: Array<RouteConfig> = [
 	{
-		path: URL_LOGIN,
-		name: 'Login',
-		component: PageB
+		path: MediaViewUrl,
+		name: 'Media',
+		component: MediaView
 	},
 	{
-		path: URL_HOME,
-		name: 'Home',
+		path: FileViewUrl,
+		name: 'Video files',
 		component: FileView
 	},
 	{
 		path: '*',
 		name: 'Not found',
-		component: NotFound
+		component: NotFoundView
 	}
 ]
 
