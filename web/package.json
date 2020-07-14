@@ -9,8 +9,10 @@
     "lint-no-fix": "vue-cli-service lint --no-fix"
   },
   "dependencies": {
+    "@types/numeral": "0.0.28",
     "buefy": "^0.8.20",
     "moment": "^2.27.0",
+    "numeral": "^2.0.6",
     "vue": "^2.6.11",
     "vue-property-decorator": "^8.4.2",
     "vue-router": "^3.2.0"

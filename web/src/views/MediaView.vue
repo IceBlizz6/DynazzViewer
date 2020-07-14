@@ -21,7 +21,7 @@
 								<img v-if="episode.status == stateNone" class="tree-icon" src="@/assets/videofiles/Neutral.png">
 								<img v-if="episode.status == stateViewed" class="tree-icon" src="@/assets/videofiles/Viewed.png">
 								<img v-if="episode.status == stateSkipped" class="tree-icon" src="@/assets/videofiles/Skipped.png">
-								{{ episode.name }}
+								{{ episodeFormat(episode.episodeNumber) }} | {{  episode.name }}
 								<div class="toolbar">
 									<span class="toolbar-action" @click="setEpisodeWatch(episode, stateNone)">
 										<img class="tree-icon" src="@/assets/videofiles/Neutral.png">
@@ -50,6 +50,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import graphClient from '@/lib/graph-client'
 import { VideoFile, ViewStatus, MediaUnit, MediaPart } from '@/graph/schema'
 import MediaSeries from '@/components/MediaSeries.vue'
+import numeral from 'numeral';
 
 @Component({
 	components: {
@@ -65,9 +66,12 @@ export default class MediaView extends Vue {
 	public stateViewed = ViewStatus.Viewed
 	public stateSkipped = ViewStatus.Skipped
 
-
 	mounted() {
 		this.mediaQuery()
+	}
+
+	episodeFormat(value: number) {
+		return "E" + numeral(value).format("00")
 	}
 
 	mediaQuery() {
