@@ -2,12 +2,13 @@
 	<header>
 		<router-link to="/">Files</router-link> |
 		<router-link to="/media">Media</router-link> |
-		<router-link to="/media-search">Search</router-link>
+		<router-link to="/media-search">Search</router-link> |
+		<router-link to="/anime-season">Anime seasons</router-link> |
 	</header>
 </template>
 
 <script lang="ts">
-import { Component, Prop,  Vue } from 'vue-property-decorator';
+import { Component, Prop,  Vue } from 'vue-property-decorator'
 
 @Component
 export default class MenuHeader extends Vue {

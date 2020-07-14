@@ -4,12 +4,14 @@ import FileView from '@/views/FileView.vue'
 import MediaView from '@/views/MediaView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import MediaSearchView from '@/views/MediaSearchView.vue'
+import AnimeSeasonView from '@/views/AnimeSeasonView.vue'
 
 Vue.use(VueRouter)
 
 export const MediaViewUrl = '/media'
 export const FileViewUrl = '/'
 export const MediaSearchViewUrl = '/media-search'
+export const AnimeSeasonViewUrl = '/anime-season'
 
 const routes: Array<RouteConfig> = [
 	{
@@ -21,6 +23,11 @@ const routes: Array<RouteConfig> = [
 		path: MediaSearchViewUrl,
 		name: "Media search",
 		component: MediaSearchView
+	},
+	{
+		path: AnimeSeasonViewUrl,
+		name: 'Anime seasons',
+		component: AnimeSeasonView
 	},
 	{
 		path: FileViewUrl,
