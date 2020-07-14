@@ -1,8 +1,8 @@
 <template>
-    <header>
-        <router-link to="/">Files</router-link> |
-        <router-link to="/media">Media</router-link> |
-    </header>
+	<header>
+		<router-link to="/">Files</router-link> |
+		<router-link to="/media">Media</router-link>
+	</header>
 </template>
 
 <script lang="ts">
@@ -17,5 +17,6 @@ export default class MenuHeader extends Vue {
 header {
     background-color: lightblue;
     margin-bottom: 15px;
+    padding-left: 20px;
 }
 </style>
