@@ -3,17 +3,24 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import FileView from '@/views/FileView.vue'
 import MediaView from '@/views/MediaView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
+import MediaSearchView from '@/views/MediaSearchView.vue'
 
 Vue.use(VueRouter)
 
 export const MediaViewUrl = '/media'
 export const FileViewUrl = '/'
+export const MediaSearchViewUrl = '/media-search'
 
 const routes: Array<RouteConfig> = [
 	{
 		path: MediaViewUrl,
 		name: 'Media',
 		component: MediaView
+	},
+	{
+		path: MediaSearchViewUrl,
+		name: "Media search",
+		component: MediaSearchView
 	},
 	{
 		path: FileViewUrl,
