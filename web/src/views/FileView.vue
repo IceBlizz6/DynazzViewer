@@ -47,7 +47,6 @@ export default class FileView extends Vue {
 			const sourceVideoFiles = data.listVideoFiles!
 			this.roots = sourceVideoFiles.map(el => this.filePathsToTree(el!.root!, el!.files!.map(e => e!)!))
 			this.videoFiles = sourceVideoFiles.flatMap(el => el!.files).map(e => e!)
-			console.log(this.roots)
 		})
 	}
 
