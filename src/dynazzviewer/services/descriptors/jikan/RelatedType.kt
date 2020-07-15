@@ -16,4 +16,6 @@ enum class RelatedType(
     SUMMARY("Summary", false),
     ALTERNATIVE_SETTING("Alternative setting", false),
     FULL_STORY("Full story", true),
+    SPIN_OFF("Spin-off", false),
+    CHARACTER("Character", false)
 }
