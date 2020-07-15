@@ -100,7 +100,8 @@ export default class MediaSearchView extends Vue {
 					name: 1,
 					extDb: 1,
 					extDbCode: 1,
-					imageUrl: 1
+					imageUrl: 1,
+					saved: 1
 				}
 			]
 		}).then(response => {
