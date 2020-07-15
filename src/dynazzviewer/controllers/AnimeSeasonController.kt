@@ -59,7 +59,9 @@ class AnimeSeasonController(
                     score = it.score,
                     url = it.url,
                     flag = storedFlags[it.malId] ?: AnimeSeasonFlagState.None,
-                    saved = cacheExists[mediaIds.single { media -> media.extDbCode == it.malId.toString() }]!!
+                    saved = cacheExists[
+                        mediaIds.single { media -> media.extDbCode == it.malId.toString() }
+                    ]!!
                 )
             }
         }
