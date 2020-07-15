@@ -15,6 +15,7 @@ enum class RelatedType(
     SEQUEL("Sequel", true),
     SUMMARY("Summary", false),
     ALTERNATIVE_SETTING("Alternative setting", false),
+    ALTERNATIVE_VERSION("Alternative version", false),
     FULL_STORY("Full story", true),
     SPIN_OFF("Spin-off", false),
     CHARACTER("Character", false)
