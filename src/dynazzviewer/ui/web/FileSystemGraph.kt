@@ -1,6 +1,7 @@
 package dynazzviewer.ui.web
 
 import dynazzviewer.base.ViewStatus
+import dynazzviewer.filesystem.FileNameDetector
 import io.leangen.graphql.annotations.GraphQLMutation
 import io.leangen.graphql.annotations.GraphQLQuery
 
@@ -42,4 +43,24 @@ class FileSystemGraph(
     fun playVideo(path: String) {
         controller.playVideos(listOf(path))
     }
+
+    @GraphQLQuery
+    fun parseFileNames(fileNames: List<String>): List<DetectedFileResult> {
+        val detector = FileNameDetector()
+        return fileNames.map { it to detector.parse(it) }.mapNotNull { pair ->
+            val result = pair.second
+            if (result == null) {
+                null
+            } else {
+                DetectedFileResult(pair.first, result.name, result.season, result.episode)
+            }
+        }
+    }
+
+    class DetectedFileResult(
+        val fileName: String,
+        val name: String,
+        val season: Int?,
+        val episode: Int?
+    )
 }

@@ -99,6 +99,24 @@ class FileDetectorTest {
             null,
             1
         )
+        assertMatch(
+            "[delete aniplex] Kaguya-sama wa Kokurasetai S2 - 10 [1080p] [1F35E523].mkv",
+            "Kaguya-sama wa Kokurasetai S2",
+            null,
+            10
+        )
+        assertMatch(
+            "[GJM-DDY] Boogiepop wa Warawanai (2019) - 07 [D8D1A463].mkv",
+            "Boogiepop wa Warawanai (2019)",
+            null,
+            7
+        )
+        assertMatch(
+            "[Kawaiika-Raws] Nankoko 12 [BDRip 1920x1080 HEVC FLAC].mkv",
+            "Nankoko",
+            null,
+            12
+        )
     }
 
     @Test
@@ -133,6 +151,18 @@ class FileDetectorTest {
             "Dark.Matter.S01E12.720p.HDTV.x264-KILLERS.mkv",
             "Dark Matter",
             1,
+            12
+        )
+        assertMatch(
+            "The EXPANSE - S01 E02 - The Big Empty (1080p - BluRay).mp4",
+            "The EXPANSE",
+            1,
+            2
+        )
+        assertMatch(
+            "The EXPANSE - S02 E12 - The Monster and the Rocket (1080p - BluRay).mp4",
+            "The EXPANSE",
+            2,
             12
         )
     }

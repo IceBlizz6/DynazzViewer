@@ -15,7 +15,7 @@ class FileNameDetector : FileDetector {
             episodeGroup = 3
         ),
         RegexMatcher(
-            regex = "^\\[([A-Za-z ]+)\\][ ]([A-Za-z ()0-9-]+)[ ][-][ ][0]*([0-9]+)" +
+            regex = "^\\[([A-Za-z -]+)\\][ ]([A-Za-z ()0-9-]+)[ ][-][ ][0]*([0-9]+)" +
                     "([v]{0,1}[0-9]*)[ ]{0,1}(\\([A-Za-z0-9 ]+\\))*" +
                     "[ ]{0,1}(\\[([A-Z0-9a-z]+)\\])*[.]([a-z]+)\$",
             nameGroup = 2,
@@ -24,6 +24,28 @@ class FileNameDetector : FileDetector {
         ),
         RegexMatcher(
             regex = "^([A-Za-z.]+)[Ss][0]([0-9]+)[Ee][0]*([0-9]+)",
+            nameGroup = 1,
+            seasonGroup = 2,
+            episodeGroup = 3
+        ),
+        RegexMatcher(
+            regex = "^\\[([A-Za-z -]+)\\][ ]([A-Za-z ()0-9-]+)[ ][-][ ][0]*([0-9]+)" +
+                "([v]{0,1}[0-9]*)[ ]{0,1}(\\([A-Za-z0-9 ]+\\))*[ ]{0,1}" +
+                "(\\[([A-Z0-9a-z]+)\\])*[ ]?\\[\\w+\\][.]([a-z]+)\$",
+            nameGroup = 2,
+            seasonGroup = null,
+            episodeGroup = 3
+        ),
+        RegexMatcher(
+            regex = "^\\[([A-Za-z -]+)\\][ ]([A-Za-z ()0-9-]+)([ ]" +
+                "([0-9]*)[ ])+\\[[\\w\\ ]+\\][.]([a-z]+)\$",
+            nameGroup = 2,
+            seasonGroup = null,
+            episodeGroup = 4
+        ),
+        RegexMatcher(
+            regex = "^([(\\w )]+)[ ][-][ ][sS][0]?([0-9]+)[ ]" +
+                "[eE][0]?([0-9]+)+[ ][-][ ][\\w -]+[(\\w -]+[)][.][\\w]+\$",
             nameGroup = 1,
             seasonGroup = 2,
             episodeGroup = 3
