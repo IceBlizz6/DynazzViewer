@@ -55,6 +55,8 @@
 						<dd>{{ series.score }}</dd>
 						<dt>Type</dt>
 						<dd>{{ series.type }}</dd>
+						<dt>In library</dt>
+						<dd>{{ series.saved }}</dd>
 						<dt>Flag</dt>
 						<dd>{{ series.flag }}</dd>
 					</dl>
@@ -62,6 +64,12 @@
 						<button v-on:click="flagWatch(series)">Watch</button>
 						<button v-on:click="flagSkip(series)">Skip</button>
 						<button v-on:click="flagNone(series)">Clear</button>
+					</div>
+					<div>
+						<p v-if="series.saved == true"><strong>[In library]</strong></p>
+						<button 
+							v-on:click="addMediaSeries(series)"
+							v-if="series.saved == false">Add to library</button>
 					</div>
 				</li>
 			</ul>
@@ -71,7 +79,7 @@
 
 <script lang="ts">
 import { Component, Prop,  Vue } from 'vue-property-decorator'
-import { MalSeasonIdentifier, AnimeSeasonSeries, AnimeSeasonFlagState, MalYearSeason } from '@/graph/schema'
+import { MalSeasonIdentifier, AnimeSeasonSeries, AnimeSeasonFlagState, MalYearSeason, ExtDatabase } from '@/graph/schema'
 import graphClient from '@/lib/graph-client'
 
 class AnimeSeason {
@@ -127,7 +135,8 @@ export default class AnimeSeasonView extends Vue {
 					url: 1,
 					episodes: 1,
 					score: 1,
-					type: 1
+					type: 1,
+					saved: 1
 				}
 			]
 		}).then(response => {
@@ -206,6 +215,17 @@ export default class AnimeSeasonView extends Vue {
 				}
 			})
 		}
+	}
+
+	addMediaSeries(item: AnimeSeasonSeries) {
+		graphClient.mutation({
+			externalMediaAdd: [{ db: ExtDatabase.MyAnimeList, code: item.malId.toString() }]
+		}).then(response => {
+			const success: boolean = response.data!.externalMediaAdd
+			if (success) {
+				item.saved = true
+			}
+		})
 	}
 }
 </script>
