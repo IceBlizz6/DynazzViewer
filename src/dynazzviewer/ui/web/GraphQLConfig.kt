@@ -7,6 +7,7 @@ import dynazzviewer.filesystem.FileEntryFactory
 import dynazzviewer.filesystem.FileSystemRepository
 import dynazzviewer.filesystem.SystemFileSource
 import dynazzviewer.services.HttpWebJsonParser
+import dynazzviewer.services.descriptors.HttpThrottledWebParser
 import dynazzviewer.services.descriptors.jikan.JikanApi
 import dynazzviewer.services.descriptors.tvmaze.TvMazeApi
 import dynazzviewer.storage.sqlite.SqlLiteStorage
@@ -57,17 +58,15 @@ open class GraphQLConfig {
             fileRepository = fileRepository
         )
 
-        val parser = HttpWebJsonParser()
-
         val jikanApi = JikanApi(
-            parser = parser,
+            parser = HttpThrottledWebParser(secondsInterval = 2),
             fetchRelated = true,
             autoFillEpisodes = true,
             autoFillEpisodeAirDates = true
         )
 
         val tvMazeApi = TvMazeApi(
-            parser = parser
+            parser = HttpWebJsonParser()
         )
 
         val apiServiceController = ServiceDescriptorController(
