@@ -55,8 +55,6 @@
 						<dd>{{ series.score }}</dd>
 						<dt>Type</dt>
 						<dd>{{ series.type }}</dd>
-						<dt>In library</dt>
-						<dd>{{ series.saved }}</dd>
 						<dt>Flag</dt>
 						<dd>{{ series.flag }}</dd>
 					</dl>
