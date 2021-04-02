@@ -53,7 +53,7 @@ class Show(
     class Aired(
         @JsonProperty("from", required = true)
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss[xxx]")
-        val from: LocalDateTime,
+        val from: LocalDateTime?,
         @JsonProperty("to", required = true)
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss[xxx]")
         val to: LocalDateTime?
@@ -88,7 +88,7 @@ class Show(
             extDatabase = ExtDatabase.MyAnimeList,
             episodes = episodes.map { e -> e.toDescriptionPart(malId = malId.toString()) },
             uniqueKey = "MAL/$malId",
-            sortOrder = aired.from.year * 400 + aired.from.dayOfYear,
+            sortOrder = aired.from?.let { it.year * 400 + it.dayOfYear },
             seasonNumber = null,
             alternativeTitles = alternativeTitles
         )

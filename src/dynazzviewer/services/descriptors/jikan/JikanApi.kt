@@ -29,16 +29,23 @@ class JikanApi(
     override fun queryLookup(db: ExtDatabase, code: String): DescriptionUnit? {
         if (ExtDatabase.MyAnimeList == db) {
             val jikanSeries = fetchSeries(code)
-            val partCollections = jikanSeries.map { e -> e.toDescriptionPartCollection() }
-            val firstName = jikanSeries.map { e -> e.show }.minBy { e -> e.aired.from }!!.title
+            val partCollections = jikanSeries
+                .map { e -> e.toDescriptionPartCollection() }
+            val firstName = jikanSeries
+                .map { e -> e.show }
+                .filter { it.aired.from != null }
+                .minByOrNull { it.aired.from!! }
+                ?.title
             return DescriptionUnit(
                 children = partCollections,
                 uniqueKey = null,
-                name = firstName,
+                name = firstName ?: jikanSeries.first().show.title,
                 tags = jikanSeries
                     .flatMap { e -> e.show.genres.map { genre -> genre.name } }
                     .toSet(),
-                imageUrls = jikanSeries.map { e -> e.show.imageUrl }.toSet()
+                imageUrls = jikanSeries
+                    .map { e -> e.show.imageUrl }
+                    .toSet()
             )
         } else {
             return null
@@ -99,7 +106,7 @@ class JikanApi(
         } else {
             episodes(code)
         }
-        if (autoFillEpisodeAirDates && seriesData.aired.to != null) {
+        if (autoFillEpisodeAirDates && seriesData.aired.from != null && seriesData.aired.to != null) {
             autoFillEpisodeAirDates(
                 episodes, seriesData.aired.from.toLocalDate(),
                 seriesData.aired.to.toLocalDate()
@@ -130,7 +137,7 @@ class JikanApi(
         } else {
             episodes(code)
         }
-        if (autoFillEpisodeAirDates && seriesData.aired.to != null) {
+        if (autoFillEpisodeAirDates && seriesData.aired.from != null && seriesData.aired.to != null) {
             autoFillEpisodeAirDates(
                 episodes, seriesData.aired.from.toLocalDate(),
                 seriesData.aired.to.toLocalDate()
