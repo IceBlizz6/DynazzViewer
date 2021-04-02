@@ -20,11 +20,13 @@ class FileSystemController(
     private val fileRepository: FileRepository
 ) : UpdateListener {
     private val desktop: Desktop = Desktop.getDesktop()
+    private val viewStatusController: ViewStatusController
 
     init {
         for (path in fileConfiguration.rootDirectoryPaths) {
             fileRepository.add(path)
         }
+        this.viewStatusController = ViewStatusController(storage, this)
     }
 
     fun list(): Map<String, Set<VideoFile>> {
@@ -51,12 +53,11 @@ class FileSystemController(
     }
 
     fun setViewStatus(videoFilePaths: Set<String>, status: ViewStatus): Map<String, Int> {
-        val controller = ViewStatusController(storage, this)
         return videoFilePaths
             .map { path ->
                 run {
                     val name = FilePath(path).fileName.name
-                    name to controller.setMediaFileStatus(status, name)
+                    name to viewStatusController.setMediaFileStatus(status, name)
                 }
             }
             .toMap()
@@ -80,6 +81,13 @@ class FileSystemController(
         } else {
             desktop.open(target)
         }
+    }
+
+    fun linkVideoFile(mediaFileId: Int, mediaPartId: Int) {
+        viewStatusController.link(
+            mediaFileId = mediaFileId,
+            mediaPartId = mediaPartId
+        )
     }
 
     val playVideoEnabled: Boolean
