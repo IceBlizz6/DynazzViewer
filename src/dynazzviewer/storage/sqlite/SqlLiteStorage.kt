@@ -8,10 +8,6 @@ import dynazzviewer.storage.Storage
 import dynazzviewer.storage.StorageMode
 import dynazzviewer.storage.query.JpaQueryStream
 import dynazzviewer.storage.query.QueryStream
-import java.io.File
-import java.util.HashMap
-import javax.persistence.EntityManager
-import javax.persistence.EntityManagerFactory
 import org.hibernate.cfg.AvailableSettings.DIALECT
 import org.hibernate.cfg.AvailableSettings.GENERATE_STATISTICS
 import org.hibernate.cfg.AvailableSettings.JPA_JDBC_DRIVER
@@ -24,6 +20,10 @@ import org.hibernate.cfg.AvailableSettings.USE_REFLECTION_OPTIMIZER
 import org.hibernate.cfg.AvailableSettings.USE_SECOND_LEVEL_CACHE
 import org.hibernate.cfg.AvailableSettings.USE_STRUCTURED_CACHE
 import org.hibernate.jpa.HibernatePersistenceProvider
+import java.io.File
+import java.util.HashMap
+import javax.persistence.EntityManager
+import javax.persistence.EntityManagerFactory
 
 class SqlLiteStorage : Storage {
     companion object {

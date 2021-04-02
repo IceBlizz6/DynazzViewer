@@ -11,9 +11,9 @@ import javax.persistence.ManyToMany
 @Entity
 class MediaUnitTag(
     @Column(unique = true)
-       override val name: String,
+    override val name: String,
     @ManyToMany(mappedBy = "tags")
-       val mediaUnits: List<MediaUnit>
+    val mediaUnits: List<MediaUnit>
 ) : EntityModel, NameContainer, UniqueKey {
     override val uniqueKey: String
         get() = name

@@ -16,28 +16,43 @@ class SeriesNameMatcherTest {
 
     init {
         storage.readWrite().use { context ->
-            createDummy(context, listOf(
-                "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen",
-                "Ascendance of a Bookworm"
-            ))
-            createDummy(context, listOf(
-                "Nanatsu no Taizai: Kamigami no Gekirin",
-                "The Seven Deadly Sins: Wrath of the Gods"
-            ))
-            createDummy(context, listOf(
-                "Wotaku ni Koi wa Muzukashii",
-                "Wotakoi: Love is Hard for Otaku",
-                "It's Difficult to Love an Otaku"
-            ))
-            createDummy(context, listOf(
-                "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka Gaiden: Sword Oratoria",
-                "Sword Oratoria: Is it Wrong to Try to Pick Up Girls in a Dungeon? On the Side",
-                "Danmachi Sword Oratoria"
-            ))
-            createDummy(context, listOf(
-                "Garo: Vanishing Line",
-                "GARO -VANISHING LINE-"
-            ))
+            createDummy(
+                context,
+                listOf(
+                    "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen",
+                    "Ascendance of a Bookworm"
+                )
+            )
+            createDummy(
+                context,
+                listOf(
+                    "Nanatsu no Taizai: Kamigami no Gekirin",
+                    "The Seven Deadly Sins: Wrath of the Gods"
+                )
+            )
+            createDummy(
+                context,
+                listOf(
+                    "Wotaku ni Koi wa Muzukashii",
+                    "Wotakoi: Love is Hard for Otaku",
+                    "It's Difficult to Love an Otaku"
+                )
+            )
+            createDummy(
+                context,
+                listOf(
+                    "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka Gaiden: Sword Oratoria",
+                    "Sword Oratoria: Is it Wrong to Try to Pick Up Girls in a Dungeon? On the Side",
+                    "Danmachi Sword Oratoria"
+                )
+            )
+            createDummy(
+                context,
+                listOf(
+                    "Garo: Vanishing Line",
+                    "GARO -VANISHING LINE-"
+                )
+            )
         }
     }
 

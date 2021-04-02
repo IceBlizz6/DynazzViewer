@@ -16,8 +16,8 @@ class FileNameDetector : FileDetector {
         ),
         RegexMatcher(
             regex = "^\\[([A-Za-z -]+)\\][ ]([A-Za-z ()0-9-]+)[ ][-][ ][0]*([0-9]+)" +
-                    "([v]{0,1}[0-9]*)[ ]{0,1}(\\([A-Za-z0-9 ]+\\))*" +
-                    "[ ]{0,1}(\\[([A-Z0-9a-z]+)\\])*[.]([a-z]+)\$",
+                "([v]{0,1}[0-9]*)[ ]{0,1}(\\([A-Za-z0-9 ]+\\))*" +
+                "[ ]{0,1}(\\[([A-Z0-9a-z]+)\\])*[.]([a-z]+)\$",
             nameGroup = 2,
             seasonGroup = null,
             episodeGroup = 3

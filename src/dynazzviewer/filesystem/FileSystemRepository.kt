@@ -53,7 +53,8 @@ class FileSystemRepository(
 
     private fun update(filePaths: Set<FilePath>): Map<RootDirectory, Set<VideoFile>> {
         return roots
-            .map { e -> e to
+            .map { e ->
+                e to
                     filePaths.filter { filePath -> filePath.path.startsWith(e.rootPath) }.toSet()
             }
             .map { e -> e.first to factory.files(e.first, e.second).toSet() }

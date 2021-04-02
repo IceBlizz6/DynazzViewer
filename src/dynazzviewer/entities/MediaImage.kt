@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne
 @Entity
 class MediaImage(
     @ManyToOne
-       val mediaUnit: MediaUnit,
+    val mediaUnit: MediaUnit,
     val url: String
 ) : EntityModel, UniqueKey {
     override val uniqueKey: String

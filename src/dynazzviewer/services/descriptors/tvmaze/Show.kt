@@ -7,30 +7,30 @@ import java.time.LocalDate
 
 class Show(
     /**
-	    * TvMaze ID
-	    */
-       @JsonProperty("id", required = true)
-       val id: Int,
+     * TvMaze ID
+     */
+    @JsonProperty("id", required = true)
+    val id: Int,
     @JsonProperty("url", required = true)
-       val url: String,
+    val url: String,
     @JsonProperty("name", required = true)
-       val name: String,
+    val name: String,
     @JsonProperty("type", required = true)
-       val type: String,
+    val type: String,
     @JsonProperty("language", required = true)
-       val language: String,
+    val language: String,
     @JsonProperty("genres", required = true)
-       val genres: List<String>,
+    val genres: List<String>,
     @JsonProperty("status", required = true)
-       val status: String,
+    val status: String,
     @JsonProperty("runtime", required = true)
-       val runtime: Int,
+    val runtime: Int,
     @JsonProperty("premiered", required = true)
-       val premiered: LocalDate?,
+    val premiered: LocalDate?,
     @JsonProperty("externals", required = true)
-       val externals: Map<String, String>,
+    val externals: Map<String, String>,
     @JsonProperty("image", required = true)
-       val image: Map<ImageType, String>
+    val image: Map<ImageType, String>
 ) {
     fun toResultHeader(): ResultHeader {
         return ResultHeader(

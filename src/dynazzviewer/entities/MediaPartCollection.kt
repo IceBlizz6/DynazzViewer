@@ -8,7 +8,7 @@ import javax.persistence.OneToMany
 @Entity
 class MediaPartCollection(
     @ManyToOne
-       val parent: MediaUnit,
+    val parent: MediaUnit,
     uniqueExtKey: String,
     databaseEntry: MediaDatabaseEntry?,
     var name: String,

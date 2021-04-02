@@ -39,7 +39,9 @@ class JpaPredicateBuilder<QTEntity : EntityPathBase<TEntity>, TEntity>(
         return transform(source)
     }
 
-    override fun chainAny(transform: (PredicateBuilder<QTEntity, TEntity>) -> List<BooleanExpression>): BooleanExpression {
+    override fun chainAny(
+        transform: (PredicateBuilder<QTEntity, TEntity>) -> List<BooleanExpression>
+    ): BooleanExpression {
         var combinedPredicate: BooleanExpression? = null
         for (predicate in transform(this)) {
             if (combinedPredicate == null) {

@@ -21,7 +21,11 @@ class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<
         this.joinNameGenerator = JoinNameGenerator()
     }
 
-    private constructor(source: QTEntity, query: JPAQuery<TEntity>, joinNameGenerator: JoinNameGenerator) {
+    private constructor(
+        source: QTEntity,
+        query: JPAQuery<TEntity>,
+        joinNameGenerator: JoinNameGenerator
+    ) {
         this.source = source
         this.query = query
         this.joinNameGenerator = joinNameGenerator
@@ -74,7 +78,10 @@ class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<
         return JpaQueryStream(joined, joinedQuery, joinNameGenerator)
     }
 
-    override fun <QT : EntityPathBase<T>, T> flatMapOn(joinedType: KClass<QT>, condition: (QTEntity, QT) -> Predicate): QueryStream<QT, T> {
+    override fun <QT : EntityPathBase<T>, T> flatMapOn(
+        joinedType: KClass<QT>,
+        condition: (QTEntity, QT) -> Predicate
+    ): QueryStream<QT, T> {
         val joined = generateJoinInstance(joinedType, joinNameGenerator)
         val predicate = condition(source, joined)
         val joinedQuery: JPAQuery<T> = query.innerJoin(joined).on(predicate).select(joined)
@@ -128,7 +135,10 @@ class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<
         return query.distinct().select(sumExpr).fetchOne()
     }
 
-    override fun <T : Comparable<Nothing>?> fetchDateSingle(path: ((QTEntity) -> DatePath<T>), expr: ((DatePath<T>) -> DateExpression<T>)): T? {
+    override fun <T : Comparable<Nothing>?> fetchDateSingle(
+        path: ((QTEntity) -> DatePath<T>),
+        expr: ((DatePath<T>) -> DateExpression<T>)
+    ): T? {
         val datePath: DatePath<T> = path(source)
         val dateExpression: DateExpression<T> = expr(datePath)
         return query.distinct().select(dateExpression).fetchOne()
@@ -155,23 +165,34 @@ class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<
         return this
     }
 
-    override fun filterBuildAny(transform: (PredicateBuilder<QTEntity, TEntity>) -> List<BooleanExpression>): QueryStream<QTEntity, TEntity> {
+    override fun filterBuildAny(
+        transform: (PredicateBuilder<QTEntity, TEntity>) -> List<BooleanExpression>
+    ): QueryStream<QTEntity, TEntity> {
         val builder = JpaPredicateBuilder(source, query, joinNameGenerator)
         val filterTransform = builder.chainAny(transform)
         query = query.where(filterTransform).select(source)
         return this
     }
 
-    override fun <V> withSource(defaultValue: V, transform: (source: QTEntity, stream: QueryStream<QTEntity, TEntity>) -> V): V {
+    override fun <V> withSource(
+        defaultValue: V,
+        transform: (source: QTEntity, stream: QueryStream<QTEntity, TEntity>) -> V
+    ): V {
         return transform(source, this)
     }
 
-    override fun <V> fetchWithTransform(defaultValue: V, transform: (QTEntity) -> ResultTransformer<V>): V {
+    override fun <V> fetchWithTransform(
+        defaultValue: V,
+        transform: (QTEntity) -> ResultTransformer<V>
+    ): V {
         val resultTransformer: ResultTransformer<V> = transform(source)
         return query.distinct().transform(resultTransformer)
     }
 
-    override fun <K, V> fetchMap(key: (QTEntity) -> Expression<K>, value: (QTEntity) -> Expression<V>): Map<K, V> {
+    override fun <K, V> fetchMap(
+        key: (QTEntity) -> Expression<K>,
+        value: (QTEntity) -> Expression<V>
+    ): Map<K, V> {
         return query.distinct().transform(groupBy(key(source)).`as`(value(source)))
     }
 

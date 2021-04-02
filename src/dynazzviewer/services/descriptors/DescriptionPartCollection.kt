@@ -32,8 +32,8 @@ class DescriptionPartCollection(
         context.save(partCollection)
         if (alternativeTitles != null) {
             alternativeTitles
-                    .map { AlternativeTitle(partCollection, it) }
-                    .forEach { context.save(it) }
+                .map { AlternativeTitle(partCollection, it) }
+                .forEach { context.save(it) }
         }
         return partCollection
     }

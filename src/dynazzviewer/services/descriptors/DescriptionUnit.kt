@@ -20,8 +20,8 @@ class DescriptionUnit(
         )
         context.save(mediaUnit)
         imageUrls
-                .map { e -> MediaImage(mediaUnit = mediaUnit, url = e) }
-                .forEach { context.save(it) }
+            .map { e -> MediaImage(mediaUnit = mediaUnit, url = e) }
+            .forEach { context.save(it) }
         mediaUnit.tags.addAll(
             context.tagsGetOrCreate(tags)
         )
@@ -38,8 +38,8 @@ class DescriptionUnit(
     private fun updateImages(target: MediaUnit, context: ReadWriteOperation) {
         val matchResult = Matcher().matchWithString(target.images, imageUrls)
         matchResult.added
-                .map { e -> MediaImage(mediaUnit = target, url = e) }
-                .forEach { context.save(it) }
+            .map { e -> MediaImage(mediaUnit = target, url = e) }
+            .forEach { context.save(it) }
         matchResult.removed.forEach { context.delete(it) }
     }
 

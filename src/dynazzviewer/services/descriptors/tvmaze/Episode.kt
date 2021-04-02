@@ -7,15 +7,15 @@ import java.time.LocalDate
 
 class Episode(
     @JsonProperty("id", required = true)
-       val id: Int,
+    val id: Int,
     @JsonProperty("name", required = true)
-       val name: String,
+    val name: String,
     @JsonProperty("season", required = true)
-       val season: Int,
+    val season: Int,
     @JsonProperty("number", required = true)
-       val episode: Int,
+    val episode: Int,
     @JsonProperty("airdate", required = true)
-       val airDate: LocalDate
+    val airDate: LocalDate
 ) {
     fun toDescriptionPart(): DescriptionPart {
         return DescriptionPart(

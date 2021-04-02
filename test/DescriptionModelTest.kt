@@ -13,11 +13,11 @@ class DescriptionModelTest {
         val storage = SqlLiteStorage(TestConfiguration())
         storage.readWrite().use { context ->
             val descUnit = DescriptionUnit(
-                    name = "...",
-                    uniqueKey = null,
-                    children = listOf(),
-                    imageUrls = setOf("http://test/test.jpg"),
-                    tags = setOf("Action")
+                name = "...",
+                uniqueKey = null,
+                children = listOf(),
+                imageUrls = setOf("http://test/test.jpg"),
+                tags = setOf("Action")
             )
             descUnit.create(context)
         }
@@ -38,14 +38,14 @@ class DescriptionModelTest {
                 databaseEntry = null
             )
             val descriptionPartCollection = DescriptionPartCollection(
-                    name = "test",
-                    alternativeTitles = listOf("test"),
-                    uniqueKey = "...",
-                    episodes = listOf(),
-                    extDatabaseCode = "bfsbs",
-                    extDatabase = ExtDatabase.MyAnimeList,
-                    sortOrder = null,
-                    seasonNumber = null
+                name = "test",
+                alternativeTitles = listOf("test"),
+                uniqueKey = "...",
+                episodes = listOf(),
+                extDatabaseCode = "bfsbs",
+                extDatabase = ExtDatabase.MyAnimeList,
+                sortOrder = null,
+                seasonNumber = null
             )
             context.save(mediaUnit)
             descriptionPartCollection.create(mediaUnit, context)

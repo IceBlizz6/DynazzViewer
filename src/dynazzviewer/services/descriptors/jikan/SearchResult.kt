@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 class SearchResult(
     @JsonProperty("request_hash", required = true)
-       val requestHash: String,
+    val requestHash: String,
     @JsonProperty("request_cached", required = true)
-       val requestCached: Boolean,
+    val requestCached: Boolean,
     @JsonProperty("request_cache_expiry", required = true)
-       val requestCacheExpiry: Int,
+    val requestCacheExpiry: Int,
     @JsonProperty("last_page", required = true)
-       val lastPage: Int,
+    val lastPage: Int,
     @JsonProperty("results", required = true)
-       val results: List<ResultItem>
+    val results: List<ResultItem>
 )

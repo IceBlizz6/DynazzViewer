@@ -1,10 +1,10 @@
 package dynazzviewer.ui.web
 
+import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
+import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import org.springframework.web.filter.OncePerRequestFilter
-import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletResponseWrapper
 
 class CorsRequestFilter(
@@ -12,7 +12,11 @@ class CorsRequestFilter(
 ) : OncePerRequestFilter() {
     val apiEndpoint = "/graphql"
 
-    override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
+    override fun doFilterInternal(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain
+    ) {
         val origin = request.getHeader("Origin")
         if (hosts.contains(origin)) {
             response.setHeader("Access-Control-Allow-Origin", origin)

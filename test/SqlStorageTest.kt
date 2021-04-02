@@ -2,9 +2,9 @@ import base.TestConfiguration
 import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.*
 import dynazzviewer.storage.sqlite.SqlLiteStorage
-import javax.persistence.PersistenceException
 import org.junit.Assert
 import org.junit.Test
+import javax.persistence.PersistenceException
 
 public class SqlStorageTest {
     @Test
@@ -17,21 +17,21 @@ public class SqlStorageTest {
         val storage = SqlLiteStorage(TestConfiguration())
         storage.readWrite().use { context ->
             val mediaUnit = MediaUnit(
-                    name = "Test",
-                    uniqueExtKey = null,
-                    databaseEntry = null
+                name = "Test",
+                uniqueExtKey = null,
+                databaseEntry = null
             )
             val mediaPartCollection = MediaPartCollection(
-                    name = "Test",
-                    uniqueExtKey = "...",
-                    parent = mediaUnit,
-                    seasonNumber = null,
-                    sortOrder = null,
-                    databaseEntry = null
+                name = "Test",
+                uniqueExtKey = "...",
+                parent = mediaUnit,
+                seasonNumber = null,
+                sortOrder = null,
+                databaseEntry = null
             )
             val alternativeTitle = AlternativeTitle(
-                    name = "title",
-                    parent = mediaPartCollection
+                name = "title",
+                parent = mediaPartCollection
             )
             context.save(mediaUnit)
             context.save(mediaPartCollection)
@@ -49,13 +49,13 @@ public class SqlStorageTest {
         val storage = SqlLiteStorage(TestConfiguration())
         storage.readWrite().use { context ->
             val mediaUnit = MediaUnit(
-                    name = "Test",
-                    uniqueExtKey = null,
-                    databaseEntry = null
+                name = "Test",
+                uniqueExtKey = null,
+                databaseEntry = null
             )
             val image = MediaImage(
-                    mediaUnit,
-                    "http:/test.com/img.jpg"
+                mediaUnit,
+                "http:/test.com/img.jpg"
             )
             context.save(mediaUnit)
             context.save(image)

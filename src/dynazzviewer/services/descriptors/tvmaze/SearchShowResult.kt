@@ -5,9 +5,9 @@ import dynazzviewer.services.descriptors.ResultHeader
 
 class SearchShowResult(
     @JsonProperty("score", required = true)
-       val score: Double,
+    val score: Double,
     @JsonProperty("show", required = true)
-       val show: Show
+    val show: Show
 ) {
     fun toResultHeader(): ResultHeader {
         return show.toResultHeader()

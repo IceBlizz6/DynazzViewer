@@ -86,13 +86,21 @@ class ViewStatusControllerTest() {
 
     @Test
     fun resolveViewStatusTest() {
-        Assert.assertEquals(ViewStatus.Skipped,
-            controller.resolveViewStatus(ViewStatus.None, ViewStatus.Skipped))
-        Assert.assertEquals(ViewStatus.Viewed,
-            controller.resolveViewStatus(ViewStatus.Skipped, ViewStatus.Viewed))
-        Assert.assertEquals(ViewStatus.Viewed,
-            controller.resolveViewStatus(ViewStatus.Viewed, ViewStatus.Skipped))
-        Assert.assertEquals(ViewStatus.None,
-            controller.resolveViewStatus(ViewStatus.None, ViewStatus.None))
+        Assert.assertEquals(
+            ViewStatus.Skipped,
+            controller.resolveViewStatus(ViewStatus.None, ViewStatus.Skipped)
+        )
+        Assert.assertEquals(
+            ViewStatus.Viewed,
+            controller.resolveViewStatus(ViewStatus.Skipped, ViewStatus.Viewed)
+        )
+        Assert.assertEquals(
+            ViewStatus.Viewed,
+            controller.resolveViewStatus(ViewStatus.Viewed, ViewStatus.Skipped)
+        )
+        Assert.assertEquals(
+            ViewStatus.None,
+            controller.resolveViewStatus(ViewStatus.None, ViewStatus.None)
+        )
     }
 }

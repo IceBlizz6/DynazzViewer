@@ -82,7 +82,7 @@ class FileDetectorTest {
         )
         assertMatch(
             "[DameDesuYo] Wotaku ni Koi wa Muzukashii (Wotakoi) - 02 " +
-                    "(1920x1080 10bit AAC) [871836B2].mkv",
+                "(1920x1080 10bit AAC) [871836B2].mkv",
             "Wotaku ni Koi wa Muzukashii (Wotakoi)",
             null,
             2
@@ -129,14 +129,14 @@ class FileDetectorTest {
         )
         assertMatch(
             "Star.Trek.Discovery.S01E02.Battle.at.the.Binary.Stars." +
-                    "1080p.WEBRip.6CH.x265.HEVC-PSA.mkv",
+                "1080p.WEBRip.6CH.x265.HEVC-PSA.mkv",
             "Star Trek Discovery",
             1,
             2
         )
         assertMatch(
             "Star.Trek.Discovery.S02E14.Such.Sweet.Sorrow.2.720p." +
-                    "AMZN.WEB-DL.DD+5.1.H.264-AJP69[ettv].mkv",
+                "AMZN.WEB-DL.DD+5.1.H.264-AJP69[ettv].mkv",
             "Star Trek Discovery",
             2,
             14

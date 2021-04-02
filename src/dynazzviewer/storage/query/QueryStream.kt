@@ -34,19 +34,28 @@ interface QueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> {
     /**
      * Maps to unrelated entity
      */
-    fun <QT : EntityPathBase<T>, T> flatMapOn(joinedType: KClass<QT>, condition: (QTEntity, QT) -> Predicate): QueryStream<QT, T>
+    fun <QT : EntityPathBase<T>, T> flatMapOn(
+        joinedType: KClass<QT>,
+        condition: (QTEntity, QT) -> Predicate
+    ): QueryStream<QT, T>
 
     /**
      * Stores source as reference for later query
      */
-    fun <V> withSource(defaultValue: V, transform: (source: QTEntity, stream: QueryStream<QTEntity, TEntity>) -> V): V
+    fun <V> withSource(
+        defaultValue: V,
+        transform: (source: QTEntity, stream: QueryStream<QTEntity, TEntity>) -> V
+    ): V
 
     /**
      * Maps result rows one to one
      */
     fun <QT : EntityPathBase<T>, T> map(transform: (QTEntity) -> QT): QueryStream<QT, T>
 
-    fun <T : Comparable<Nothing>?> fetchDateSingle(path: ((QTEntity) -> DatePath<T>), expr: ((DatePath<T>) -> DateExpression<T>)): T?
+    fun <T : Comparable<Nothing>?> fetchDateSingle(
+        path: ((QTEntity) -> DatePath<T>),
+        expr: ((DatePath<T>) -> DateExpression<T>)
+    ): T?
 
     /**
      * Returns results with given transformation

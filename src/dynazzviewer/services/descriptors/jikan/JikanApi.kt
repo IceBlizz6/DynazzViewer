@@ -36,8 +36,8 @@ class JikanApi(
                 uniqueKey = null,
                 name = firstName,
                 tags = jikanSeries
-                        .flatMap { e -> e.show.genres.map { genre -> genre.name } }
-                        .toSet(),
+                    .flatMap { e -> e.show.genres.map { genre -> genre.name } }
+                    .toSet(),
                 imageUrls = jikanSeries.map { e -> e.show.imageUrl }.toSet()
             )
         } else {
@@ -79,7 +79,8 @@ class JikanApi(
         val weeksDuration = daysBetween / EPISODE_AIR_DAYS_INTERVAL + 1
         val numberOfEpisodes = episodes.count()
         if (weeksDuration == numberOfEpisodes.toLong() &&
-            daysBetween % EPISODE_AIR_DAYS_INTERVAL == 0L) {
+            daysBetween % EPISODE_AIR_DAYS_INTERVAL == 0L
+        ) {
             for (episode in episodes) {
                 val daysAfter = EPISODE_AIR_DAYS_INTERVAL * (episode.episodeId - 1)
                 episode.aired = start.plusDays(daysAfter.toLong()).atStartOfDay()
@@ -99,8 +100,10 @@ class JikanApi(
             episodes(code)
         }
         if (autoFillEpisodeAirDates && seriesData.aired.to != null) {
-            autoFillEpisodeAirDates(episodes, seriesData.aired.from.toLocalDate(),
-                seriesData.aired.to.toLocalDate())
+            autoFillEpisodeAirDates(
+                episodes, seriesData.aired.from.toLocalDate(),
+                seriesData.aired.to.toLocalDate()
+            )
         }
         val relatedList = seriesData
             .related
@@ -128,8 +131,10 @@ class JikanApi(
             episodes(code)
         }
         if (autoFillEpisodeAirDates && seriesData.aired.to != null) {
-            autoFillEpisodeAirDates(episodes, seriesData.aired.from.toLocalDate(),
-                seriesData.aired.to.toLocalDate())
+            autoFillEpisodeAirDates(
+                episodes, seriesData.aired.from.toLocalDate(),
+                seriesData.aired.to.toLocalDate()
+            )
         }
         return JikanSeries(seriesData, episodes)
     }

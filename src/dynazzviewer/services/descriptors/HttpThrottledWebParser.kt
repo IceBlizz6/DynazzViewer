@@ -4,10 +4,10 @@ import dynazzviewer.services.HttpWebClient
 import dynazzviewer.services.HttpWebJsonParser
 import dynazzviewer.services.WebClient
 import dynazzviewer.services.WebJsonParser
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 class HttpThrottledWebParser(
     private val client: WebClient = HttpWebClient(),

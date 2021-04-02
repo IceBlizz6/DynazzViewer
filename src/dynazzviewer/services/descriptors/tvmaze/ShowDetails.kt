@@ -8,19 +8,19 @@ import java.time.LocalDate
 
 class ShowDetails(
     @JsonProperty("id", required = true)
-       val id: Int,
+    val id: Int,
     @JsonProperty("name", required = true)
-       val name: String,
+    val name: String,
     @JsonProperty("genres", required = true)
-       val genres: List<String>,
+    val genres: List<String>,
     @JsonProperty("status", required = true)
-       val status: String,
+    val status: String,
     @JsonProperty("premiered", required = true)
-       val premiered: LocalDate,
+    val premiered: LocalDate,
     @JsonProperty("externals", required = true)
-       val externals: Map<String, String?>,
+    val externals: Map<String, String?>,
     @JsonProperty("image", required = true)
-       val images: Map<ImageType, String>
+    val images: Map<ImageType, String>
 ) {
     fun toDescriptionUnit(episodes: List<Episode>): DescriptionUnit {
         val seasonList = mutableListOf<DescriptionPartCollection>()

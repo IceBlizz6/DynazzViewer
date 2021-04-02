@@ -8,9 +8,9 @@ import dynazzviewer.services.WebJsonParser
 import dynazzviewer.services.descriptors.jikan.JikanApi
 import dynazzviewer.services.descriptors.jikan.MalYearSeason
 import dynazzviewer.storage.sqlite.SqlLiteStorage
-import java.time.LocalDate
 import org.junit.Assert
 import org.junit.Test
+import java.time.LocalDate
 
 class JikanApiTest {
     @Test

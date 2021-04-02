@@ -15,13 +15,13 @@ import dynazzviewer.ui.config.DefaultConfiguration
 import graphql.execution.ExecutionStrategy
 import graphql.schema.GraphQLSchema
 import io.leangen.graphql.GraphQLSchemaGenerator
-import java.nio.file.Path
-import java.nio.file.Paths
-import java.util.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.util.*
 
 @Configuration
 open class GraphQLConfig {

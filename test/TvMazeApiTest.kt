@@ -4,9 +4,9 @@ import dynazzviewer.services.HttpWebJsonParser
 import dynazzviewer.services.WebClient
 import dynazzviewer.services.WebJsonParser
 import dynazzviewer.services.descriptors.tvmaze.TvMazeApi
-import java.time.LocalDate
 import org.junit.Assert
 import org.junit.Test
+import java.time.LocalDate
 
 class TvMazeApiTest {
     private val client: WebClient = TestWebClient(

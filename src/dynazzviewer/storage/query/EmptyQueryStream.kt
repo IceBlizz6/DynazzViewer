@@ -41,7 +41,9 @@ class EmptyQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> :
         return this
     }
 
-    override fun filterBuildAny(transform: (PredicateBuilder<QTEntity, TEntity>) -> List<BooleanExpression>): QueryStream<QTEntity, TEntity> {
+    override fun filterBuildAny(
+        transform: (PredicateBuilder<QTEntity, TEntity>) -> List<BooleanExpression>
+    ): QueryStream<QTEntity, TEntity> {
         return this
     }
 
@@ -89,19 +91,31 @@ class EmptyQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> :
         return false
     }
 
-    override fun <T : Comparable<Nothing>?> fetchDateSingle(path: (QTEntity) -> DatePath<T>, expr: (DatePath<T>) -> DateExpression<T>): T? {
+    override fun <T : Comparable<Nothing>?> fetchDateSingle(
+        path: (QTEntity) -> DatePath<T>,
+        expr: (DatePath<T>) -> DateExpression<T>
+    ): T? {
         return null
     }
 
-    override fun <V> withSource(defaultValue: V, transform: (source: QTEntity, stream: QueryStream<QTEntity, TEntity>) -> V): V {
+    override fun <V> withSource(
+        defaultValue: V,
+        transform: (source: QTEntity, stream: QueryStream<QTEntity, TEntity>) -> V
+    ): V {
         return defaultValue
     }
 
-    override fun <V> fetchWithTransform(defaultValue: V, transform: (QTEntity) -> ResultTransformer<V>): V {
+    override fun <V> fetchWithTransform(
+        defaultValue: V,
+        transform: (QTEntity) -> ResultTransformer<V>
+    ): V {
         return defaultValue
     }
 
-    override fun <K, V> fetchMap(key: (QTEntity) -> Expression<K>, value: (QTEntity) -> Expression<V>): Map<K, V> {
+    override fun <K, V> fetchMap(
+        key: (QTEntity) -> Expression<K>,
+        value: (QTEntity) -> Expression<V>
+    ): Map<K, V> {
         return emptyMap()
     }
 
@@ -109,7 +123,10 @@ class EmptyQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> :
         return this
     }
 
-    override fun <QT : EntityPathBase<T>, T> flatMapOn(joinedType: KClass<QT>, condition: (QTEntity, QT) -> Predicate): QueryStream<QT, T> {
+    override fun <QT : EntityPathBase<T>, T> flatMapOn(
+        joinedType: KClass<QT>,
+        condition: (QTEntity, QT) -> Predicate
+    ): QueryStream<QT, T> {
         return EmptyQueryStream()
     }
 

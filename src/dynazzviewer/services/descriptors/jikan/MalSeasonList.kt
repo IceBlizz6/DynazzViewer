@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 class MalSeasonList(
     @JsonProperty("request_hash", required = true)
-       val requestHash: String,
+    val requestHash: String,
     @JsonProperty("request_cached", required = true)
-       val requestCached: Boolean,
+    val requestCached: Boolean,
     @JsonProperty("request_cache_expiry", required = true)
-       val requestCacheExpiry: Int,
+    val requestCacheExpiry: Int,
     @JsonProperty("anime", required = true)
-       val anime: List<AnimeSeasonEntry>
+    val anime: List<AnimeSeasonEntry>
 )

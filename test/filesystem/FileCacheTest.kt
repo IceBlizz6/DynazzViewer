@@ -13,10 +13,12 @@ class FileCacheTest {
     fun isCachedTest() {
         val source = MockFileSource()
         val cache = FileCache(source)
-        source.addFiles(setOf(
-            "O:/test/file1.mkv",
-            "O:/test/file2.mkv"
-        ))
+        source.addFiles(
+            setOf(
+                "O:/test/file1.mkv",
+                "O:/test/file2.mkv"
+            )
+        )
         cache.readRoot(RootDirectory("O:/test"))
         Assert.assertEquals(1, source.cacheFiles.keys.count())
         val key = source.cacheFiles.keys.single()
@@ -27,11 +29,13 @@ class FileCacheTest {
     fun pathsByNameTest() {
         val source = MockFileSource()
         val cache = FileCache(source)
-        source.addFiles(setOf(
-            "O:/test/file1.mkv",
-            "O:/test/file2.mkv",
-            "O:/test/test2/file1.mkv"
-        ))
+        source.addFiles(
+            setOf(
+                "O:/test/file1.mkv",
+                "O:/test/file2.mkv",
+                "O:/test/test2/file1.mkv"
+            )
+        )
         cache.readRoot(RootDirectory("O:/test"))
         val paths = cache.filePathsByName(FileName("file1.mkv"))
         Assert.assertEquals(2, paths.count())
@@ -58,11 +62,13 @@ class FileCacheTest {
     fun readSubDirectoryTest() {
         val source = MockFileSource()
         val cache = FileCache(source)
-        source.addFiles(setOf(
-            "O:/test/file1.mkv",
-            "O:/test/file2.mkv",
-            "O:/test/test2/file1.mkv"
-        ))
+        source.addFiles(
+            setOf(
+                "O:/test/file1.mkv",
+                "O:/test/file2.mkv",
+                "O:/test/test2/file1.mkv"
+            )
+        )
         cache.readRoot(RootDirectory("O:/test"))
         val filePaths = cache.readSubDirectory("O:/test/test2")
         Assert.assertEquals(1, filePaths.count())
@@ -73,21 +79,30 @@ class FileCacheTest {
     fun updateTest() {
         val source = MockFileSource()
         val cache = FileCache(source)
-        source.addFiles(setOf(
-            "O:/test/file1.mkv",
-            "O:/test/file2.mkv",
-            "O:/test/test2/file1.mkv"
-        ))
+        source.addFiles(
+            setOf(
+                "O:/test/file1.mkv",
+                "O:/test/file2.mkv",
+                "O:/test/test2/file1.mkv"
+            )
+        )
         cache.readRoot(RootDirectory("O:/test"))
-        source.removeFiles(setOf(
-            "O:/test/test2/file1.mkv"
-        ))
-        source.addFiles(setOf(
-            "O:/test/test2/file2.mkv"
-        ))
-        cache.update(RootDirectory("O:/test"), "O:/test/test2", setOf(
-            FilePath("O:/test/test2/file2.mkv")
-        ))
+        source.removeFiles(
+            setOf(
+                "O:/test/test2/file1.mkv"
+            )
+        )
+        source.addFiles(
+            setOf(
+                "O:/test/test2/file2.mkv"
+            )
+        )
+        cache.update(
+            RootDirectory("O:/test"), "O:/test/test2",
+            setOf(
+                FilePath("O:/test/test2/file2.mkv")
+            )
+        )
         val cached = source.cacheFiles["O:/test"]!!
         Assert.assertEquals(3, cached.count())
         Assert.assertTrue(cached.any { e -> e == "O:/test/test2/file2.mkv" })
@@ -98,26 +113,35 @@ class FileCacheTest {
     fun updateCachedTest() {
         val source = MockFileSource()
         val cache = FileCache(source)
-        source.addFiles(setOf(
-            "O:/test/file1.mkv",
-            "O:/test/file2.mkv",
-            "O:/test/test2/file1.mkv"
-        ))
+        source.addFiles(
+            setOf(
+                "O:/test/file1.mkv",
+                "O:/test/file2.mkv",
+                "O:/test/test2/file1.mkv"
+            )
+        )
         source.cacheFiles["O:/test"] = setOf(
             "O:/test/file1.mkv",
             "O:/test/file2.mkv",
             "O:/test/test2/file1.mkv"
         )
         cache.readRoot(RootDirectory("O:/test"))
-        source.removeFiles(setOf(
-            "O:/test/test2/file1.mkv"
-        ))
-        source.addFiles(setOf(
-            "O:/test/test2/file2.mkv"
-        ))
-        cache.update(RootDirectory("O:/test"), "O:/test/test2", setOf(
-            FilePath("O:/test/test2/file2.mkv")
-        ))
+        source.removeFiles(
+            setOf(
+                "O:/test/test2/file1.mkv"
+            )
+        )
+        source.addFiles(
+            setOf(
+                "O:/test/test2/file2.mkv"
+            )
+        )
+        cache.update(
+            RootDirectory("O:/test"), "O:/test/test2",
+            setOf(
+                FilePath("O:/test/test2/file2.mkv")
+            )
+        )
         val cached = source.cacheFiles["O:/test"]!!
         Assert.assertEquals(3, cached.count())
         Assert.assertTrue(cached.any { e -> e == "O:/test/test2/file2.mkv" })

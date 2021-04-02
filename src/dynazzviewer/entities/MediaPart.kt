@@ -10,7 +10,7 @@ import javax.persistence.OneToOne
 @Entity
 class MediaPart(
     @ManyToOne
-       var parent: MediaPartCollection,
+    var parent: MediaPartCollection,
     uniqueExtKey: String,
     databaseEntry: MediaDatabaseEntry?,
     var name: String,

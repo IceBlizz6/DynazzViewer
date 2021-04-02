@@ -6,9 +6,9 @@ import javax.persistence.*
 @Inheritance(strategy = InheritanceType.JOINED)
 abstract class ExtReference(
     /**
-    * Unique value for external references
-    * Matched to update existing media from external sources
-    */
+     * Unique value for external references
+     * Matched to update existing media from external sources
+     */
     @Column(unique = true)
     var uniqueExtKey: String?,
     @ManyToOne

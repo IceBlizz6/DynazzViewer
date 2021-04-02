@@ -15,7 +15,7 @@ data class MediaFile(
     override var name: String,
     var status: ViewStatus = ViewStatus.None,
     @OneToOne
-       var mediaPart: MediaPart? = null
+    var mediaPart: MediaPart? = null
 ) : EntityModel, IdContainer, NameContainer, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

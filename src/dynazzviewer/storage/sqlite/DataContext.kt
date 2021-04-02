@@ -25,8 +25,10 @@ internal open class DataContext(
         return stream(QMediaFile.mediaFile)
             .filter { it.name.`in`(names) }
             .fetchListFields { field -> listOf(field.name, field.id, field.status) }
-            .map { e -> e.get(0, String::class.java)!! to
-                Pair(e.get(1, Int::class.java)!!, e.get(2, ViewStatus::class.java)!!) }
+            .map { e ->
+                e.get(0, String::class.java)!! to
+                    Pair(e.get(1, Int::class.java)!!, e.get(2, ViewStatus::class.java)!!)
+            }
             .toMap()
     }
 
