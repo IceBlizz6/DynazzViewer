@@ -17,7 +17,7 @@ class AnimeSeasonEntry(
     val type: MalType,
     @JsonProperty("airing_start", required = true)
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss[xxx]")
-    val airingStart: LocalDateTime,
+    val airingStart: LocalDateTime?,
     @JsonProperty("episodes", required = true)
     val episodes: Int,
     @JsonProperty("score", required = true)
