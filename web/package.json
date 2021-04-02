@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "lint-no-fix": "vue-cli-service lint --no-fix"
+    "lint-no-fix": "vue-cli-service lint --no-fix",
+	"graph:refresh": "npx generate-graphql-client --post --endpoint=http://localhost:8081/graphql --output=src/graph"
   },
   "dependencies": {
     "@types/numeral": "0.0.28",
