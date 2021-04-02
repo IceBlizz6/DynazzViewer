@@ -1,6 +1,7 @@
 package dynazzviewer.ui.web
 
 import dynazzviewer.base.ViewStatus
+import dynazzviewer.entities.MediaPartCollection
 import dynazzviewer.entities.MediaUnit
 import dynazzviewer.storage.Storage
 import io.leangen.graphql.annotations.GraphQLEnvironment
@@ -15,6 +16,12 @@ class MediaListGraph(
     fun listMediaUnits(@GraphQLEnvironment env: ResolutionEnvironment): List<MediaUnit> {
         val operation = ContextHandler.registerRead(storage, env)
         return operation.mediaUnits()
+    }
+
+    @GraphQLQuery
+    fun internalMediaSearch(@GraphQLEnvironment env: ResolutionEnvironment, name: String): List<MediaPartCollection> {
+        val operation = ContextHandler.registerRead(storage, env)
+        return operation.mediaPartCollectionsLike(name)
     }
 
     @GraphQLMutation

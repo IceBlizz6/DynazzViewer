@@ -38,6 +38,12 @@ internal open class DataContext(
             .fetchList()
     }
 
+    override fun mediaPartCollectionsLike(sqlLikeString: String): List<MediaPartCollection> {
+        return stream(QMediaPartCollection.mediaPartCollection)
+            .filter { it.name.like(sqlLikeString) }
+            .fetchList()
+    }
+
     override fun mediaUnitExist(list: List<MediaIdentity>): Map<MediaIdentity, Boolean> {
         val groups = list.groupBy { it.extDb }
         val allMatches = mutableListOf<MediaIdentity>()

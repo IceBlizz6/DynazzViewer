@@ -32,6 +32,8 @@ interface ReadOperation : Closeable {
 
     fun mediaUnitsLike(sqlLikeString: String): List<MediaUnit>
 
+    fun mediaPartCollectionsLike(sqlLikeString: String): List<MediaPartCollection>
+
     fun mediaUnitExist(list: List<MediaIdentity>): Map<MediaIdentity, Boolean>
 
     fun animeSeasonSeries(malIds: List<Int>): Map<Int, AnimeSeasonFlagState>
