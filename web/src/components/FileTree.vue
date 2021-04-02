@@ -1,12 +1,19 @@
 <template>
 	<li>
-		<div @click="toggleChildren()" class="tree-item-header directory-node">
-			<img class="tree-icon" src="@/assets/FolderContentAvailable.png">
-			<span>{{ label }}</span>
+		<div class="tree-item-header directory-node">
+			<span @click="toggleChildren()" >
+				<img class="tree-icon" src="@/assets/FolderContentAvailable.png">
+				<span>{{ label }}</span>
+			</span>
+			<span class="toolbar-action" @click="detectLink(parentNode)">
+				<img class="tree-icon" src="@/assets/Link.png">
+				Detect/Link
+			</span>
 		</div>
 		<ul class="tree-children-list" v-if="showChildren">
 			<FileTree
 				v-for="node in childrenDirectories"
+				:parent-node="node"
 				:nodes="node.children"
 				:label="node.name"
 				:key="node.name">
@@ -56,7 +63,10 @@ export default class FileTree extends Vue {
 
 	@Prop({required: true})
 	private readonly nodes!: TreeNode[]
-	
+
+	@Prop({required: true})
+	private readonly parentNode!: TreeNode
+
 	private showChildren = true
 	
 	private get childrenDirectories(): TreeNode[] {
@@ -113,6 +123,23 @@ export default class FileTree extends Vue {
 		}
 	}
 
+	private detectLink(node: TreeNode): void {
+		if (node.children == null) {
+			throw new Error("Node is not a directory")
+		} else {
+			const videoFiles = node.children
+				.map(el => el.videoFile)
+				.filter(this.notEmpty)
+				
+			const parent = this.parentFileView
+			parent.detectLink(videoFiles)
+		}
+	}
+
+	public notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+		return value !== null && value !== undefined
+	}
+
 	private get parentFileView(): FileView {
 		const parent = this.$parent
 		if (parent instanceof FileView) {
@@ -127,9 +154,6 @@ export default class FileTree extends Vue {
 </script>
 
 <style>
-.file-node {
-}
-
 .file-node:hover {
 	background-color: lightgray;
 }

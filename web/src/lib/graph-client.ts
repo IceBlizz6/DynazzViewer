@@ -8,6 +8,8 @@ export interface GraphClient {
 	mutation(request: MutationRequest, responseAction: (_: Mutation) => void): void
 	
 	queryWithReturn<T>(request: QueryRequest, responseAction: (_: Query) => T): Promise<T>
+
+	mutationWithReturn<T>(request: MutationRequest, responseAction: (_: Mutation) => T): Promise<T>
 }
 
 class GraphClientImpl implements GraphClient {
@@ -56,6 +58,19 @@ class GraphClientImpl implements GraphClient {
 				}
 			})
 	}
+
+	public mutationWithReturn<T>(request: MutationRequest, responseAction: (_: Mutation) => T): Promise<T> {
+		return this.client.mutation(request)
+			.then(response => {
+				if (response.data == null) {
+					throw new Error("No data to handle request")
+				} else {
+					return responseAction(response.data)
+				}
+			})
+	}
 }
 
-export default new GraphClientImpl()
+const graphClient: GraphClient = new GraphClientImpl()
+
+export default graphClient

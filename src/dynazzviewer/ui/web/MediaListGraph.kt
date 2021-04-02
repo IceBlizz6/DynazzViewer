@@ -1,5 +1,6 @@
 package dynazzviewer.ui.web
 
+import dynazzviewer.base.ExtDatabase
 import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.MediaPartCollection
 import dynazzviewer.entities.MediaUnit
@@ -22,6 +23,12 @@ class MediaListGraph(
     fun internalMediaSearch(@GraphQLEnvironment env: ResolutionEnvironment, name: String): List<MediaPartCollection> {
         val operation = ContextHandler.registerRead(storage, env)
         return operation.mediaPartCollectionsLike(name)
+    }
+
+    @GraphQLQuery
+    fun internalMediaLookup(@GraphQLEnvironment env: ResolutionEnvironment, db: ExtDatabase, code: String): MediaPartCollection? {
+        val operation = ContextHandler.registerRead(storage, env)
+        return operation.mediaPartCollectionByCode(db, code)
     }
 
     @GraphQLMutation

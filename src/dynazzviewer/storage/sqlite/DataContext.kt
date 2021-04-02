@@ -2,6 +2,7 @@ package dynazzviewer.storage.sqlite
 
 import com.querydsl.core.types.dsl.EntityPathBase
 import dynazzviewer.base.AnimeSeasonFlagState
+import dynazzviewer.base.ExtDatabase
 import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.*
 import dynazzviewer.storage.MediaIdentity
@@ -42,6 +43,13 @@ internal open class DataContext(
         return stream(QMediaPartCollection.mediaPartCollection)
             .filter { it.name.like(sqlLikeString) }
             .fetchList()
+    }
+
+    override fun mediaPartCollectionByCode(db: ExtDatabase, code: String): MediaPartCollection? {
+        return stream(QMediaPartCollection.mediaPartCollection)
+            .filter { it._super.databaseEntry.mediaDatabase.eq(db) }
+            .filter { it._super.databaseEntry.code.eq(code) }
+            .fetchSingleOrNull()
     }
 
     override fun mediaUnitExist(list: List<MediaIdentity>): Map<MediaIdentity, Boolean> {

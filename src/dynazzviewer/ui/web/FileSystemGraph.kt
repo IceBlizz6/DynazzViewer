@@ -65,6 +65,14 @@ class FileSystemGraph(
         )
     }
 
+    @GraphQLMutation
+    fun linkVideoFileWithName(mediaFileName: String, mediaPartId: Int) {
+        controller.linkVideoFile(
+            mediaFileName = mediaFileName,
+            mediaPartId = mediaPartId
+        )
+    }
+
     class DetectedFileResult(
         val fileName: String,
         val name: String,

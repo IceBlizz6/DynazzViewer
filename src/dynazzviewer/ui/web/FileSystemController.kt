@@ -90,6 +90,14 @@ class FileSystemController(
         )
     }
 
+    fun linkVideoFile(mediaFileName: String, mediaPartId: Int) {
+        val mediaFileId = viewStatusController.getOrCreateMediaFile(mediaFileName)
+        viewStatusController.link(
+            mediaFileId = mediaFileId,
+            mediaPartId = mediaPartId
+        )
+    }
+
     val playVideoEnabled: Boolean
         get() = userConfiguration.mediaPlayerApplicationPath != null
 

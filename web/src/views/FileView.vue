@@ -1,13 +1,20 @@
 <template>
 	<article>
-		<section v-for="root in this.roots" :key="root.id">
+		<section v-for="root in this.roots" :key="root.name">
 			<ul class="tree-children-list">
 				<FileTree
+					:parent-node="root"
 					:label="root.name"
 					:nodes="root.children">
 				</FileTree>
 			</ul>
 		</section>
+		<b-modal :active.sync="activeModal" class="link-modal" width="80%" destroy-on-hide>
+			<FileLinkModal
+				:detectedFileResults="detectedFileResults"
+				@finalized="closeModal"
+			/>
+		</b-modal>
 	</article>
 </template>
 
@@ -15,18 +22,23 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { TreeNode } from '@/lib/TreeNode'
 import graphClient from '@/lib/graph-client'
-import { VideoFile, ViewStatus } from '@/graph/schema'
+import { VideoFile, ViewStatus, DetectedFileResult } from '@/graph/schema'
 import FileTree from "@/components/FileTree.vue"
+import FileLinkModal from "@/views/FileLinkModal.vue"
+import { FileLinkRow } from "@/lib/FileLinkRow"
 
 @Component({
 	components: {
-		FileTree
+		FileTree,
+		FileLinkModal
 	}
 })
 export default class FileView extends Vue {
 	private videoFiles: VideoFile[] = []
 	private roots: TreeNode[] = []
-	
+	private activeModal = false
+	private detectedFileResults: FileLinkRow[] = []
+
 	protected mounted(): void {
 		graphClient.query(
 			{
@@ -64,7 +76,11 @@ export default class FileView extends Vue {
 			}
 		)
 	}
-	
+
+	private closeModal(): void {
+		this.activeModal = false
+	}
+
 	public showExplorer(node: VideoFile): void {
 		graphClient.mutation(
 			{
@@ -92,6 +108,38 @@ export default class FileView extends Vue {
 			children.push(newChild)
 			return newChild
 		}
+	}
+
+	public detectLink(videoFiles: VideoFile[]): void {
+		this.activeModal = false
+		graphClient.query(
+			{
+				parseFileNames: [
+					{
+						fileNames: videoFiles.map(el => el.fileName.name)
+					}, 
+					{
+						fileName: 1,
+						name: 1,
+						season: 1,
+						episode: 1
+					}
+				]
+			},
+			data => {
+				const fileResults = data.parseFileNames
+				this.detectedFileResults = videoFiles.map(videoFile => {
+					const videoFileName = videoFile.fileName.name
+					const match: DetectedFileResult | undefined = fileResults.find(el => el.fileName == videoFileName)
+					if (match != undefined) {
+						return new FileLinkRow(videoFileName, match.name, match.season, match.episode)
+					} else {
+						return new FileLinkRow(videoFileName, null, null, null)
+					}
+				}).sort((a, b) => (a.fileName > b.fileName) ? 1 : -1)
+				this.activeModal = true
+			}
+		)
 	}
 	
 	private pushNode(treeRoot: TreeNode, pathList: string[], childObject: VideoFile): void {
@@ -191,6 +239,35 @@ export default class FileView extends Vue {
 
 .tree-item-header:hover .toolbar-action {
 	visibility: visible;
+}
+
+.modal-body {
+	background-color: whitesmoke;
+	padding-left: 25px;
+	min-width: 90%;
+}
+
+.next-button {
+	margin-top: 35px;
+	margin-bottom: 25px;
+}
+
+.link-header-section {
+	display: grid;
+	grid-template-columns: 50% 50;
+	column-gap: 15px;
+}
+
+.media-name-list {
+	grid-column: 1;
+}
+
+.media-name-options {
+	grid-column: 2;
+}
+
+.result-section {
+	padding-bottom: 25px;
 }
 
 </style>

@@ -60,7 +60,7 @@ class ViewStatusController(
         return statusList.max()!!
     }
 
-    private fun getOrCreateMediaFile(fileName: String): Int {
+    fun getOrCreateMediaFile(fileName: String): Int {
         storage.readWrite().use { context ->
             val mapLookup = context.mediaFilesByName(setOf(fileName))
             val entry: Pair<Int, ViewStatus>? = mapLookup[fileName]
