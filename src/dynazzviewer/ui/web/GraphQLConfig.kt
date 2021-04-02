@@ -38,8 +38,6 @@ open class GraphQLConfig {
 
     @Bean
     open fun graphQlSchema(): GraphQLSchema {
-        crossOriginHeaderHandler()
-
         val configPath: Path = Paths.get(
             DefaultConfiguration.userDirectory,
             DefaultConfiguration.configPropertiesFileName
@@ -92,10 +90,10 @@ open class GraphQLConfig {
             .generate()
     }
 
-    private fun crossOriginHeaderHandler() {
-        val beanFactory = applicationContext.beanFactory
-        val className = CorsRequestFilter::class.java.canonicalName
-        val bean = CorsRequestFilter(DefaultConfiguration.clientOrigin)
-        beanFactory.registerSingleton(className, bean)
+    @Bean
+    open fun crossOriginHeaderHandler(): CorsRequestFilter {
+        return CorsRequestFilter(
+            listOf(DefaultConfiguration.clientOrigin)
+        )
     }
 }

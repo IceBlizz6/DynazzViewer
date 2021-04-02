@@ -1,11 +1,12 @@
 package dynazzviewer.storage.sqlite
 
-import com.mysema.query.types.path.EntityPathBase
+import com.querydsl.core.types.dsl.EntityPathBase
 import dynazzviewer.base.AnimeSeasonFlagState
 import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.*
 import dynazzviewer.storage.MediaIdentity
 import dynazzviewer.storage.ReadOperation
+import dynazzviewer.storage.query.QueryStream
 import java.io.Closeable
 import javax.persistence.EntityManager
 

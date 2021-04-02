@@ -1,11 +1,13 @@
 package dynazzviewer.storage.sqlite
 
-import com.mysema.query.types.path.EntityPathBase
+import com.querydsl.core.types.dsl.EntityPathBase
 import dynazzviewer.base.Configuration
 import dynazzviewer.storage.ReadOperation
 import dynazzviewer.storage.ReadWriteOperation
 import dynazzviewer.storage.Storage
 import dynazzviewer.storage.StorageMode
+import dynazzviewer.storage.query.JpaQueryStream
+import dynazzviewer.storage.query.QueryStream
 import java.io.File
 import java.util.HashMap
 import javax.persistence.EntityManager
