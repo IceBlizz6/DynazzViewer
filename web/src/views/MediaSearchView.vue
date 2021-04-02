@@ -66,7 +66,7 @@ export default class MediaSearchView extends Vue {
 
 	public runSearch(): void {
 		if (this.searchText.length == 0) {
-			this.searchStatus = "Unable to stat search, empty query"
+			this.searchStatus = "Unable to start search, empty query"
 		} else {
 			this.searchResults = []
 			this.searchStatus = "Searching..."
