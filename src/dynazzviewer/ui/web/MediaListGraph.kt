@@ -36,6 +36,9 @@ class MediaListGraph(
         storage.readWrite().use { context ->
             val mediaPart = context.mediaPartById(mediaPartId)
             mediaPart.status = status
+            mediaPart.mediaFile?.let {
+                it.status = status
+            }
         }
     }
 }
