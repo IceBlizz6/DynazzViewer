@@ -76,97 +76,102 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop,  Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import { MalSeasonIdentifier, AnimeSeasonSeries, AnimeSeasonFlagState, MalYearSeason, ExtDatabase } from '@/graph/schema'
 import graphClient from '@/lib/graph-client'
 
-class AnimeSeason {
-
-}
-
 @Component
 export default class AnimeSeasonView extends Vue {
-	public seasonHeaders: MalSeasonIdentifier[] = []
-	public selected: MalSeasonIdentifier | null = null
-	public selectedSeriesList: AnimeSeasonSeries[] = []
+	private seasonHeaders: MalSeasonIdentifier[] = []
+	private selected: MalSeasonIdentifier | null = null
+	private selectedSeriesList: AnimeSeasonSeries[] = []
 
-	public enableWatch = false
-	public enableSkip = false
-	public enableNone = false
+	private enableWatch = false
+	private enableSkip = false
+	private enableNone = false
 
-	public seasonWinter = MalYearSeason.WINTER
-	public seasonSpring = MalYearSeason.SPRING
-	public seasonSummer = MalYearSeason.SUMMER
-	public seasonFall = MalYearSeason.FALL
+	private seasonWinter = MalYearSeason.WINTER
+	private seasonSpring = MalYearSeason.SPRING
+	private seasonSummer = MalYearSeason.SUMMER
+	private seasonFall = MalYearSeason.FALL
 
-	public yearInput: number | null = null
-	public seasonInput: MalYearSeason = MalYearSeason.WINTER
+	private yearInput: number | null = null
+	private seasonInput: MalYearSeason = MalYearSeason.WINTER
 
-	mounted() {
+	protected mounted(): void {
 		this.refreshHeaders()
 	}
 
-	refreshHeaders() {
-		graphClient.query({
-			animeSeasonList: {
-				year: 1,
-				season: 1,
-			}
-		}).then(response => {
-			const seasonList = response.data!.animeSeasonList
-			this.seasonHeaders = seasonList
-		})
-	}
-
-	querySelectedSeries(item: MalSeasonIdentifier) {
-		graphClient.query({
-			animeSeason: [
-				{ 
-					year: item.year, 
-					season: item.season 
-				}, 
-				{
-					malId: 1,
-					title: 1,
-					flag: 1,
-					imageUrl: 1,
-					url: 1,
-					episodes: 1,
-					score: 1,
-					type: 1,
-					saved: 1
+	private refreshHeaders(): void {
+		graphClient.query(
+			{
+				animeSeasonList: {
+					year: 1,
+					season: 1,
 				}
-			]
-		}).then(response => {
-			const results = response.data!.animeSeason
-			this.selectedSeriesList = results
-		})
+			},
+			data => {
+				const seasonList = data.animeSeasonList
+				this.seasonHeaders = seasonList
+			}
+		)
 	}
 
-	flagWatch(item: AnimeSeasonSeries) {
+	private querySelectedSeries(item: MalSeasonIdentifier): void {
+		graphClient.query(
+			{
+				animeSeason: [
+					{ 
+						year: item.year, 
+						season: item.season 
+					}, 
+					{
+						malId: 1,
+						title: 1,
+						flag: 1,
+						imageUrl: 1,
+						url: 1,
+						episodes: 1,
+						score: 1,
+						type: 1,
+						saved: 1
+					}
+				]
+			},
+			data => {
+				const results = data.animeSeason
+				this.selectedSeriesList = results
+			}
+		)
+	}
+
+	private flagWatch(item: AnimeSeasonSeries): void {
 		this.setFlagState(item, AnimeSeasonFlagState.Watch)
 	}
 
-	flagSkip(item: AnimeSeasonSeries) {
+	private flagSkip(item: AnimeSeasonSeries): void {
 		this.setFlagState(item, AnimeSeasonFlagState.Skip)
 	}
 
-	flagNone(item: AnimeSeasonSeries) {
+	private flagNone(item: AnimeSeasonSeries): void {
 		this.setFlagState(item, AnimeSeasonFlagState.None)
 	}
 
-	private setFlagState(item: AnimeSeasonSeries, state: AnimeSeasonFlagState) {
-		graphClient.mutation({
-			animeSeasonMark: [{ malId: item.malId, flag: state }]
-		}).then(response => {
-			const success = response.data!.animeSeasonMark
-			if (success) {
-				item.flag = state
+	private setFlagState(item: AnimeSeasonSeries, state: AnimeSeasonFlagState): void {
+		graphClient.mutation(
+			{
+				animeSeasonMark: [{ malId: item.malId, flag: state }]
+			},
+			data => {
+				const success = data.animeSeasonMark
+				if (success) {
+					item.flag = state
+				}
 			}
-		})
+		)
 	}
 
-	get seriesFilteredList(): AnimeSeasonSeries[] {
+	private get seriesFilteredList(): AnimeSeasonSeries[] {
 		const enableWatch = this.enableWatch
 		const enableSkip = this.enableSkip
 		const enableNone = this.enableNone
@@ -188,7 +193,7 @@ export default class AnimeSeasonView extends Vue {
 		})
 	}
 
-	selectHeader(item: MalSeasonIdentifier) {
+	private selectHeader(item: MalSeasonIdentifier): void {
 		this.selectedSeriesList = []
 		if (this.selected == item) {
 			this.selected = null
@@ -198,32 +203,40 @@ export default class AnimeSeasonView extends Vue {
 		}
 	}
 
-	addAnimeSeason() {
+	private addAnimeSeason(): void {
 		if (this.yearInput == null) {
 			console.error("Missing year")
 		} else {
-			graphClient.mutation({
-				animeSeasonAdd: [{ year: this.yearInput, season: this.seasonInput }]
-			}).then(response => {
-				const success = response.data!.animeSeasonAdd
-				if (success) {
-					this.selected = null
-					this.selectedSeriesList = []
-					this.refreshHeaders()
+			graphClient.mutation(
+				{
+					animeSeasonAdd: [
+						{ year: this.yearInput, season: this.seasonInput }
+					]
+				},
+				data => {
+					const success = data.animeSeasonAdd
+					if (success) {
+						this.selected = null
+						this.selectedSeriesList = []
+						this.refreshHeaders()
+					}
 				}
-			})
+			)
 		}
 	}
 
-	addMediaSeries(item: AnimeSeasonSeries) {
-		graphClient.mutation({
-			externalMediaAdd: [{ db: ExtDatabase.MyAnimeList, code: item.malId.toString() }]
-		}).then(response => {
-			const success: boolean = response.data!.externalMediaAdd
-			if (success) {
-				item.saved = true
+	private addMediaSeries(item: AnimeSeasonSeries): void {
+		graphClient.mutation(
+			{
+				externalMediaAdd: [{ db: ExtDatabase.MyAnimeList, code: item.malId.toString() }]
+			},
+			data => {
+				const success: boolean = data.externalMediaAdd
+				if (success) {
+					item.saved = true
+				}
 			}
-		})
+		)
 	}
 }
 </script>

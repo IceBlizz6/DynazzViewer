@@ -46,11 +46,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator'
 import graphClient from '@/lib/graph-client'
-import { VideoFile, ViewStatus, MediaUnit, MediaPart } from '@/graph/schema'
+import { ViewStatus, MediaUnit, MediaPart } from '@/graph/schema'
 import MediaSeries from '@/components/MediaSeries.vue'
-import numeral from 'numeral';
+import numeral from 'numeral'
 
 @Component({
 	components: {
@@ -66,55 +66,64 @@ export default class MediaView extends Vue {
 	public stateViewed = ViewStatus.Viewed
 	public stateSkipped = ViewStatus.Skipped
 
-	mounted() {
+	protected mounted(): void {
 		this.mediaQuery()
 	}
 
-	episodeFormat(value: number) {
+	private episodeFormat(value: number): string {
 		return "E" + numeral(value).format("00")
 	}
 
-	mediaQuery() {
-		graphClient.query({
-			listMediaUnits: {
-				id: 1,
-				name: 1,
-				images: {
-					url: 1
-				},
-				children: {
+	private mediaQuery(): void {
+		graphClient.query(
+			{
+				listMediaUnits: {
 					id: 1,
 					name: 1,
-					seasonNumber: 1,
-					sortOrder: 1,
+					images: {
+						url: 1
+					},
 					children: {
 						id: 1,
-						episodeNumber: 1,
 						name: 1,
-						status: 1,
+						seasonNumber: 1,
 						sortOrder: 1,
-						aired: 1
+						children: {
+							id: 1,
+							episodeNumber: 1,
+							name: 1,
+							status: 1,
+							sortOrder: 1,
+							aired: 1
+						}
 					}
 				}
+			},
+			data => {
+				this.source = data.listMediaUnits
+				this.selected = null
 			}
-		}).then(response => {
-			const data = response.data!.listMediaUnits!
-			this.source = data.map(el => el!)
-			this.selected = null
-		})
+		)
 	}
 
-	selectSeries(item: MediaUnit) {
-		this.selected = item;
+	public selectSeries(item: MediaUnit): void {
+		this.selected = item
 		this.activeModal = true
 	}
 			
-	setEpisodeWatch(episode: MediaPart, status: ViewStatus) {
-		graphClient.mutation({
-			setEpisodeWatchState: [{ mediaPartId: episode.id, status: status }]
-		}).then(response => {
-			episode.status = status;
-		})
+	private setEpisodeWatch(episode: MediaPart, status: ViewStatus): void {
+		graphClient.mutation(
+			{
+				setEpisodeWatchState: [{ mediaPartId: episode.id, status: status }]
+			},
+			data => {
+				if (data.setEpisodeWatchState) {
+					episode.status = status
+				} else {
+					throw new Error("Operation failed")
+				}
+			}
+		)
 	}
 }
 </script>

@@ -31,7 +31,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import graphClient from '@/lib/graph-client'
-import { VideoFile, ViewStatus, MediaUnit, ExtDatabase, MediaSearchResultItem } from '@/graph/schema'
+import { ExtDatabase, MediaSearchResultItem } from '@/graph/schema'
 
 enum ResultItemStatus {
 	NEW,
@@ -43,7 +43,7 @@ class ResultHeaderItem {
 	public inner: MediaSearchResultItem
 	public state: ResultItemStatus
 
-	constructor(inner: MediaSearchResultItem) {
+	public constructor(inner: MediaSearchResultItem) {
 		this.inner = inner
 
 		if (inner.saved) {
@@ -64,7 +64,7 @@ export default class MediaSearchView extends Vue {
 	public stateSaved = ResultItemStatus.SAVED
 	public stateSaving = ResultItemStatus.SAVING
 
-	public runSearch() {
+	public runSearch(): void {
 		if (this.searchText.length == 0) {
 			this.searchStatus = "Unable to stat search, empty query"
 		} else {
@@ -74,41 +74,48 @@ export default class MediaSearchView extends Vue {
 		}
 	}
 
-	public addOrUpdate(item: ResultHeaderItem) {
+	public addOrUpdate(item: ResultHeaderItem): void {
 		item.state = ResultItemStatus.SAVING
 
-		graphClient.mutation({
-			externalMediaAdd: [{ db: item.inner.extDb, code: item.inner.extDbCode }]
-		}).then(response => {
-			const success: boolean = response.data!.externalMediaAdd
-			if (success) {
-				item.state = ResultItemStatus.SAVED
-			} else {
-				item.state = ResultItemStatus.NEW
+		graphClient.mutation(
+			{
+				externalMediaAdd: [{ db: item.inner.extDb, code: item.inner.extDbCode }]
+			},
+			data => {
+				const success: boolean = data.externalMediaAdd
+				if (success) {
+					item.state = ResultItemStatus.SAVED
+				} else {
+					item.state = ResultItemStatus.NEW
+				}
+
 			}
-		})
+		)
 	}
 
-	private query() {
-		graphClient.query({
-			externalMediaSearch: [
-				{ 
-					db: ExtDatabase.MyAnimeList, 
-					name: this.searchText
-				}, 
-				{
-					name: 1,
-					extDb: 1,
-					extDbCode: 1,
-					imageUrl: 1,
-					saved: 1
-				}
-			]
-		}).then(response => {
-			this.searchStatus = "Search complete"
-			const rawResults = response.data!.externalMediaSearch
-			this.searchResults = rawResults.map(el => new ResultHeaderItem(el))
-		})
+	private query(): void {
+		graphClient.query(
+			{
+				externalMediaSearch: [
+					{ 
+						db: ExtDatabase.MyAnimeList, 
+						name: this.searchText
+					}, 
+					{
+						name: 1,
+						extDb: 1,
+						extDbCode: 1,
+						imageUrl: 1,
+						saved: 1
+					}
+				]
+			},
+			data => {
+				this.searchStatus = "Search complete"
+				const rawResults = data.externalMediaSearch
+				this.searchResults = rawResults.map(el => new ResultHeaderItem(el))
+			}
+		)
 	}
 }
 </script>

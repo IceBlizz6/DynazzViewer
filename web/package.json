@@ -51,6 +51,38 @@
       "@typescript-eslint/indent": [
         "error",
         "tab"
+      ],
+      "@typescript-eslint/no-non-null-assertion": "error",
+      "@typescript-eslint/explicit-function-return-type": [
+        "error"
+      ],
+      "@typescript-eslint/member-delimiter-style": [
+        "warn",
+        {
+          "multiline": {
+            "delimiter": "none"
+          },
+          "singleline": {
+            "delimiter": "comma"
+          }
+        }
+      ],
+      "@typescript-eslint/explicit-member-accessibility": [
+        "warn"
+      ],
+      "@typescript-eslint/semi": [
+        "warn",
+        "never"
+      ],
+      "@typescript-eslint/no-inferrable-types": "off",
+      "no-console": [
+        "warn",
+        {
+          "allow": [
+            "warn",
+            "error"
+          ]
+        }
       ]
     }
   }

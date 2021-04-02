@@ -44,57 +44,76 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop,  Vue } from 'vue-property-decorator';
+import { Component, Prop,  Vue } from 'vue-property-decorator'
 import { TreeNode } from '@/lib/TreeNode'
-import { VideoFile, ViewStatus } from '@/graph/schema'
-import FileView from '@/views/FileView.vue';
+import { ViewStatus } from '@/graph/schema'
+import FileView from '@/views/FileView.vue'
 
 @Component
 export default class FileTree extends Vue {
 	@Prop({required: true})
-	public label!: string
+	private readonly label!: string
+
 	@Prop({required: true})
-	public nodes!: TreeNode[]
+	private readonly nodes!: TreeNode[]
 	
 	private showChildren = true
 	
-	get childrenDirectories() {
-		return this.nodes.filter(el => el.children != null).sort((a: TreeNode, b: TreeNode) => (a.name > b.name)? 1 : -1);
+	private get childrenDirectories(): TreeNode[] {
+		return this.nodes.filter(el => el.children != null).sort((a: TreeNode, b: TreeNode) => (a.name > b.name)? 1 : -1)
 	}
 
-	get childrenFiles() {
-		return this.nodes.filter(el => el.videoFile != null).sort((a, b) => (a.videoFile!.fileName!.name! > b.videoFile!.fileName!.name!)? 1 : -1);
+	private get childrenFiles(): TreeNode[] {
+		return this.nodes
+			.filter(el => el.videoFile != null)
+			.sort(
+				(a, b) => {
+					if (a.videoFile == null || b.videoFile == null) {
+						throw new Error("Sort encountered node without video")
+					} else {
+						return (a.videoFile.fileName.name > b.videoFile.fileName.name)? 1 : -1
+					}
+				}
+			)
 	}
 	
-	toggleChildren() {
-		this.showChildren = !this.showChildren;
+	private toggleChildren(): void {
+		this.showChildren = !this.showChildren
 	}
 
-	showExplorer(node: TreeNode) {
-		this.parentFileView.showExplorer(node.videoFile!)
+	private showExplorer(node: TreeNode): void {
+		if (node.videoFile == null) {
+			throw new Error("Node is not a video file")
+		} else {
+			this.parentFileView.showExplorer(node.videoFile)
+		}
 	}
 
-	setStatusViewed(node: TreeNode) {
+	private setStatusViewed(node: TreeNode): void {
 		this.setViewed(node, ViewStatus.Viewed)
 	}
 
-	setStatusSkipped(node: TreeNode) {
+	private setStatusSkipped(node: TreeNode): void {
 		this.setViewed(node, ViewStatus.Skipped)
 	}
 
-	setStatusNone(node: TreeNode) {
+	private setStatusNone(node: TreeNode): void {
 		this.setViewed(node, ViewStatus.None)
 	}
 
-	setViewed(node: TreeNode, status: ViewStatus) {
+	private setViewed(node: TreeNode, status: ViewStatus): void {
 		this.parentFileView.setViewed(node, status)
 	}
 
-	playVideo(node: TreeNode) {
-		this.parentFileView.playVideo(node.videoFile!)
+	private playVideo(node: TreeNode): void {
+		if (node.videoFile == null) {
+			throw new Error("Node is not a video")
+		} else {
+			this.parentFileView.playVideo(node.videoFile)
+		}
 	}
 
-	get parentFileView(): FileView {
+	private get parentFileView(): FileView {
 		const parent = this.$parent
 		if (parent instanceof FileView) {
 			return parent

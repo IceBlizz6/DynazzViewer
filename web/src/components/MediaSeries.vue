@@ -1,5 +1,5 @@
 <template>
-	<section class="series-item" @click="selectSeries(source)">
+	<section class="series-item" @click="selectSeries">
 		<span class="series-header">{{ source.name }}</span>
 		<div class="series-img">
 			<img v-if="source.images.length > 0" :src="source.images[0].url">
@@ -17,19 +17,17 @@
 
 
 <script lang="ts">
-import { Component, Prop,  Vue } from 'vue-property-decorator';
-import { TreeNode } from '@/lib/TreeNode'
-import { VideoFile, ViewStatus, MediaUnit } from '@/graph/schema'
-import FileView from '@/views/FileView.vue'
+import { Component, Prop,  Vue } from 'vue-property-decorator'
+import { ViewStatus, MediaUnit } from '@/graph/schema'
 import moment from 'moment'
-import MediaView from '@/views/MediaView.vue';
+import MediaView from '@/views/MediaView.vue'
 
 @Component
 export default class MediaSeries extends Vue {
 	@Prop({required: true})
 	public source!: MediaUnit
 
-	selectSeries() {
+	private selectSeries(): void {
 		const parent = this.$parent
 		if (parent instanceof MediaView) {
 			parent.selectSeries(this.source)
@@ -38,25 +36,25 @@ export default class MediaSeries extends Vue {
 		}
 	}
 
-	get episodesWatched() {
-		return this.source.children!
-			.flatMap(season => season!.children)
-			.filter(ep => ep!.status == ViewStatus.Viewed)
+	private get episodesWatched(): number {
+		return this.source.children
+			.flatMap(season => season.children)
+			.filter(ep => ep.status == ViewStatus.Viewed)
 			.length
 	}
 
-	get episodesAired() {
+	private get episodesAired(): number {
 		const today = moment().format("YYYY-MM-DD")
-		return this.source.children!
-			.flatMap(season => season!.children)
-			.filter(ep => ep!.aired != null && today > ep!.aired)
+		return this.source.children
+			.flatMap(season => season.children)
+			.filter(ep => ep.aired != null && today > ep.aired)
 			.length
 	}
 
-	get episodesAnnounced() {
-		return this.source.children!
-			.flatMap(season => season!.children)
-			.length;
+	private get episodesAnnounced(): number {
+		return this.source.children
+			.flatMap(season => season.children)
+			.length
 	}
 }
 </script>
