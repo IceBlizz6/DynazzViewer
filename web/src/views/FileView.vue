@@ -52,7 +52,8 @@ export default class FileView extends Vue {
 							path: 1
 						},
 						mediaFileId: 1,
-						viewStatus: 1
+						viewStatus: 1,
+						linkedMediaPartId: 1,
 					}
 				}
 			},

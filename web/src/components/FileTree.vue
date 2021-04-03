@@ -23,6 +23,8 @@
 					<img v-if="node.videoFile.viewStatus == 'None'" class="tree-icon" src="@/assets/videofiles/Neutral.png">
 					<img v-if="node.videoFile.viewStatus == 'Viewed'" class="tree-icon" src="@/assets/videofiles/Viewed.png">
 					<img v-if="node.videoFile.viewStatus == 'Skipped'" class="tree-icon" src="@/assets/videofiles/Skipped.png">
+					<img v-if="isLinked(node.videoFile)" class="tree-icon" src="@/assets/Link.png">
+
 					<span>{{ node.videoFile.fileName.name }}</span>
 					<span class="toolbar-action" @click="playVideo(node)">
 						<img class="tree-icon" src="@/assets/videofiles/Play.png">
@@ -53,7 +55,7 @@
 <script lang="ts">
 import { Component, Prop,  Vue } from 'vue-property-decorator'
 import { TreeNode } from '@/lib/TreeNode'
-import { ViewStatus } from '@/graph/schema'
+import { ViewStatus, VideoFile } from '@/graph/schema'
 import FileView from '@/views/FileView.vue'
 
 @Component
@@ -85,6 +87,10 @@ export default class FileTree extends Vue {
 					}
 				}
 			)
+	}
+
+	private isLinked(videoFile: VideoFile): boolean {
+		return videoFile.linkedMediaPartId != null
 	}
 	
 	private toggleChildren(): void {

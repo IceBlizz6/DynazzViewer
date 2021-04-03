@@ -10,5 +10,6 @@ class VideoFile(
     filePath: FilePath,
     root: RootDirectory,
     val mediaFileId: Int?,
-    val viewStatus: ViewStatus
+    val viewStatus: ViewStatus,
+    val linkedMediaPartId: Int?
 ) : FileEntry(root, filePath, fileName)

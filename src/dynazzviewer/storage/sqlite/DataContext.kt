@@ -22,14 +22,11 @@ internal open class DataContext(
             .fetchList()
     }
 
-    override fun mediaFilesByName(names: Set<String>): Map<String, Pair<Int, ViewStatus>> {
+    override fun mediaFilesByName(names: Set<String>): Map<String, MediaFile> {
         return stream(QMediaFile.mediaFile)
             .filter { it.name.`in`(names) }
-            .fetchListFields { field -> listOf(field.name, field.id, field.status) }
-            .map { e ->
-                e.get(0, String::class.java)!! to
-                    Pair(e.get(1, Int::class.java)!!, e.get(2, ViewStatus::class.java)!!)
-            }
+            .fetchList()
+            .map { it.name to it }
             .toMap()
     }
 

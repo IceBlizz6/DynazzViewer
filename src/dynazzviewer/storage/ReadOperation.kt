@@ -25,7 +25,7 @@ interface ReadOperation : Closeable {
 
     fun mediaFiles(): List<MediaFile>
 
-    fun mediaFilesByName(names: Set<String>): Map<String, Pair<Int, ViewStatus>>
+    fun mediaFilesByName(names: Set<String>): Map<String, MediaFile>
 
     fun mediaFilesByPartialName(partialName: String): List<MediaFile>
 

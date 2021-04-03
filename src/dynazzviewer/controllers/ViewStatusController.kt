@@ -63,13 +63,13 @@ class ViewStatusController(
     fun getOrCreateMediaFile(fileName: String): Int {
         storage.readWrite().use { context ->
             val mapLookup = context.mediaFilesByName(setOf(fileName))
-            val entry: Pair<Int, ViewStatus>? = mapLookup[fileName]
+            val entry: MediaFile? = mapLookup[fileName]
             if (entry == null) {
                 val mediaFile = MediaFile(name = fileName)
                 context.save(mediaFile)
                 return mediaFile.id
             } else {
-                return entry.first
+                return entry.id
             }
         }
     }

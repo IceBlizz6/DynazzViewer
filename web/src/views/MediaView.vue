@@ -21,6 +21,8 @@
 								<img v-if="episode.status == stateNone" class="tree-icon" src="@/assets/videofiles/Neutral.png">
 								<img v-if="episode.status == stateViewed" class="tree-icon" src="@/assets/videofiles/Viewed.png">
 								<img v-if="episode.status == stateSkipped" class="tree-icon" src="@/assets/videofiles/Skipped.png">
+								<img v-if="isLinked(episode)" class="tree-icon" src="@/assets/Link.png">
+
 								{{ episodeFormat(episode.episodeNumber) }} | {{  episode.name }}
 								<div class="toolbar">
 									<span class="toolbar-action" @click="setEpisodeWatch(episode, stateNone)">
@@ -74,6 +76,10 @@ export default class MediaView extends Vue {
 		return "E" + numeral(value).format("00")
 	}
 
+	private isLinked(mediaPart: MediaPart): boolean {
+		return mediaPart.mediaFile != null
+	}
+
 	private mediaQuery(): void {
 		graphClient.query(
 			{
@@ -94,7 +100,10 @@ export default class MediaView extends Vue {
 							name: 1,
 							status: 1,
 							sortOrder: 1,
-							aired: 1
+							aired: 1,
+							mediaFile: {
+								id: 1,
+							}
 						}
 					}
 				}
