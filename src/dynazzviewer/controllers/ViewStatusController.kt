@@ -57,7 +57,7 @@ class ViewStatusController(
     }
 
     fun resolveViewStatus(vararg statusList: ViewStatus): ViewStatus {
-        return statusList.max()!!
+        return statusList.maxOrNull()!!
     }
 
     fun getOrCreateMediaFile(fileName: String): Int {

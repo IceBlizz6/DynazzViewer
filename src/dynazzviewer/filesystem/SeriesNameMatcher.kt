@@ -46,7 +46,7 @@ class SeriesNameMatcher(
         seasonWithMatchName: Map<MediaPartCollection, String>
     ): MediaPartCollection {
         return seasonWithMatchName
-            .minBy { e -> abs(e.value.length - seriesName.length) }!!
+            .minByOrNull { e -> abs(e.value.length - seriesName.length) }!!
             .key
     }
 
