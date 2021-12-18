@@ -10,14 +10,14 @@ abstract class ExtReference(
      * Matched to update existing media from external sources
      */
     @Column(unique = true)
-    var uniqueExtKey: String?,
+    open var uniqueExtKey: String?,
     @ManyToOne
-    var databaseEntry: MediaDatabaseEntry?
+    open var databaseEntry: MediaDatabaseEntry?
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int = 0
-        private set
+    open var id: Int = 0
+        protected set
 
     abstract val root: MediaUnit
 }
