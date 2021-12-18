@@ -12,12 +12,6 @@
     </parent>
 
     <dependencies>
-        <dependency>
-            <groupId>dynazzviewer</groupId>
-            <artifactId>core</artifactId>
-            <version>1.0</version>
-        </dependency>
-
         <!-- Annotate as entities -->
         <dependency>
             <groupId>javax.persistence</groupId>
