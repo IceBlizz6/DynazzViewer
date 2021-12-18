@@ -1,4 +1,4 @@
-package dynazzviewer.filesystem.hierarchy
+package dynazzviewer.files.hierarchy
 
 class InvalidPathException(
     message: String

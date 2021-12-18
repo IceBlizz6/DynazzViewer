@@ -1,4 +1,4 @@
-package dynazzviewer.filesystem
+package dynazzviewer.files
 
 class FileNameDetector : FileDetector {
     private val matchers: List<RegexMatcher> = listOf(

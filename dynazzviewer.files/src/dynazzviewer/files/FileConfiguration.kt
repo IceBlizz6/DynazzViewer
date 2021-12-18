@@ -1,4 +1,4 @@
-package dynazzviewer.filesystem
+package dynazzviewer.files
 
 interface FileConfiguration {
     val videoExtensions: Set<String>

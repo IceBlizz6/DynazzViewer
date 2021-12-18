@@ -1,6 +1,6 @@
 package dynazzviewer.ui.web
 
-import dynazzviewer.services.filesystem.VideoFile
+import dynazzviewer.files.hierarchy.VideoFile
 
 class RootEntry(
     val root: String,

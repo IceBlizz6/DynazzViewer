@@ -1,4 +1,4 @@
-package dynazzviewer.filesystem
+package dynazzviewer.files
 
 import dynazzviewer.entities.MediaPart
 import dynazzviewer.entities.MediaPartCollection

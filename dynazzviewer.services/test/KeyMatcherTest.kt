@@ -1,10 +1,10 @@
-import dynazzviewer.base.Matcher
-import dynazzviewer.base.UniqueKey
+import dynazzviewer.entities.UniqueKey
+import dynazzviewer.services.KeyMatcher
 import org.junit.Assert
 import org.junit.Test
 
-class MatcherTest {
-    private val matcher = Matcher()
+class KeyMatcherTest {
+    private val matcher = KeyMatcher()
 
     @Test
     fun addedTest() {

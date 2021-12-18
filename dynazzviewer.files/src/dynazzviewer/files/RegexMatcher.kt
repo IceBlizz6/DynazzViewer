@@ -1,4 +1,4 @@
-package dynazzviewer.filesystem
+package dynazzviewer.files
 
 class RegexMatcher(
     val regex: String,

@@ -2,10 +2,9 @@ package dynazzviewer.files
 
 import dynazzviewer.entities.MediaFile
 import dynazzviewer.entities.ViewStatus
-import dynazzviewer.filesystem.FileConfiguration
-import dynazzviewer.filesystem.hierarchy.FilePath
-import dynazzviewer.filesystem.hierarchy.RootDirectory
-import dynazzviewer.services.filesystem.VideoFile
+import dynazzviewer.files.hierarchy.FilePath
+import dynazzviewer.files.hierarchy.RootDirectory
+import dynazzviewer.files.hierarchy.VideoFile
 import dynazzviewer.storage.Storage
 
 class FileEntryFactory(

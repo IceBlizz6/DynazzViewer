@@ -1,7 +1,7 @@
 package dynazzviewer.ui.config
 
 import dynazzviewer.config.Configuration
-import dynazzviewer.filesystem.FileConfiguration
+import dynazzviewer.files.FileConfiguration
 import dynazzviewer.storage.StorageMode
 import java.io.File
 

@@ -1,9 +1,9 @@
-import dynazzviewer.filesystem.FileDetector
-import dynazzviewer.filesystem.FileNameDetector
+import dynazzviewer.files.FileDetector
+import dynazzviewer.files.FileNameDetector
 import org.junit.Assert
 import org.junit.Test
 
-class FileDetectorTest {
+class FileNameDetectorTest {
     private val fileDetector: FileDetector = FileNameDetector()
 
     @Test

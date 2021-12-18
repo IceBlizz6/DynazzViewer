@@ -1,8 +1,4 @@
-package dynazzviewer.services.filesystem
-
-import dynazzviewer.filesystem.hierarchy.FileName
-import dynazzviewer.filesystem.hierarchy.FilePath
-import dynazzviewer.filesystem.hierarchy.RootDirectory
+package dynazzviewer.files.hierarchy
 
 abstract class FileEntry(
     val root: RootDirectory,

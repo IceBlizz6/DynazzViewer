@@ -1,8 +1,8 @@
-package dynazzviewer.filesystem
+package dynazzviewer.files
 
-import dynazzviewer.filesystem.hierarchy.FileName
-import dynazzviewer.filesystem.hierarchy.RootDirectory
-import dynazzviewer.services.filesystem.VideoFile
+import dynazzviewer.files.hierarchy.FileName
+import dynazzviewer.files.hierarchy.RootDirectory
+import dynazzviewer.files.hierarchy.VideoFile
 
 interface FileRepository {
     fun list(): Map<String, Set<VideoFile>>

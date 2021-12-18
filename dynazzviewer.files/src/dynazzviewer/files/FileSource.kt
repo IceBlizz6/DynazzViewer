@@ -1,4 +1,4 @@
-package dynazzviewer.filesystem
+package dynazzviewer.files
 
 interface FileSource {
     fun listFiles(path: String): Set<String>

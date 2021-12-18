@@ -16,12 +16,12 @@ class TestWebClient(
         val resourceName: String? = fileLookup[uri]
 
         if (resourceName == null) {
-            throw KotlinNullPointerException("No file lookup found for " + uri)
+            throw KotlinNullPointerException("No file lookup found for $uri")
         } else {
             val nullableResource: URL? = javaClass.classLoader.getResource(resourceName)
 
             if (nullableResource == null) {
-                throw KotlinNullPointerException("Resource " + resourceName + " not found")
+                throw KotlinNullPointerException("Resource $resourceName not found")
             } else {
                 val resource = nullableResource
                 val path = Paths.get(resource.toURI())

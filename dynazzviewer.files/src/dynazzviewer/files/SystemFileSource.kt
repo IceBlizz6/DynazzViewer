@@ -1,4 +1,4 @@
-package dynazzviewer.filesystem
+package dynazzviewer.files
 
 import java.io.BufferedReader
 import java.io.BufferedWriter

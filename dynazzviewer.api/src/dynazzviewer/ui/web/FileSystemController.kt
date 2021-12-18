@@ -3,11 +3,11 @@ package dynazzviewer.ui.web
 import dynazzviewer.controllers.UpdateListener
 import dynazzviewer.controllers.ViewStatusController
 import dynazzviewer.entities.ViewStatus
-import dynazzviewer.filesystem.FileConfiguration
-import dynazzviewer.filesystem.FileRepository
-import dynazzviewer.filesystem.hierarchy.FilePath
-import dynazzviewer.filesystem.hierarchy.RootDirectory
-import dynazzviewer.services.filesystem.VideoFile
+import dynazzviewer.files.FileConfiguration
+import dynazzviewer.files.FileRepository
+import dynazzviewer.files.hierarchy.FilePath
+import dynazzviewer.files.hierarchy.RootDirectory
+import dynazzviewer.files.hierarchy.VideoFile
 import dynazzviewer.storage.Storage
 import dynazzviewer.ui.config.UserConfiguration
 import java.awt.Desktop

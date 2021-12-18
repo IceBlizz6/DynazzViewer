@@ -1,4 +1,4 @@
-package dynazzviewer.filesystem.hierarchy
+package dynazzviewer.files.hierarchy
 
 import java.io.File
 

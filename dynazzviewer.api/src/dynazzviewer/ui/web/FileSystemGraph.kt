@@ -1,7 +1,7 @@
 package dynazzviewer.ui.web
 
 import dynazzviewer.entities.ViewStatus
-import dynazzviewer.filesystem.FileNameDetector
+import dynazzviewer.files.FileNameDetector
 import io.leangen.graphql.annotations.GraphQLMutation
 import io.leangen.graphql.annotations.GraphQLQuery
 

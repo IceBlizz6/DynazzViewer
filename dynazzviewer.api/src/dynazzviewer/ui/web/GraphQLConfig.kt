@@ -2,10 +2,10 @@ package dynazzviewer.ui.web
 
 import dynazzviewer.controllers.AnimeSeasonController
 import dynazzviewer.controllers.ServiceDescriptorController
+import dynazzviewer.files.FileCache
 import dynazzviewer.files.FileEntryFactory
-import dynazzviewer.filesystem.FileCache
-import dynazzviewer.filesystem.FileSystemRepository
-import dynazzviewer.filesystem.SystemFileSource
+import dynazzviewer.files.FileSystemRepository
+import dynazzviewer.files.SystemFileSource
 import dynazzviewer.services.HttpWebJsonParser
 import dynazzviewer.services.descriptors.HttpThrottledWebParser
 import dynazzviewer.services.descriptors.jikan.JikanApi

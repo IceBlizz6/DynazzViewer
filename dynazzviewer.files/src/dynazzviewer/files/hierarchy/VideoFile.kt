@@ -1,9 +1,6 @@
-package dynazzviewer.services.filesystem
+package dynazzviewer.files.hierarchy
 
 import dynazzviewer.entities.ViewStatus
-import dynazzviewer.filesystem.hierarchy.FileName
-import dynazzviewer.filesystem.hierarchy.FilePath
-import dynazzviewer.filesystem.hierarchy.RootDirectory
 
 class VideoFile(
     fileName: FileName,

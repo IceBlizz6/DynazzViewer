@@ -1,8 +1,8 @@
-package dynazzviewer.filesystem
+package dynazzviewer.files
 
-import dynazzviewer.filesystem.hierarchy.FileName
-import dynazzviewer.filesystem.hierarchy.FilePath
-import dynazzviewer.filesystem.hierarchy.RootDirectory
+import dynazzviewer.files.hierarchy.FileName
+import dynazzviewer.files.hierarchy.FilePath
+import dynazzviewer.files.hierarchy.RootDirectory
 
 class FileCache(
     private val source: FileSource
