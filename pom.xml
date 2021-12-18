@@ -17,7 +17,7 @@
     </modules>
 
     <properties>
-        <kotlin.version>1.6.0</kotlin.version>
+        <kotlin.version>1.6.10</kotlin.version>
         <kotlin-coroutines.version>1.5.2</kotlin-coroutines.version>
         <ktlint.version>1.11.2</ktlint.version>
         <enforcer.version>3.0.0-M3</enforcer.version>
