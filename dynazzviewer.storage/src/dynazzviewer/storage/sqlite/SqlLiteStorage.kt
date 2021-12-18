@@ -39,16 +39,17 @@ class SqlLiteStorage(
         val unitInfo = HibernatePersistenceUnitInfo()
         val map = HashMap<String, Any>()
         map.put(JPA_JDBC_DRIVER, "org.sqlite.JDBC")
-        if (storageMode == StorageMode.FILE) {
-            val filename = rootStorageDirectory + File.separatorChar + DB_FILENAME
-            map.put(JPA_JDBC_URL, CONNECTION_PREFIX + filename)
-            map.put("hibernate.hbm2ddl.auto", "update")
-        } else if (storageMode == StorageMode.MEMORY) {
-            map.put(JPA_JDBC_URL, "$CONNECTION_PREFIX:memory:")
-            map.put("hibernate.hbm2ddl.auto", "create-drop")
-        } else {
-            throw RuntimeException("Unknown storage mode: $storageMode")
-        }
+        when (storageMode) {
+            StorageMode.FILE -> {
+                val filename = rootStorageDirectory + File.separatorChar + DB_FILENAME
+                map.put(JPA_JDBC_URL, CONNECTION_PREFIX + filename)
+                map.put("hibernate.hbm2ddl.auto", "update")
+            }
+            StorageMode.MEMORY -> {
+                map.put(JPA_JDBC_URL, "$CONNECTION_PREFIX:memory:")
+                map.put("hibernate.hbm2ddl.auto", "create-drop")
+            }
+        }.let {  }
         map.put(DIALECT, "org.sqlite.hibernate.dialect.SQLiteDialect")
         map.put(SHOW_SQL, false)
         map.put(QUERY_STARTUP_CHECKING, false)
