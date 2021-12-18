@@ -10,6 +10,10 @@
 
     <artifactId>api</artifactId>
 
+    <properties>
+        <graphql.version>11.1.0</graphql.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>dynazzviewer</groupId>
@@ -25,6 +29,32 @@
             <groupId>dynazzviewer</groupId>
             <artifactId>files</artifactId>
             <version>1.0</version>
+        </dependency>
+
+        <!-- Web UI framework -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+
+        <!-- GraphQL -->
+        <dependency>
+            <groupId>io.leangen.graphql</groupId>
+            <artifactId>spqr</artifactId>
+            <version>0.11.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java-kickstart</groupId>
+            <artifactId>graphql-spring-boot-starter</artifactId>
+            <version>${graphql.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java-kickstart</groupId>
+            <artifactId>graphiql-spring-boot-starter</artifactId>
+            <version>${graphql.version}</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 </project>
