@@ -12,7 +12,9 @@ class JpaPredicateBuilder<QTEntity : EntityPathBase<TEntity>, TEntity>(
     private var query: JPAQuery<TEntity>,
     private val nameGenerator: JoinNameGenerator,
 ) : PredicateBuilder<QTEntity, TEntity> {
-    override fun filter(transform: (QTEntity) -> BooleanExpression): PredicateBuilder<QTEntity, TEntity> {
+    override fun filter(
+        transform: (QTEntity) -> BooleanExpression
+    ): PredicateBuilder<QTEntity, TEntity> {
         var expr: BooleanExpression = transform(source)
         if (expr is BooleanPath) {
             expr = expr.isTrue
@@ -21,7 +23,9 @@ class JpaPredicateBuilder<QTEntity : EntityPathBase<TEntity>, TEntity>(
         return this
     }
 
-    override fun <QT : EntityPathBase<T>, T> flatMap(transform: (QTEntity) -> ListPath<T, QT>): PredicateBuilder<QT, T> {
+    override fun <QT : EntityPathBase<T>, T> flatMap(
+        transform: (QTEntity) -> ListPath<T, QT>
+    ): PredicateBuilder<QT, T> {
         val joinedSource: ListPath<T, QT> = transform(source)
         val joinedType: KClass<out QT> = joinedSource.any()::class
         val joined = JpaQueryStream.generateJoinInstance(joinedType, nameGenerator)
@@ -29,7 +33,9 @@ class JpaPredicateBuilder<QTEntity : EntityPathBase<TEntity>, TEntity>(
         return JpaPredicateBuilder(joined, joinedQuery, nameGenerator)
     }
 
-    override fun <QT : EntityPathBase<T>, T> map(transform: (QTEntity) -> QT): PredicateBuilder<QT, T> {
+    override fun <QT : EntityPathBase<T>, T> map(
+        transform: (QTEntity) -> QT
+    ): PredicateBuilder<QT, T> {
         val joinedSource = transform(source)
         val joinedQuery = query.select(joinedSource)
         return JpaPredicateBuilder(joinedSource, joinedQuery, nameGenerator)

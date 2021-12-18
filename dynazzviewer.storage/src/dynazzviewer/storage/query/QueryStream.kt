@@ -18,18 +18,24 @@ interface QueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> {
     /**
      * Filter result set on predicate that can map to other entities
      */
-    fun filterBuild(transform: (PredicateBuilder<QTEntity, TEntity>) -> BooleanExpression): QueryStream<QTEntity, TEntity>
+    fun filterBuild(
+        transform: (PredicateBuilder<QTEntity, TEntity>) -> BooleanExpression
+    ): QueryStream<QTEntity, TEntity>
 
     /**
      * Filter result set on predicate that can map to other entities
      * Returns result that matches any of the predicates in list
      */
-    fun filterBuildAny(transform: (PredicateBuilder<QTEntity, TEntity>) -> List<BooleanExpression>): QueryStream<QTEntity, TEntity>
+    fun filterBuildAny(
+        transform: (PredicateBuilder<QTEntity, TEntity>) -> List<BooleanExpression>
+    ): QueryStream<QTEntity, TEntity>
 
     /**
      * Maps result rows one to many
      */
-    fun <QT : EntityPathBase<T>, T> flatMap(transform: (QTEntity) -> ListPath<T, QT>): QueryStream<QT, T>
+    fun <QT : EntityPathBase<T>, T> flatMap(
+        transform: (QTEntity) -> ListPath<T, QT>
+    ): QueryStream<QT, T>
 
     /**
      * Maps to unrelated entity
@@ -62,7 +68,10 @@ interface QueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> {
      */
     fun <V> fetchWithTransform(defaultValue: V, transform: (QTEntity) -> ResultTransformer<V>): V
 
-    fun <K, V> fetchMap(key: (QTEntity) -> Expression<K>, value: (QTEntity) -> Expression<V>): Map<K, V>
+    fun <K, V> fetchMap(
+        key: (QTEntity) -> Expression<K>,
+        value: (QTEntity) -> Expression<V>
+    ): Map<K, V>
 
     /**
      * Skips n rows in result
@@ -117,7 +126,9 @@ interface QueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> {
     /**
      * Calculates sum from all rows using given expression
      */
-    fun <T> fetchSumExpression(expr: (QTEntity) -> NumberExpression<T>): T? where T : Number, T : Comparable<*>
+    fun <T> fetchSumExpression(
+        expr: (QTEntity) -> NumberExpression<T>
+    ): T? where T : Number, T : Comparable<*>
 
     /**
      * Runs query to retrieve number of rows

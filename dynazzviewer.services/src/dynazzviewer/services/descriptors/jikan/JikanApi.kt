@@ -106,7 +106,10 @@ class JikanApi(
         } else {
             episodes(code)
         }
-        if (autoFillEpisodeAirDates && seriesData.aired.from != null && seriesData.aired.to != null) {
+        if (autoFillEpisodeAirDates &&
+            seriesData.aired.from != null &&
+            seriesData.aired.to != null
+        ) {
             autoFillEpisodeAirDates(
                 episodes, seriesData.aired.from.toLocalDate(),
                 seriesData.aired.to.toLocalDate()
@@ -137,7 +140,10 @@ class JikanApi(
         } else {
             episodes(code)
         }
-        if (autoFillEpisodeAirDates && seriesData.aired.from != null && seriesData.aired.to != null) {
+        if (autoFillEpisodeAirDates &&
+            seriesData.aired.from != null &&
+            seriesData.aired.to != null
+        ) {
             autoFillEpisodeAirDates(
                 episodes, seriesData.aired.from.toLocalDate(),
                 seriesData.aired.to.toLocalDate()

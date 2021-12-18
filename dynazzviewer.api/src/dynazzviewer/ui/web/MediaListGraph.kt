@@ -20,7 +20,10 @@ class MediaListGraph(
     }
 
     @GraphQLQuery
-    fun internalMediaSearch(@GraphQLEnvironment env: ResolutionEnvironment, name: String): List<MediaPartCollection> {
+    fun internalMediaSearch(
+        @GraphQLEnvironment env: ResolutionEnvironment,
+        name: String
+    ): List<MediaPartCollection> {
         val operation = ContextHandler.registerRead(storage, env)
         return operation.mediaPartCollectionsLike(name)
     }

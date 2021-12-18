@@ -29,7 +29,9 @@ class CorsRequestFilter(
         }
     }
 
-    class CustomHttpServletResponseWrapper(response: HttpServletResponse?) : HttpServletResponseWrapper(response) {
+    class CustomHttpServletResponseWrapper(
+        response: HttpServletResponse?
+    ) : HttpServletResponseWrapper(response) {
         override fun addCookie(cookie: Cookie) {
             if ("JSESSIONID" == cookie.name) {
                 super.addHeader("Set-Cookie", getCookieValue(cookie))

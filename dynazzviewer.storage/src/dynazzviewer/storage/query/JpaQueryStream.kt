@@ -31,7 +31,9 @@ class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<
         this.joinNameGenerator = joinNameGenerator
     }
 
-    override fun orderBy(transform: (QTEntity) -> OrderSpecifier<*>): QueryStream<QTEntity, TEntity> {
+    override fun orderBy(
+        transform: (QTEntity) -> OrderSpecifier<*>
+    ): QueryStream<QTEntity, TEntity> {
         query = query.orderBy(transform(source))
         return this
     }
@@ -45,8 +47,10 @@ class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<
      * Note: Adding isTrue on BooleanPath to avoid AST node path error
      *          Should investigate further and remove if possible
      */
-    override fun filter(lmbd: (QTEntity) -> BooleanExpression): QueryStream<QTEntity, TEntity> {
-        var expr: BooleanExpression = lmbd(source)
+    override fun filter(
+        transform: (QTEntity) -> BooleanExpression
+    ): QueryStream<QTEntity, TEntity> {
+        var expr: BooleanExpression = transform(source)
         if (expr is BooleanPath) {
             expr = expr.isTrue
         }
@@ -64,14 +68,18 @@ class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<
         return this
     }
 
-    override fun <QT : EntityPathBase<T>, T> map(lmbd: (QTEntity) -> QT): QueryStream<QT, T> {
-        val joinedSource: QT = lmbd(source)
+    override fun <QT : EntityPathBase<T>, T> map(
+        transform: (QTEntity) -> QT
+    ): QueryStream<QT, T> {
+        val joinedSource: QT = transform(source)
         val joinedQuery: JPAQuery<T> = query.select(joinedSource)
         return JpaQueryStream(joinedSource, joinedQuery, joinNameGenerator)
     }
 
-    override fun <QT : EntityPathBase<T>, T> flatMap(lmbd: (QTEntity) -> ListPath<T, QT>): QueryStream<QT, T> {
-        val joinedSource: ListPath<T, QT> = lmbd(source)
+    override fun <QT : EntityPathBase<T>, T> flatMap(
+        transform: (QTEntity) -> ListPath<T, QT>
+    ): QueryStream<QT, T> {
+        val joinedSource: ListPath<T, QT> = transform(source)
         val joinedType: KClass<out QT> = joinedSource.any()::class
         val joined = generateJoinInstance(joinedType, joinNameGenerator)
         val joinedQuery = query.innerJoin(joinedSource, joined).select(joined)
@@ -125,12 +133,16 @@ class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<
         }
     }
 
-    override fun <T> fetchSum(expr: (QTEntity) -> NumberPath<T>): T? where T : Number, T : Comparable<*> {
+    override fun <T> fetchSum(
+        expr: (QTEntity) -> NumberPath<T>
+    ): T? where T : Number, T : Comparable<*> {
         val sumExpr = expr(source).sum()
         return query.distinct().select(sumExpr).fetchOne()
     }
 
-    override fun <T> fetchSumExpression(expr: (QTEntity) -> NumberExpression<T>): T? where T : Number, T : Comparable<*> {
+    override fun <T> fetchSumExpression(
+        expr: (QTEntity) -> NumberExpression<T>
+    ): T? where T : Number, T : Comparable<*> {
         val sumExpr = expr(source).sum()
         return query.distinct().select(sumExpr).fetchOne()
     }
@@ -159,7 +171,9 @@ class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<
         return query.distinct().toString()
     }
 
-    override fun filterBuild(transform: (PredicateBuilder<QTEntity, TEntity>) -> BooleanExpression): QueryStream<QTEntity, TEntity> {
+    override fun filterBuild(
+        transform: (PredicateBuilder<QTEntity, TEntity>) -> BooleanExpression
+    ): QueryStream<QTEntity, TEntity> {
         val builder = JpaPredicateBuilder(source, query, joinNameGenerator)
         query = query.where(transform(builder)).select(source)
         return this
@@ -202,7 +216,10 @@ class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<
     }
 
     companion object {
-        fun <T : Any> generateJoinInstance(type: KClass<out T>, nameGenerator: JoinNameGenerator): T {
+        fun <T : Any> generateJoinInstance(
+            type: KClass<out T>,
+            nameGenerator: JoinNameGenerator
+        ): T {
             val generatedName = nameGenerator.generate()
             val constructors = type.constructors
             val constructorMatch = constructors.first {

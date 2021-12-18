@@ -36,7 +36,7 @@ class EmptyQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> :
     }
 
     companion object {
-        fun <QTEntity : EntityPathBase<TEntity>, TEntity> empty(): EmptyQueryStream<QTEntity, TEntity> {
+        fun <QT : EntityPathBase<T>, T> empty(): EmptyQueryStream<QT, T> {
             return EmptyQueryStream()
         }
     }
@@ -140,7 +140,9 @@ class EmptyQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> :
         return EmptyQueryStream()
     }
 
-    override fun <QT : EntityPathBase<T>, T> flatMap(transform: (QTEntity) -> ListPath<T, QT>): QueryStream<QT, T> {
+    override fun <QT : EntityPathBase<T>, T> flatMap(
+        transform: (QTEntity) -> ListPath<T, QT>
+    ): QueryStream<QT, T> {
         return EmptyQueryStream()
     }
 
