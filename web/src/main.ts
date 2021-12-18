@@ -1,17 +1,7 @@
-import Vue from 'vue'
-import App from '@/App.vue'
+import { createApp } from "vue"
 import router from '@/router'
-import { RouterHandler } from '@/router'
-import MenuHeader from '@/components/MenuHeader.vue'
-import Buefy from 'buefy'
-import 'buefy/dist/buefy.css'
+import App from "@/App.vue"
 
-Vue.component("MenuHeader", MenuHeader)
-Vue.use(Buefy)
-
-Vue.config.productionTip = false
-
-const vueApp = new Vue({
-	router,
-	render: h => h(App)
-}).$mount('#app')
+createApp(App)
+    .use(router)
+    .mount('#app')

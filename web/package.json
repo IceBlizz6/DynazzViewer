@@ -3,33 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "lint-no-fix": "vue-cli-service lint --no-fix",
-	"graph:refresh": "npx generate-graphql-client --post --endpoint=http://localhost:8081/graphql --output=src/graph"
+    "serve": "vite",
+    "build": "vite build"
   },
   "dependencies": {
-    "@types/numeral": "0.0.28",
-    "buefy": "^0.8.20",
-    "moment": "^2.27.0",
-    "numeral": "^2.0.6",
-    "vue": "^2.6.11",
-    "vue-property-decorator": "^8.4.2",
-    "vue-router": "^3.2.0"
+    "vue": "^3.2.26",
+    "vue-router": "^4.0.12",
+    "vue-class-component": "^8.0.0-rc.1"
   },
   "devDependencies": {
-    "typescript": "~3.9.3",
-    "@vue/cli-service": "~4.4.0",
-    "@vue/cli-plugin-typescript": "~4.4.0",
-    "vue-template-compiler": "^2.6.11",
-    "@vue/eslint-config-typescript": "^5.0.2",
-    "@vue/cli-plugin-eslint": "~4.4.0",
-    "eslint-plugin-vue": "^6.2.2",
-    "@typescript-eslint/eslint-plugin": "^2.33.0",
-    "@typescript-eslint/parser": "^2.33.0",
-    "eslint": "^6.7.2",
-    "graphql-typed-client": "^1.7.4"
+    "@vitejs/plugin-vue": "^2.0.1",
+    "typescript": "~4.5.4"
   },
   "eslintConfig": {
     "root": true,
