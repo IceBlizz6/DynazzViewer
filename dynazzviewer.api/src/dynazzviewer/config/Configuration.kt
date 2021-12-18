@@ -1,4 +1,4 @@
-package dynazzviewer.base
+package dynazzviewer.config
 
 import dynazzviewer.storage.StorageMode
 

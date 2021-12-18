@@ -2,7 +2,6 @@ package dynazzviewer.storage
 
 import dynazzviewer.base.AnimeSeasonFlagState
 import dynazzviewer.base.ExtDatabase
-import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.*
 import java.io.Closeable
 

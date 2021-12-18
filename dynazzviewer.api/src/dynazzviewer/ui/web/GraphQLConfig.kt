@@ -2,8 +2,8 @@ package dynazzviewer.ui.web
 
 import dynazzviewer.controllers.AnimeSeasonController
 import dynazzviewer.controllers.ServiceDescriptorController
+import dynazzviewer.files.FileEntryFactory
 import dynazzviewer.filesystem.FileCache
-import dynazzviewer.filesystem.FileEntryFactory
 import dynazzviewer.filesystem.FileSystemRepository
 import dynazzviewer.filesystem.SystemFileSource
 import dynazzviewer.services.HttpWebJsonParser
@@ -46,7 +46,7 @@ open class GraphQLConfig {
         val configuration = DefaultConfiguration(settingsController)
         val systemFileSource = SystemFileSource(configuration)
         val fileCache = FileCache(systemFileSource)
-        val storage = SqlLiteStorage(configuration)
+        val storage = SqlLiteStorage(configuration.storageMode, configuration.rootStorageDirectory)
         val fileEntryFactory = FileEntryFactory(configuration, storage)
         val fileRepository = FileSystemRepository(fileCache, fileEntryFactory)
         val fileController = FileSystemController(

@@ -1,7 +1,6 @@
 package dynazzviewer.storage.sqlite
 
 import com.querydsl.core.types.dsl.EntityPathBase
-import dynazzviewer.base.Configuration
 import dynazzviewer.storage.ReadOperation
 import dynazzviewer.storage.ReadWriteOperation
 import dynazzviewer.storage.Storage
@@ -25,7 +24,10 @@ import java.util.HashMap
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
 
-class SqlLiteStorage : Storage {
+class SqlLiteStorage(
+    storageMode: StorageMode,
+    rootStorageDirectory: String
+) : Storage {
     companion object {
         const val CONNECTION_PREFIX = "jdbc:sqlite:"
         const val DB_FILENAME = "media.db"
@@ -33,22 +35,21 @@ class SqlLiteStorage : Storage {
 
     private val entityManagerFactory: EntityManagerFactory
 
-    constructor(configuration: Configuration) {
+    init {
         val unitInfo = HibernatePersistenceUnitInfo()
         val map = HashMap<String, Any>()
         map.put(JPA_JDBC_DRIVER, "org.sqlite.JDBC")
-
-        if (configuration.storageMode == StorageMode.FILE) {
-            val filename = configuration.rootStorageDirectory + File.separatorChar + DB_FILENAME
+        if (storageMode == StorageMode.FILE) {
+            val filename = rootStorageDirectory + File.separatorChar + DB_FILENAME
             map.put(JPA_JDBC_URL, CONNECTION_PREFIX + filename)
             map.put("hibernate.hbm2ddl.auto", "update")
-        } else if (configuration.storageMode == StorageMode.MEMORY) {
-            map.put(JPA_JDBC_URL, CONNECTION_PREFIX + ":memory:")
+        } else if (storageMode == StorageMode.MEMORY) {
+            map.put(JPA_JDBC_URL, "$CONNECTION_PREFIX:memory:")
             map.put("hibernate.hbm2ddl.auto", "create-drop")
         } else {
-            throw RuntimeException("Unknown storage mode: " + configuration.storageMode)
+            throw RuntimeException("Unknown storage mode: $storageMode")
         }
-        map.put(DIALECT, "org.hibernate.dialect.SQLiteDialect")
+        map.put(DIALECT, "org.sqlite.hibernate.dialect.SQLiteDialect")
         map.put(SHOW_SQL, false)
         map.put(QUERY_STARTUP_CHECKING, false)
         map.put(GENERATE_STATISTICS, false)

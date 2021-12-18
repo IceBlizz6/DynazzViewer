@@ -26,7 +26,11 @@ class MediaListGraph(
     }
 
     @GraphQLQuery
-    fun internalMediaLookup(@GraphQLEnvironment env: ResolutionEnvironment, db: ExtDatabase, code: String): MediaPartCollection? {
+    fun internalMediaLookup(
+        @GraphQLEnvironment env: ResolutionEnvironment,
+        db: ExtDatabase,
+        code: String
+    ): MediaPartCollection? {
         val operation = ContextHandler.registerRead(storage, env)
         return operation.mediaPartCollectionByCode(db, code)
     }

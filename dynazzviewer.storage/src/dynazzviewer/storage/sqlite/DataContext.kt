@@ -3,7 +3,6 @@ package dynazzviewer.storage.sqlite
 import com.querydsl.core.types.dsl.EntityPathBase
 import dynazzviewer.base.AnimeSeasonFlagState
 import dynazzviewer.base.ExtDatabase
-import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.*
 import dynazzviewer.storage.MediaIdentity
 import dynazzviewer.storage.ReadOperation

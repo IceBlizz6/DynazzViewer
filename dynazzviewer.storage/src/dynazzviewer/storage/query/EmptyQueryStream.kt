@@ -23,11 +23,15 @@ class EmptyQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> :
         throw RuntimeException("Missing result")
     }
 
-    override fun <T> fetchSum(expr: (QTEntity) -> NumberPath<T>): T? where T : Number, T : Comparable<*> {
+    override fun <T> fetchSum(
+        expr: (QTEntity) -> NumberPath<T>
+    ): T? where T : Number, T : Comparable<*> {
         return null
     }
 
-    override fun <T> fetchSumExpression(expr: (QTEntity) -> NumberExpression<T>): T? where T : Number, T : Comparable<*> {
+    override fun <T> fetchSumExpression(
+        expr: (QTEntity) -> NumberExpression<T>
+    ): T? where T : Number, T : Comparable<*> {
         return null
     }
 
@@ -37,7 +41,9 @@ class EmptyQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> :
         }
     }
 
-    override fun filterBuild(transform: (PredicateBuilder<QTEntity, TEntity>) -> BooleanExpression): QueryStream<QTEntity, TEntity> {
+    override fun filterBuild(
+        transform: (PredicateBuilder<QTEntity, TEntity>) -> BooleanExpression
+    ): QueryStream<QTEntity, TEntity> {
         return this
     }
 
@@ -47,7 +53,9 @@ class EmptyQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> :
         return this
     }
 
-    override fun <QT : EntityPathBase<T>, T> map(lmbd: (QTEntity) -> QT): QueryStream<QT, T> {
+    override fun <QT : EntityPathBase<T>, T> map(
+        transform: (QTEntity) -> QT
+    ): QueryStream<QT, T> {
         return EmptyQueryStream()
     }
 
@@ -75,7 +83,9 @@ class EmptyQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> :
         return this
     }
 
-    override fun orderBy(lmbd: (QTEntity) -> OrderSpecifier<*>): QueryStream<QTEntity, TEntity> {
+    override fun orderBy(
+        transform: (QTEntity) -> OrderSpecifier<*>
+    ): QueryStream<QTEntity, TEntity> {
         return this
     }
 
