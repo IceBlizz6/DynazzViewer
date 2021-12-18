@@ -49,7 +49,7 @@ class SqlLiteStorage(
                 map.put(JPA_JDBC_URL, "$CONNECTION_PREFIX:memory:")
                 map.put("hibernate.hbm2ddl.auto", "create-drop")
             }
-        }.let {  }
+        }.let { }
         map.put(DIALECT, "org.sqlite.hibernate.dialect.SQLiteDialect")
         map.put(SHOW_SQL, false)
         map.put(QUERY_STARTUP_CHECKING, false)
