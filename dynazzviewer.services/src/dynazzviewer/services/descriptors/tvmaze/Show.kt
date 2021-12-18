@@ -1,7 +1,7 @@
 package dynazzviewer.services.descriptors.tvmaze
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import dynazzviewer.base.ExtDatabase
+import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.services.descriptors.ResultHeader
 import java.time.LocalDate
 

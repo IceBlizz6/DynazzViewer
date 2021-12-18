@@ -1,8 +1,8 @@
 package dynazzviewer.ui.web
 
-import dynazzviewer.base.ViewStatus
 import dynazzviewer.controllers.UpdateListener
 import dynazzviewer.controllers.ViewStatusController
+import dynazzviewer.entities.ViewStatus
 import dynazzviewer.filesystem.FileConfiguration
 import dynazzviewer.filesystem.FileRepository
 import dynazzviewer.filesystem.hierarchy.FilePath

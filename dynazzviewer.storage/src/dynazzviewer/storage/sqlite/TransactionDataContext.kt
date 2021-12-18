@@ -1,8 +1,8 @@
 package dynazzviewer.storage.sqlite
 
-import dynazzviewer.base.AnimeSeasonFlagState
-import dynazzviewer.base.ExtDatabase
 import dynazzviewer.entities.*
+import dynazzviewer.entities.AnimeSeasonFlagState
+import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.storage.ReadWriteOperation
 import javax.persistence.EntityTransaction
 

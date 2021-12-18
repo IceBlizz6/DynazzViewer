@@ -1,6 +1,6 @@
 package dynazzviewer.ui.web
 
-import dynazzviewer.base.ViewStatus
+import dynazzviewer.entities.ViewStatus
 import dynazzviewer.filesystem.FileNameDetector
 import io.leangen.graphql.annotations.GraphQLMutation
 import io.leangen.graphql.annotations.GraphQLQuery

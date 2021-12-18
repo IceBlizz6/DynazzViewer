@@ -1,9 +1,9 @@
 package dynazzviewer.ui.web
 
-import dynazzviewer.base.AnimeSeasonFlagState
-import dynazzviewer.base.ExtDatabase
 import dynazzviewer.controllers.AnimeSeasonController
 import dynazzviewer.controllers.ServiceDescriptorController
+import dynazzviewer.entities.AnimeSeasonFlagState
+import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.services.descriptors.DescriptionUnit
 import dynazzviewer.services.descriptors.ResultHeader
 import dynazzviewer.services.descriptors.jikan.MalYearSeason

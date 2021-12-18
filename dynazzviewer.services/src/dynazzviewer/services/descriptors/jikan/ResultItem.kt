@@ -2,7 +2,7 @@ package dynazzviewer.services.descriptors.jikan
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
-import dynazzviewer.base.ExtDatabase
+import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.services.descriptors.ResultHeader
 import java.time.LocalDateTime
 

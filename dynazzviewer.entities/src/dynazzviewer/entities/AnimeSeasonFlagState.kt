@@ -1,4 +1,4 @@
-package dynazzviewer.base
+package dynazzviewer.entities
 
 enum class AnimeSeasonFlagState {
     None,

@@ -1,6 +1,5 @@
 package dynazzviewer.entities
 
-import dynazzviewer.base.ExtDatabase
 import javax.persistence.Entity
 import javax.persistence.Id
 

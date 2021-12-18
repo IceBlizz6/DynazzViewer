@@ -1,6 +1,6 @@
 package dynazzviewer.services.descriptors
 
-import dynazzviewer.base.ExtDatabase
+import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.storage.MediaIdentity
 
 class ResultHeader(

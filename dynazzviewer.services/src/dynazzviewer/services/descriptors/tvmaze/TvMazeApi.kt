@@ -1,6 +1,6 @@
 package dynazzviewer.services.descriptors.tvmaze
 
-import dynazzviewer.base.ExtDatabase
+import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.services.WebJsonParser
 import dynazzviewer.services.descriptors.DescriptionUnit
 import dynazzviewer.services.descriptors.DescriptorApi

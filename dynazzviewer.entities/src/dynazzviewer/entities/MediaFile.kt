@@ -1,6 +1,5 @@
 package dynazzviewer.entities
 
-import dynazzviewer.base.ViewStatus
 import java.io.Serializable
 import javax.persistence.Column
 import javax.persistence.Entity

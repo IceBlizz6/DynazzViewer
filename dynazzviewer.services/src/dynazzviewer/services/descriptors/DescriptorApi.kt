@@ -1,6 +1,6 @@
 package dynazzviewer.services.descriptors
 
-import dynazzviewer.base.ExtDatabase
+import dynazzviewer.entities.ExtDatabase
 
 interface DescriptorApi {
     fun querySearch(db: ExtDatabase, name: String): List<ResultHeader>?

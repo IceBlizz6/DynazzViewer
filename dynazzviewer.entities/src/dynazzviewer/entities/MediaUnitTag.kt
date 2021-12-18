@@ -1,6 +1,5 @@
 package dynazzviewer.entities
 
-import dynazzviewer.base.UniqueKey
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue

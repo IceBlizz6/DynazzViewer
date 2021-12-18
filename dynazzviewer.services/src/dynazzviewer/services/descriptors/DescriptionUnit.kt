@@ -1,8 +1,8 @@
 package dynazzviewer.services.descriptors
 
-import dynazzviewer.base.Matcher
 import dynazzviewer.entities.MediaImage
 import dynazzviewer.entities.MediaUnit
+import dynazzviewer.services.KeyMatcher
 import dynazzviewer.storage.ReadWriteOperation
 
 class DescriptionUnit(
@@ -36,7 +36,7 @@ class DescriptionUnit(
     }
 
     private fun updateImages(target: MediaUnit, context: ReadWriteOperation) {
-        val matchResult = Matcher().matchWithString(target.images, imageUrls)
+        val matchResult = KeyMatcher().matchWithString(target.images, imageUrls)
         matchResult.added
             .map { e -> MediaImage(mediaUnit = target, url = e) }
             .forEach { context.save(it) }
@@ -44,14 +44,14 @@ class DescriptionUnit(
     }
 
     private fun updateTags(target: MediaUnit, context: ReadWriteOperation) {
-        val matchResult = Matcher().matchWithString(target.tags, tags)
+        val matchResult = KeyMatcher().matchWithString(target.tags, tags)
         val addedTags = context.tagsGetOrCreate(matchResult.added.toSet())
         target.tags.addAll(addedTags)
         target.tags.removeAll(matchResult.removed)
     }
 
     private fun updateChildren(target: MediaUnit, context: ReadWriteOperation) {
-        val matchResult = Matcher().match(target.children, children)
+        val matchResult = KeyMatcher().match(target.children, children)
         for (added in matchResult.added) {
             added.create(target, context)
         }

@@ -1,6 +1,8 @@
-package dynazzviewer.base
+package dynazzviewer.services
 
-class Matcher {
+import dynazzviewer.entities.UniqueKey
+
+class KeyMatcher {
     fun <TOriginal : UniqueKey, TUpdate : UniqueKey> match(
         original: List<TOriginal>,
         updated: List<TUpdate>

@@ -8,7 +8,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>dynazzviewer.core</module>
         <module>dynazzviewer.entities</module>
         <module>dynazzviewer.storage</module>
         <module>dynazzviewer.files</module>

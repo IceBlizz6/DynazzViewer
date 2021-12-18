@@ -1,6 +1,6 @@
 package dynazzviewer.storage
 
-import dynazzviewer.base.ExtDatabase
+import dynazzviewer.entities.ExtDatabase
 
 interface MediaIdentity {
     val extDb: ExtDatabase

@@ -1,9 +1,9 @@
 package dynazzviewer.storage.sqlite
 
 import com.querydsl.core.types.dsl.EntityPathBase
-import dynazzviewer.base.AnimeSeasonFlagState
-import dynazzviewer.base.ExtDatabase
 import dynazzviewer.entities.*
+import dynazzviewer.entities.AnimeSeasonFlagState
+import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.storage.MediaIdentity
 import dynazzviewer.storage.ReadOperation
 import dynazzviewer.storage.query.QueryStream

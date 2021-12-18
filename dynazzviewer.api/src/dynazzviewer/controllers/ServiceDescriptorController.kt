@@ -1,6 +1,6 @@
 package dynazzviewer.controllers
 
-import dynazzviewer.base.ExtDatabase
+import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.entities.MediaUnit
 import dynazzviewer.services.descriptors.DescriptionUnit
 import dynazzviewer.services.descriptors.DescriptorApi

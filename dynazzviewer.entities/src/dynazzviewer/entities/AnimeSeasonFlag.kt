@@ -1,6 +1,5 @@
 package dynazzviewer.entities
 
-import dynazzviewer.base.AnimeSeasonFlagState
 import javax.persistence.Entity
 import javax.persistence.Id
 

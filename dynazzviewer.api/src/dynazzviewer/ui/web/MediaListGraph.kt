@@ -1,9 +1,9 @@
 package dynazzviewer.ui.web
 
-import dynazzviewer.base.ExtDatabase
-import dynazzviewer.base.ViewStatus
+import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.entities.MediaPartCollection
 import dynazzviewer.entities.MediaUnit
+import dynazzviewer.entities.ViewStatus
 import dynazzviewer.storage.Storage
 import io.leangen.graphql.annotations.GraphQLEnvironment
 import io.leangen.graphql.annotations.GraphQLMutation

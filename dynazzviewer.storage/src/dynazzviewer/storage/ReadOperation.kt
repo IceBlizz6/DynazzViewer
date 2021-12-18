@@ -1,8 +1,8 @@
 package dynazzviewer.storage
 
-import dynazzviewer.base.AnimeSeasonFlagState
-import dynazzviewer.base.ExtDatabase
 import dynazzviewer.entities.*
+import dynazzviewer.entities.AnimeSeasonFlagState
+import dynazzviewer.entities.ExtDatabase
 import java.io.Closeable
 
 interface ReadOperation : Closeable {

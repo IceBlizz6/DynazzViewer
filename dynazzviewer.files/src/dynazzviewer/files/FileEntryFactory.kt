@@ -1,7 +1,7 @@
 package dynazzviewer.files
 
-import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.MediaFile
+import dynazzviewer.entities.ViewStatus
 import dynazzviewer.filesystem.FileConfiguration
 import dynazzviewer.filesystem.hierarchy.FilePath
 import dynazzviewer.filesystem.hierarchy.RootDirectory

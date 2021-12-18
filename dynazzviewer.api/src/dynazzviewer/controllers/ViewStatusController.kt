@@ -1,7 +1,7 @@
 package dynazzviewer.controllers
 
-import dynazzviewer.base.ViewStatus
 import dynazzviewer.entities.MediaFile
+import dynazzviewer.entities.ViewStatus
 import dynazzviewer.storage.Storage
 import java.util.Optional
 

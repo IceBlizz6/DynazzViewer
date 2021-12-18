@@ -1,8 +1,8 @@
 package dynazzviewer.storage
 
-import dynazzviewer.base.AnimeSeasonFlagState
-import dynazzviewer.base.ExtDatabase
+import dynazzviewer.entities.AnimeSeasonFlagState
 import dynazzviewer.entities.EntityModel
+import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.entities.MediaDatabaseEntry
 import dynazzviewer.entities.MediaUnitTag
 

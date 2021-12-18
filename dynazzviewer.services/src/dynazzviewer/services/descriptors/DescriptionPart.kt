@@ -1,9 +1,9 @@
 package dynazzviewer.services.descriptors
 
-import dynazzviewer.base.ExtDatabase
-import dynazzviewer.base.UniqueKey
+import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.entities.MediaPart
 import dynazzviewer.entities.MediaPartCollection
+import dynazzviewer.entities.UniqueKey
 import dynazzviewer.storage.ReadWriteOperation
 import java.time.LocalDate
 

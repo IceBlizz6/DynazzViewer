@@ -1,6 +1,6 @@
 package dynazzviewer.services.filesystem
 
-import dynazzviewer.base.ViewStatus
+import dynazzviewer.entities.ViewStatus
 import dynazzviewer.filesystem.hierarchy.FileName
 import dynazzviewer.filesystem.hierarchy.FilePath
 import dynazzviewer.filesystem.hierarchy.RootDirectory

@@ -1,11 +1,11 @@
 package dynazzviewer.services.descriptors
 
-import dynazzviewer.base.ExtDatabase
-import dynazzviewer.base.Matcher
-import dynazzviewer.base.UniqueKey
 import dynazzviewer.entities.AlternativeTitle
+import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.entities.MediaPartCollection
 import dynazzviewer.entities.MediaUnit
+import dynazzviewer.entities.UniqueKey
+import dynazzviewer.services.KeyMatcher
 import dynazzviewer.storage.ReadWriteOperation
 
 class DescriptionPartCollection(
@@ -41,7 +41,7 @@ class DescriptionPartCollection(
     fun update(target: MediaPartCollection, context: ReadWriteOperation) {
         target.name = name
         target.sortOrder = target.sortOrder
-        val matchResult = Matcher().match(target.children, episodes)
+        val matchResult = KeyMatcher().match(target.children, episodes)
         target.seasonNumber = seasonNumber
         if (alternativeTitles == null) {
             for (altTitle in target.alternativeTitles) {
@@ -67,7 +67,7 @@ class DescriptionPartCollection(
         parent: MediaPartCollection,
         titles: List<String>
     ) {
-        val matchResult = Matcher().matchWithString(parent.alternativeTitles, titles)
+        val matchResult = KeyMatcher().matchWithString(parent.alternativeTitles, titles)
         for (added in matchResult.added) {
             val altTitle = AlternativeTitle(
                 parent = parent,

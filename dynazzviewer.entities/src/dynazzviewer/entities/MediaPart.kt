@@ -1,7 +1,5 @@
 package dynazzviewer.entities
 
-import dynazzviewer.base.UniqueKey
-import dynazzviewer.base.ViewStatus
 import java.time.LocalDate
 import javax.persistence.Entity
 import javax.persistence.ManyToOne

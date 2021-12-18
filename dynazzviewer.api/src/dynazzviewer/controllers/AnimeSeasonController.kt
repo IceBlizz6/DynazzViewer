@@ -1,7 +1,7 @@
 package dynazzviewer.controllers
 
-import dynazzviewer.base.AnimeSeasonFlagState
-import dynazzviewer.base.ExtDatabase
+import dynazzviewer.entities.AnimeSeasonFlagState
+import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.filesystem.FileConfiguration
 import dynazzviewer.services.descriptors.jikan.JikanApi
 import dynazzviewer.services.descriptors.jikan.MalType
