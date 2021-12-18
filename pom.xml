@@ -21,6 +21,7 @@
         <kotlin-coroutines.version>1.5.2-native-mt</kotlin-coroutines.version>
         <ktlint.version>1.11.2</ktlint.version>
         <enforcer.version>3.0.0-M3</enforcer.version>
+        <querydsl.version>5.0.0</querydsl.version>
 
         <jvm.target>1.8</jvm.target>
         <maven.compiler.target>11</maven.compiler.target>
