@@ -13,7 +13,7 @@
 				/>
 			</ul>
 		</section>
-		<b-modal
+		<o-modal
 			v-model:active="activeModal"
 			class="link-modal"
 			width="80%"
@@ -23,7 +23,7 @@
 				:detected-file-results="detectedFileResults"
 				@finalized="closeModal"
 			/>
-		</b-modal>
+		</o-modal>
 	</article>
 </template>
 

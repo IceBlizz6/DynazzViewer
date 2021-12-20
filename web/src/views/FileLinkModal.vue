@@ -41,12 +41,12 @@
 					</td>
 				</tr>
 			</table>
-			<b-button
+			<o-button
 				class="next-button"
 				@click="moveToQuerySelection"
 			>
 				NEXT
-			</b-button>
+			</o-button>
 		</section>
 
 		<section v-if="modalState == 2">
@@ -61,12 +61,12 @@
 				</li>
 			</ul>
 			<template v-if="!querying">
-				<b-button @click="useMyLibrary">
+				<o-button @click="useMyLibrary">
 					My library
-				</b-button>
-				<b-button @click="useMyAnimeList">
+				</o-button>
+				<o-button @click="useMyAnimeList">
 					MyAnimeList
-				</b-button>
+				</o-button>
 			</template>
 		</section>
 
@@ -79,7 +79,7 @@
 					:key="result.mediaName.mediaName"
 				>
 					{{ result.mediaName.mediaName }}
-					<b-select v-model="result.selectedResult">
+					<o-select v-model="result.selectedResult">
 						<option
 							v-for="(opt, index) in result.results"
 							:key="index"
@@ -87,12 +87,12 @@
 						>
 							{{ opt.name }} ({{ opt.extDbCode }}:{{ opt.extDbCode }})
 						</option>
-					</b-select>
+					</o-select>
 				</li>
 			</ul>
-			<b-button @click="finalizeSelection">
+			<o-button @click="finalizeSelection">
 				Finalize
-			</b-button>
+			</o-button>
 		</section>
 	</article>
 </template>

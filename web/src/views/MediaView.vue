@@ -8,7 +8,7 @@
 				@click="selectSeries(mediaItem)"
 			/>
 		</article>
-		<b-modal v-model:active="activeModal">
+		<o-modal v-model:active="activeModal">
 			<article
 				v-if="selected != null"
 				class="series-modal"
@@ -92,7 +92,7 @@
 					</section>
 				</div>
 			</article>
-		</b-modal>
+		</o-modal>
 	</article>
 </template>
 
