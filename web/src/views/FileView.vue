@@ -264,11 +264,14 @@ export default class FileView extends Vue {
 
 .toolbar-action {
 	visibility: hidden;
+	border-style: solid;
+	border-color: transparent;
 }
 
 .toolbar-action:hover {
 	cursor: pointer;
 	border-style: solid;
+	border-color: var(--primary);
 }
 
 .tree-item-header:hover .toolbar-action {

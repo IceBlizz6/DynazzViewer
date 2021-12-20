@@ -6,7 +6,7 @@
 					class="tree-icon"
 					src="@/assets/FolderContentAvailable.png"
 				>
-				<span>{{ label }}</span>
+				<span class="tree-item-name">{{ label }}</span>
 			</span>
 			<span
 				class="toolbar-action"
@@ -72,9 +72,9 @@
 						src="@/assets/Link.png"
 					>
 
-					<span>{{ node.videoFile.fileName.name }}</span>
+					<span class="tree-item-name">{{ node.videoFile.fileName.name }}</span>
 					<span
-						class="toolbar-action"
+						class="toolbar-action toolbar-action-play"
 						@click="playVideo(node)"
 					>
 						<o-tooltip
@@ -87,7 +87,6 @@
 							>
 						</o-tooltip>
 					</span>
-					<span class="toolbar-action"> | </span>
 					<span
 						class="toolbar-action"
 						@click="setStatusViewed(node)"
@@ -130,9 +129,8 @@
 							>
 						</o-tooltip>
 					</span>
-					<span class="toolbar-action"> | </span>
 					<span
-						class="toolbar-action"
+						class="toolbar-action toolbar-action-exporer"
 						@click="showExplorer(node)"
 					>
 						<o-tooltip
@@ -260,8 +258,24 @@ export default class FileTree extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 .file-node:hover {
 	background-color: var(--primary-invert-highlight);
+}
+
+:root {
+	--toolbar-item-margin: 10px;
+}
+
+.tree-item-name {
+	padding-left: 10px;
+}
+
+.toolbar-action-exporer {
+	margin-left: var(--toolbar-item-margin);
+}
+
+.toolbar-action-play {
+	margin-right: var(--toolbar-item-margin);
 }
 </style>
