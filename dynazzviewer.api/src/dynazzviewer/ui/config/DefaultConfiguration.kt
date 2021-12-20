@@ -12,7 +12,7 @@ class DefaultConfiguration(
         const val cacheDirectory = "cache"
         const val userDirectory = "user"
         const val configPropertiesFileName = "config.properties"
-        const val clientOrigin: String = "http://localhost:8080"
+        const val clientOrigin: String = "http://localhost:3000"
         private const val listSeparator = "|"
     }
 
