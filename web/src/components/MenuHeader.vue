@@ -29,18 +29,25 @@ header {
 	left: 0;
 	right: 0;
 	background-color: var(--primary-invert);
-	padding-bottom: 5px;
-	padding-left: 20px;
-	border-style: solid;
+	padding-bottom: 0px;
+	padding-left: 30px;
+	border-bottom: solid;
+	border-bottom-color: var(--primary-invert-highlight);
 }
 
 header a {
+	display: block;
+	float: left;
 	padding-left: 10px;
 	padding-right: 10px;
+	font-size: 1.2em;
+	padding-top: 15px;
+	padding-bottom: 15px;
+
+	margin-bottom: 0;
 }
 
 header a:hover {
-	background-color: var(--primary);
-	color: var(--primary-invert);
+	background-color: var(--primary-invert-highlight);
 }
 </style>

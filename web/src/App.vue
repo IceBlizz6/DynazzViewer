@@ -22,7 +22,7 @@ export default class App extends Vue {
 
 <style>
 main {
-	margin-top: 30px;
+	margin-top: 80px;
 }
 
 :root {
