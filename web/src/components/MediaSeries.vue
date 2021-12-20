@@ -23,7 +23,6 @@
 <script lang="ts">
 import { Vue } from "vue-class-component"
 import moment from 'moment'
-import MediaView from '@/views/MediaView.vue'
 import { ViewStatus } from "@/zeus"
 import { Prop } from "vue-property-decorator"
 import { MediaUnit } from "@/lib/Queries"
