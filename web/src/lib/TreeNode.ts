@@ -11,11 +11,11 @@ export class TreeNode {
 		public videoFile: VideoFile | null
 	) {}
 
-	public static videoFileNode(videoFile: VideoFile) {
+	public static videoFileNode(videoFile: VideoFile): TreeNode {
 		return new TreeNode(videoFile.fileName.name, null, videoFile)
 	}
 
-	public static directoryNode(name: string) {
+	public static directoryNode(name: string): TreeNode {
 		return new TreeNode(name, [], null)
 	}
 }

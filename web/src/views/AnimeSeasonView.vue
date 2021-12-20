@@ -119,7 +119,8 @@
 
 <script lang="ts">
 import { Vue } from 'vue-property-decorator'
-import { AnimeSeasonFlagState, MalYearSeason, ExtDatabase } from '@/zeus'
+import { AnimeSeasonFlagState, MalYearSeason, ExtDatabase, Gql } from '@/zeus'
+import queries, { AnimeSeasonSeries, MalSeasonIdentifier } from "@/lib/Queries"
 
 export default class AnimeSeasonView extends Vue {
 	private seasonHeaders: MalSeasonIdentifier[] = []
@@ -142,47 +143,14 @@ export default class AnimeSeasonView extends Vue {
 		this.refreshHeaders()
 	}
 
-	private refreshHeaders(): void {
-		graphClient.query(
-			{
-				animeSeasonList: {
-					year: 1,
-					season: 1,
-				}
-			},
-			data => {
-				const seasonList = data.animeSeasonList
-				this.seasonHeaders = seasonList
-			}
-		)
+	private async refreshHeaders(): Promise<void> {
+		const seasonList = await queries.animeSeasonList()
+		this.seasonHeaders = seasonList.animeSeasonList
 	}
 
-	private querySelectedSeries(item: MalSeasonIdentifier): void {
-		graphClient.query(
-			{
-				animeSeason: [
-					{ 
-						year: item.year, 
-						season: item.season 
-					}, 
-					{
-						malId: 1,
-						title: 1,
-						flag: 1,
-						imageUrl: 1,
-						url: 1,
-						episodes: 1,
-						score: 1,
-						type: 1,
-						saved: 1
-					}
-				]
-			},
-			data => {
-				const results = data.animeSeason
-				this.selectedSeriesList = results
-			}
-		)
+	private async querySelectedSeries(item: MalSeasonIdentifier): Promise<void> {
+		const { animeSeason } = await queries.animeSeasonSeries(item.year, item.season)
+		this.selectedSeriesList = animeSeason
 	}
 
 	private flagWatch(item: AnimeSeasonSeries): void {
@@ -197,18 +165,17 @@ export default class AnimeSeasonView extends Vue {
 		this.setFlagState(item, AnimeSeasonFlagState.None)
 	}
 
-	private setFlagState(item: AnimeSeasonSeries, state: AnimeSeasonFlagState): void {
-		graphClient.mutation(
-			{
-				animeSeasonMark: [{ malId: item.malId, flag: state }]
-			},
-			data => {
-				const success = data.animeSeasonMark
-				if (success) {
-					item.flag = state
-				}
-			}
-		)
+	private async setFlagState(item: AnimeSeasonSeries, state: AnimeSeasonFlagState): Promise<void> {
+		const data = await Gql("mutation")({
+			animeSeasonMark: [
+				{ malId: item.malId, flag: state },
+				true
+			]
+		})
+		const success = data.animeSeasonMark
+		if (success) {
+			item.flag = state
+		}
 	}
 
 	private get seriesFilteredList(): AnimeSeasonSeries[] {
@@ -243,40 +210,39 @@ export default class AnimeSeasonView extends Vue {
 		}
 	}
 
-	private addAnimeSeason(): void {
+	private async addAnimeSeason(): Promise<void> {
 		if (this.yearInput == null) {
 			console.error("Missing year")
 		} else {
-			graphClient.mutation(
-				{
-					animeSeasonAdd: [
-						{ year: this.yearInput, season: this.seasonInput }
-					]
-				},
-				data => {
-					const success = data.animeSeasonAdd
-					if (success) {
-						this.selected = null
-						this.selectedSeriesList = []
-						this.refreshHeaders()
-					}
-				}
-			)
+			const { animeSeasonAdd } = await Gql("mutation")({
+				animeSeasonAdd: [
+					{ year: this.yearInput, season: this.seasonInput },
+					true
+				]
+			})
+			const success = animeSeasonAdd
+			if (success) {
+				this.selected = null
+				this.selectedSeriesList = []
+				this.refreshHeaders()
+			}
 		}
 	}
 
-	private addMediaSeries(item: AnimeSeasonSeries): void {
-		graphClient.mutation(
-			{
-				externalMediaAdd: [{ db: ExtDatabase.MyAnimeList, code: item.malId.toString() }]
-			},
-			data => {
-				const success: boolean = data.externalMediaAdd
-				if (success) {
-					item.saved = true
-				}
-			}
-		)
+	private async addMediaSeries(item: AnimeSeasonSeries): Promise<void> {
+		const { externalMediaAdd } = await Gql("mutation")({
+			externalMediaAdd: [
+				{
+					db: ExtDatabase.MyAnimeList,
+					code: item.malId.toString(),
+				},
+				true
+			]
+		})
+		const success: boolean = externalMediaAdd
+		if (success) {
+			item.saved = true
+		}
 	}
 }
 </script>

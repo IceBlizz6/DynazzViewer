@@ -47,11 +47,11 @@ const router = createRouter(
 )
 
 export class RouterHandler {
-	static currentPath(app: Vue) {
+	private static currentPath(app: Vue): string {
 		return app.$route.path
 	}
 
-	static navigate(app: Vue, path: string) {
+	public static navigate(app: Vue, path: string): void {
 		const current = RouterHandler.currentPath(app)
 		if (current != path) {
 			app.$router.push(path)

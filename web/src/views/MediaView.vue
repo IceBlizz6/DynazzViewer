@@ -97,7 +97,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { Chain, Gql, ViewStatus, ZeusHook } from '@/zeus'
+import { Gql, ViewStatus } from '@/zeus'
 import MediaSeries from '@/components/MediaSeries.vue'
 import numeral from 'numeral'
 import queries, { MediaUnit, MediaPart } from "@/lib/Queries"

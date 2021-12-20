@@ -248,7 +248,7 @@ export default class FileLinkModal extends Vue {
 	}
 
 	private async finalizeSelection(): Promise<void> {
-		const success = await this.addUnsavedMedia()
+		await this.addUnsavedMedia()
 		for (const result of this.queryResults) {
 			if (result.selectedResult != null) {
 				const selectedResult = result.selectedResult
