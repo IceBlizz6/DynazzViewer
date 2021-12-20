@@ -5,6 +5,7 @@
 				v-for="mediaItem in source"
 				:key="mediaItem.id"
 				:source="mediaItem"
+				@click="selectSeries(mediaItem)"
 			/>
 		</article>
 		<b-modal v-model:active="activeModal">

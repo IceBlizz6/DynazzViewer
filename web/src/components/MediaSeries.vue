@@ -1,7 +1,6 @@
 <template>
 	<section
 		class="series-item"
-		@click="selectSeries"
 	>
 		<span class="series-header">{{ source.name }}</span>
 		<div class="series-img">
@@ -32,15 +31,6 @@ import { MediaUnit } from "@/lib/Queries"
 export default class MediaSeries extends Vue {
 	@Prop({ required: true })
 	public readonly source!: MediaUnit
-
-	private selectSeries(): void {
-		const parent = this.$parent
-		if (parent instanceof MediaView) {
-			parent.selectSeries(this.source)
-		} else {
-			throw new Error("Unknown parent: " + parent)
-		}
-	}
 
 	private get episodesWatched(): number {
 		return this.source.children
