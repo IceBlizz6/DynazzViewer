@@ -29,6 +29,7 @@
 				:parent-node="node"
 				:nodes="node.children"
 				:label="node.name"
+				:file-view="fileView"
 			/>
 			<li
 				v-for="node in childrenFiles"
@@ -134,6 +135,9 @@ export default class FileTree extends Vue {
 	@Prop({ required: true })
 	private readonly parentNode!: TreeNode
 
+	@Prop({ required: true })
+	private readonly fileView!: FileView
+
 	private showChildren = true
 	
 	private get childrenDirectories(): TreeNode[] {
@@ -170,7 +174,7 @@ export default class FileTree extends Vue {
 		if (node.videoFile == null) {
 			throw new Error("Node is not a video file")
 		} else {
-			this.parentFileView.showExplorer(node.videoFile)
+			this.fileView.showExplorer(node.videoFile)
 		}
 	}
 
@@ -187,14 +191,14 @@ export default class FileTree extends Vue {
 	}
 
 	private setViewed(node: TreeNode, status: ViewStatus): void {
-		this.parentFileView.setViewed(node, status)
+		this.fileView.setViewed(node, status)
 	}
 
 	private playVideo(node: TreeNode): void {
 		if (node.videoFile == null) {
 			throw new Error("Node is not a video")
 		} else {
-			this.parentFileView.playVideo(node.videoFile)
+			this.fileView.playVideo(node.videoFile)
 		}
 	}
 
@@ -205,25 +209,12 @@ export default class FileTree extends Vue {
 			const videoFiles = node.children
 				.map(el => el.videoFile)
 				.filter(this.notEmpty)
-				
-			const parent = this.parentFileView
-			parent.detectLink(videoFiles)
+			this.fileView.detectLink(videoFiles)
 		}
 	}
 
 	public notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
 		return value !== null && value !== undefined
-	}
-
-	private get parentFileView(): FileView {
-		const parent = this.$parent
-		if (parent instanceof FileView) {
-			return parent
-		} else if (parent instanceof FileTree) {
-			return parent.parentFileView
-		} else {
-			throw new Error("Unknown parent: " + parent)
-		}
 	}
 }
 </script>

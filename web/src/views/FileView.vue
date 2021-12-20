@@ -9,6 +9,7 @@
 					:parent-node="root"
 					:label="root.name"
 					:nodes="root.children"
+					:file-view="fileView"
 				/>
 			</ul>
 		</section>
@@ -84,6 +85,10 @@ export default class FileView extends Vue {
 		if (!showExplorer) {
 			throw new Error("Request failed")
 		}
+	}
+
+	private get fileView(): FileView {
+		return this
 	}
 	
 	private lookupChildren(parent: TreeNode, childName: string): TreeNode {
