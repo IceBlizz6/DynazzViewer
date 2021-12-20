@@ -2,16 +2,16 @@
 	<header>
 		<router-link to="/">
 			Files
-		</router-link> |
+		</router-link>
 		<router-link to="/media">
 			Media
-		</router-link> |
+		</router-link>
 		<router-link to="/media-search">
 			Search
-		</router-link> |
+		</router-link>
 		<router-link to="/anime-season">
 			Anime seasons
-		</router-link> |
+		</router-link>
 	</header>
 </template>
 
