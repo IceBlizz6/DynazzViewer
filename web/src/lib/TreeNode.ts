@@ -1,18 +1,18 @@
 import { VideoFile } from "@/lib/Queries"
 
 export class TreeNode {
-	public name: string
-	public children: TreeNode[] | null
-	public videoFile: VideoFile | null
+	private static idCounter = 1
 
-	private constructor(name: string, children: TreeNode[] | null, videoFile: VideoFile | null) {
-		this.name = name
-		this.children = children
-		this.videoFile = videoFile
-	}
+	public localId = TreeNode.idCounter++
+
+	private constructor(
+		public name: string,
+		public children: TreeNode[] | null,
+		public videoFile: VideoFile | null
+	) {}
 
 	public static videoFileNode(videoFile: VideoFile) {
-		return new TreeNode(videoFile.fileName!.name, null, videoFile)
+		return new TreeNode(videoFile.fileName.name, null, videoFile)
 	}
 
 	public static directoryNode(name: string) {

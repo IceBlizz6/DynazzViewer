@@ -18,8 +18,11 @@
 				:label="node.name"
 				:key="node.name">
 			</FileTree>
-			<li v-for="node in childrenFiles" :key="node.videoFile.fileName.name">
-				<div class="tree-item-header file-node">
+			<li v-for="node in childrenFiles" :key="node.localId">
+				<div
+					v-if="node.videoFile != null"
+					class="tree-item-header file-node"
+				>
 					<img v-if="node.videoFile.viewStatus == 'None'" class="tree-icon" src="@/assets/videofiles/Neutral.png">
 					<img v-if="node.videoFile.viewStatus == 'Viewed'" class="tree-icon" src="@/assets/videofiles/Viewed.png">
 					<img v-if="node.videoFile.viewStatus == 'Skipped'" class="tree-icon" src="@/assets/videofiles/Skipped.png">
@@ -73,7 +76,11 @@ export default class FileTree extends Vue {
 	private showChildren = true
 	
 	private get childrenDirectories(): TreeNode[] {
-		return this.nodes.filter(el => el.children != null).sort((a: TreeNode, b: TreeNode) => (a.name > b.name)? 1 : -1)
+		return this.nodes
+			.filter(el => el.children != null)
+			.sort(
+				(a: TreeNode, b: TreeNode) => (a.name > b.name)? 1 : -1
+			)
 	}
 
 	private get childrenFiles(): TreeNode[] {
