@@ -34,7 +34,7 @@
 		<section>
 			<ul>
 				<li
-					v-for="seasonHeader in seasonHeaders"
+					v-for="seasonHeader in orderedSeasonHeader"
 					:key="`${seasonHeader.year}-${seasonHeader.season}`"
 					class="season-header"
 					@click="selectHeader(seasonHeader)"
@@ -152,6 +152,26 @@ export default class AnimeSeasonView extends Vue {
 	private async refreshHeaders(): Promise<void> {
 		const seasonList = await queries.animeSeasonList()
 		this.seasonHeaders = seasonList.animeSeasonList
+	}
+
+	private get orderedSeasonHeader(): MalSeasonIdentifier[] {
+		const seasonOrder: MalYearSeason[] = [
+			MalYearSeason.WINTER,
+			MalYearSeason.SPRING,
+			MalYearSeason.SUMMER,
+			MalYearSeason.FALL
+		]
+		return this.seasonHeaders.sort(
+			(a, b): number => {
+				if (a.year != b.year) {
+					return a.year - b.year
+				} else {
+					const aIndex = seasonOrder.indexOf(a.season) 
+					const bIndex = seasonOrder.indexOf(b.season) 
+					return aIndex - bIndex
+				}
+			}
+		)
 	}
 
 	private async querySelectedSeries(item: MalSeasonIdentifier): Promise<void> {
