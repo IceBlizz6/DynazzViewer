@@ -10,6 +10,7 @@
 					:label="root.name"
 					:nodes="root.children"
 					:file-view="fileView"
+					:is-root="true"
 				/>
 			</ul>
 		</section>
@@ -35,6 +36,7 @@ import FileTree from "@/components/FileTree.vue"
 import FileLinkModal from "@/views/FileLinkModal.vue"
 import { FileLinkRow } from "@/lib/FileLinkRow"
 import queries, { VideoFile } from "@/lib/Queries"
+import { ListFunc } from "@/lib/ListFunc"
 
 @Options({
 	components: {
@@ -89,6 +91,39 @@ export default class FileView extends Vue {
 
 	private get fileView(): FileView {
 		return this
+	}
+
+	private videoFilesFromParent(node: TreeNode): VideoFile[] {
+		if (node.videoFile != null) {
+			return [ node.videoFile ]
+		} else if (node.children != null) {
+			return node.children.flatMap(e => this.videoFilesFromParent(e))
+		} else {
+			return []
+		}
+	}
+
+	public async removeRoot(node: TreeNode): Promise<void> {
+		const included = this.roots.includes(node)
+		if (!included) {
+			throw new Error("Node is not a root directory")
+		} else {
+			const { removeRootDirectory } = await Gql("mutation")({
+				removeRootDirectory: [
+					{
+						rootPath: node.name
+					},
+					true
+				]
+			})
+			if (!removeRootDirectory) {
+				throw new Error("Unable to remove root directory")
+			} else {
+				ListFunc.remove(this.roots, node)
+				const videoFiles = this.videoFilesFromParent(node)
+				this.videoFiles = this.videoFiles.filter(e => !videoFiles.includes(e))
+			}
+		}
 	}
 	
 	private lookupChildren(parent: TreeNode, childName: string): TreeNode {

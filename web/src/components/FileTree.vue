@@ -18,6 +18,17 @@
 				>
 				Detect/Link
 			</span>
+			<span
+				v-if="isRoot"
+				class="toolbar-action"
+				@click="removeRoot"
+			>
+				<img
+					class="tree-icon"
+					src="@/assets/Remove.png"
+				>
+				Remove
+			</span>
 		</div>
 		<ul
 			v-if="showChildren"
@@ -30,6 +41,7 @@
 				:nodes="node.children"
 				:label="node.name"
 				:file-view="fileView"
+				:is-root="false"
 			/>
 			<li
 				v-for="node in childrenFiles"
@@ -138,6 +150,9 @@ export default class FileTree extends Vue {
 	@Prop({ required: true })
 	private readonly fileView!: FileView
 
+	@Prop({ required: true })
+	private readonly isRoot!: boolean
+
 	private showChildren = true
 	
 	private get childrenDirectories(): TreeNode[] {
@@ -160,6 +175,10 @@ export default class FileTree extends Vue {
 					}
 				}
 			)
+	}
+
+	private removeRoot(): void {
+		this.fileView.removeRoot(this.parentNode)
 	}
 
 	private isLinked(videoFile: VideoFile): boolean {
