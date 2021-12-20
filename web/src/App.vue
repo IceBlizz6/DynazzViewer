@@ -57,6 +57,8 @@ body {
 }
 
 p, a, dt, dd, span, li, h1 {
-	color: var(--primary)
+	color: var(--primary);
+	font-size: 1.05em;
+	
 }
 </style>
