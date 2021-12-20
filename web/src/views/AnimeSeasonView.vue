@@ -33,7 +33,7 @@
 				<li
 					v-for="seasonHeader in seasonHeaders"
 					:key="`${seasonHeader.year}-${seasonHeader.season}`"
-					class="seasonHeader"
+					class="season-header"
 					@click="selectHeader(seasonHeader)"
 				>
 					{{ seasonHeader.year }} - {{ seasonHeader.season }}
@@ -62,22 +62,22 @@
 				>
 				<label>None</label>
 			</div>
-			<ul class="selectedSeriesList">
+			<ul class="selected-series-list">
 				<li
 					v-for="series in seriesFilteredList"
 					:key="series.malId" 
-					class="seriesItem"
+					class="series-item"
 				>
 					<a
-						class="seriesTitle" 
+						class="series-title" 
 						target="_blank" 
 						:href="series.url"
 					>{{ series.title }}</a>
 					<img
-						class="seriesImage"
+						class="series-image"
 						:src="series.imageUrl"
 					>
-					<dl class="seriesInfo">
+					<dl class="series-info">
 						<dt>ID</dt>
 						<dd>{{ series.malId }}</dd>
 						<dt>Episodes</dt>
@@ -89,7 +89,7 @@
 						<dt>Flag</dt>
 						<dd>{{ series.flag }}</dd>
 					</dl>
-					<div class="seriesAction">
+					<div class="series-action">
 						<button @click="flagWatch(series)">
 							Watch
 						</button>
@@ -253,20 +253,20 @@ export default class AnimeSeasonView extends Vue {
 	margin-left: 15px;
 }
 
-.seasonHeader {
+.season-header {
 	background-color: aliceblue;
 }
 
-.seasonHeader:hover {
+.season-header:hover {
 	background-color: lightblue;
 }
 
-.selectedSeriesList {
+.selected-series-list {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(200px, 500px));
 }
 
-.seriesItem {
+.series-item {
 	background-color: whitesmoke;
 	border-style: solid;
 	display: grid;
@@ -279,24 +279,22 @@ export default class AnimeSeasonView extends Vue {
 	margin: 10px;
 }
 
-.seriesTitle {
+.series-title {
 	grid-column: 2;
 	grid-row: 1;
 }
 
-.seriesImage {
+.series-image {
 	grid-column: 1;
-	grid-row-start: 1;
-	grid-row-end: 3;
+	grid-row: 1 / 3;
 }
 
-.seriesInfo {
+.series-info {
 	grid-column: 2;
-	grid-row-start: 2;
-	grid-row-end: 3;
+	grid-row: 2 / 3;
 }
 
-.seriesAction {
+.series-action {
 	grid-column: 1;
 	grid-row: 3;
 }
@@ -308,6 +306,6 @@ dt {
 
 dd {
 	margin: 0;
-	padding: 0 0 0.5em 0;
+	padding: 0 0 0.5em;
 }
 </style>

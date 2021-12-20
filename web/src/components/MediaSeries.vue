@@ -57,35 +57,34 @@ export default class MediaSeries extends Vue {
 <style scoped>
 .series-header {
 	font-size: 20px;
-    grid-column: 2;
-    grid-row: 1;
+	grid-column: 2;
+	grid-row: 1;
 }
 
 .series-img {
-    grid-column: 1;
-    grid-row-start: 1;
-    grid-row-end: 2;
+	grid-column: 1;
+	grid-row: 1 / 2;
 }
 
 .series-details {
-    grid-column: 2;
-    grid-row: 2;
+	grid-column: 2;
+	grid-row: 2;
 }
 
 .series-item {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: 10% 1fr;
-    column-gap: 10px;
-    padding: 5px;
+	display: grid;
+	grid-template-columns: 50% 50%;
+	grid-template-rows: 10% 1fr;
+	column-gap: 10px;
+	padding: 5px;
 	background-color: whitesmoke;
 	margin: 10px;
-    border-style: solid;
+	border-style: solid;
 	border-color: gray;
 }
 
 .series-item:hover {
-    background-color: aliceblue;
+	background-color: aliceblue;
 	border-style: solid;
 	border-color: darkblue;
 }

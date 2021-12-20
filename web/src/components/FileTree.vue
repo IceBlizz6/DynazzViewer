@@ -77,7 +77,10 @@
 						class="toolbar-action"
 						@click="playVideo(node)"
 					>
-						<o-tooltip label="Play video" position="top">
+						<o-tooltip
+							label="Play video"
+							position="top"
+						>
 							<img
 								class="tree-icon"
 								src="@/assets/videofiles/Play.png"
@@ -89,7 +92,10 @@
 						class="toolbar-action"
 						@click="setStatusViewed(node)"
 					>
-						<o-tooltip label="Flag viewed" position="top">
+						<o-tooltip
+							label="Flag viewed"
+							position="top"
+						>
 							<img
 								class="tree-icon"
 								src="@/assets/videofiles/Viewed.png"
@@ -100,7 +106,10 @@
 						class="toolbar-action"
 						@click="setStatusSkipped(node)"
 					>
-						<o-tooltip label="Flag skipped" position="top">
+						<o-tooltip
+							label="Flag skipped"
+							position="top"
+						>
 							<img
 								class="tree-icon"
 								src="@/assets/videofiles/Skipped.png"
@@ -111,7 +120,10 @@
 						class="toolbar-action"
 						@click="setStatusNone(node)"
 					>
-						<o-tooltip label="Reset status" position="top">
+						<o-tooltip
+							label="Reset status"
+							position="top"
+						>
 							<img
 								class="tree-icon"
 								src="@/assets/Undo.png"
@@ -123,7 +135,10 @@
 						class="toolbar-action"
 						@click="showExplorer(node)"
 					>
-						<o-tooltip label="Show in explorer" position="top">
+						<o-tooltip
+							label="Show in explorer"
+							position="top"
+						>
 							<img
 								class="tree-icon"
 								src="@/assets/FolderOpen.png"

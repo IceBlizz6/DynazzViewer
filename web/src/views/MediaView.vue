@@ -165,7 +165,7 @@ export default class MediaView extends Vue {
 }
 
 .series-modal {
-	background-color:white;
+	background-color: white;
 	padding: 20px;
 	overflow-y: auto;
 }
