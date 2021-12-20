@@ -276,7 +276,6 @@ export default class FileView extends Vue {
 }
 
 .modal-body {
-	background-color: whitesmoke;
 	padding-left: 25px;
 	min-width: 90%;
 }
@@ -303,5 +302,4 @@ export default class FileView extends Vue {
 .result-section {
 	padding-bottom: 25px;
 }
-
 </style>
