@@ -77,51 +77,58 @@
 						class="toolbar-action"
 						@click="playVideo(node)"
 					>
-						<img
-							class="tree-icon"
-							src="@/assets/videofiles/Play.png"
-						>
-						Play
+						<o-tooltip label="Play video" position="top">
+							<img
+								class="tree-icon"
+								src="@/assets/videofiles/Play.png"
+							>
+						</o-tooltip>
 					</span>
-					<span
-						class="toolbar-action"
-						@click="setStatusNone(node)"
-					>
-						<img
-							class="tree-icon"
-							src="@/assets/videofiles/Neutral.png"
-						>
-						Undo
-					</span>
+					<span class="toolbar-action"> | </span>
 					<span
 						class="toolbar-action"
 						@click="setStatusViewed(node)"
 					>
-						<img
-							class="tree-icon"
-							src="@/assets/videofiles/Viewed.png"
-						>
-						Viewed
+						<o-tooltip label="Flag viewed" position="top">
+							<img
+								class="tree-icon"
+								src="@/assets/videofiles/Viewed.png"
+							>
+						</o-tooltip>
 					</span>
 					<span
 						class="toolbar-action"
 						@click="setStatusSkipped(node)"
 					>
-						<img
-							class="tree-icon"
-							src="@/assets/videofiles/Skipped.png"
-						>
-						Skipped
+						<o-tooltip label="Flag skipped" position="top">
+							<img
+								class="tree-icon"
+								src="@/assets/videofiles/Skipped.png"
+							>
+						</o-tooltip>
 					</span>
+					<span
+						class="toolbar-action"
+						@click="setStatusNone(node)"
+					>
+						<o-tooltip label="Reset status" position="top">
+							<img
+								class="tree-icon"
+								src="@/assets/Undo.png"
+							>
+						</o-tooltip>
+					</span>
+					<span class="toolbar-action"> | </span>
 					<span
 						class="toolbar-action"
 						@click="showExplorer(node)"
 					>
-						<img
-							class="tree-icon"
-							src="@/assets/FolderOpen.png"
-						>
-						Show
+						<o-tooltip label="Show in explorer" position="top">
+							<img
+								class="tree-icon"
+								src="@/assets/FolderOpen.png"
+							>
+						</o-tooltip>
 					</span>
 				</div>
 			</li>

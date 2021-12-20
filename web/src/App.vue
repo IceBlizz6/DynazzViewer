@@ -24,4 +24,9 @@ export default class App extends Vue {
 main {
 	margin-top: 30px;
 }
+
+:root {
+	--oruga-tooltip-background-color: red;
+	--oruga-tooltip-color: white;
+}
 </style>
