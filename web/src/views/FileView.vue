@@ -25,6 +25,10 @@
 				@finalized="closeModal"
 			/>
 		</o-modal>
+
+		<o-button @click="addRoot">
+			Add
+		</o-button>
 	</article>
 </template>
 
@@ -73,6 +77,12 @@ export default class FileView extends Vue {
 
 	private closeModal(): void {
 		this.activeModal = false
+	}
+
+	private addRoot(): void {
+		Gql("mutation")({
+			addRootDirectoryInteractively: true
+		})
 	}
 
 	public async showExplorer(node: VideoFile): Promise<void> {

@@ -4,6 +4,7 @@ import dynazzviewer.entities.ViewStatus
 import dynazzviewer.files.FileNameDetector
 import io.leangen.graphql.annotations.GraphQLMutation
 import io.leangen.graphql.annotations.GraphQLQuery
+import javax.swing.JFileChooser
 
 class FileSystemGraph(
     private val controller: FileSystemController
@@ -17,6 +18,17 @@ class FileSystemGraph(
     @GraphQLMutation
     fun setViewStatus(videoFilePaths: Set<String>, status: ViewStatus): Map<String, Int> {
         return controller.setViewStatus(videoFilePaths, status)
+    }
+
+    @GraphQLMutation
+    fun addRootDirectoryInteractively() {
+        val fileChooser = JFileChooser()
+        fileChooser.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
+        val option = fileChooser.showOpenDialog(null)
+        if (option == JFileChooser.APPROVE_OPTION) {
+            val file = fileChooser.selectedFile
+            addRootDirectory(file.path)
+        }
     }
 
     @GraphQLMutation
