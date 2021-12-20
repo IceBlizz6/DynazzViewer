@@ -123,7 +123,6 @@ export default class MediaSearchView extends Vue {
 	}
 
 	private async query(): Promise<void> {
-		this.searchStatus = "Search complete"
 		const response = await Gql("query")({
 			externalMediaSearch: [
 				{
@@ -139,6 +138,7 @@ export default class MediaSearchView extends Vue {
 				}
 			]
 		})
+		this.searchStatus = "Search complete"
 		const rawResults = response.externalMediaSearch
 		this.searchResults = rawResults.map(
 			el => new ResultHeaderItem(
