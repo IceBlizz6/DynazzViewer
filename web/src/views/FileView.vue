@@ -9,7 +9,7 @@
 				</FileTree>
 			</ul>
 		</section>
-		<b-modal :active.sync="activeModal" class="link-modal" width="80%" destroy-on-hide>
+		<b-modal v-model:active="activeModal" class="link-modal" width="80%" destroy-on-hide>
 			<FileLinkModal
 				:detectedFileResults="detectedFileResults"
 				@finalized="closeModal"
@@ -19,15 +19,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Options, Vue } from 'vue-property-decorator'
 import { TreeNode } from '@/lib/TreeNode'
-import graphClient from '@/lib/graph-client'
-import { VideoFile, ViewStatus, DetectedFileResult } from '@/graph/schema'
+import { Gql, ViewStatus } from '@/zeus'
 import FileTree from "@/components/FileTree.vue"
 import FileLinkModal from "@/views/FileLinkModal.vue"
 import { FileLinkRow } from "@/lib/FileLinkRow"
+import queries, { VideoFile } from "@/lib/Queries"
 
-@Component({
+@Options({
 	components: {
 		FileTree,
 		FileLinkModal
@@ -39,60 +39,43 @@ export default class FileView extends Vue {
 	private activeModal = false
 	private detectedFileResults: FileLinkRow[] = []
 
-	protected mounted(): void {
-		graphClient.query(
-			{
-				listVideoFiles: {
-					root: 1,
-					files: {
-						fileName: {
-							name: 1
-						},
-						filePath: {
-							path: 1
-						},
-						mediaFileId: 1,
-						viewStatus: 1,
-						linkedMediaPartId: 1,
-					}
-				}
-			},
-			data => {
-				const sourceVideoFiles = data.listVideoFiles
-				this.roots = sourceVideoFiles.map(el => this.filePathsToTree(el.root, el.files))
-				this.videoFiles = sourceVideoFiles.flatMap(el => el.files)
-			}
-		)
+	public async mounted(): Promise<void> {
+		const response = await queries.listVideoFiles()
+		const sourceVideoFiles = response.listVideoFiles
+		this.roots = sourceVideoFiles.map(el => this.filePathsToTree(el.root, el.files))
+		this.videoFiles = sourceVideoFiles.flatMap(el => el.files)
 	}
 
-	public playVideo(node: VideoFile): void {
-		graphClient.mutation(
-			{
-				playVideo: [{ path: node.filePath.path }]
-			},
-			data => {
-				if (!data.playVideo) {
-					throw new Error("Request failed")
-				}
-			}
-		)
+	public async playVideo(node: VideoFile): Promise<void> {
+		const success = await Gql("mutation")({
+			playVideo: [
+				{
+					path: node.filePath.path
+				},
+				true
+			]
+		})
+		if (!success) {
+			throw new Error("Unable to play video file")
+		}
 	}
 
 	private closeModal(): void {
 		this.activeModal = false
 	}
 
-	public showExplorer(node: VideoFile): void {
-		graphClient.mutation(
-			{
-				showExplorer: [{ path: node.filePath.path }]
-			},
-			data => {
-				if (!data.showExplorer) {
-					throw new Error("Request failed")
-				}
-			}
-		)
+	public async showExplorer(node: VideoFile): Promise<void> {
+		const { showExplorer } = await Gql("mutation")({
+			showExplorer: [
+				{
+					path: node.filePath.path
+				},
+				true
+			]
+		})
+		if (!showExplorer) {
+			throw new Error("Request failed")
+		}
 	}
 	
 	private lookupChildren(parent: TreeNode, childName: string): TreeNode {
@@ -111,36 +94,32 @@ export default class FileView extends Vue {
 		}
 	}
 
-	public detectLink(videoFiles: VideoFile[]): void {
+	public async detectLink(videoFiles: VideoFile[]): Promise<void> {
 		this.activeModal = false
-		graphClient.query(
-			{
-				parseFileNames: [
-					{
-						fileNames: videoFiles.map(el => el.fileName.name)
-					}, 
-					{
-						fileName: 1,
-						name: 1,
-						season: 1,
-						episode: 1
-					}
-				]
-			},
-			data => {
-				const fileResults = data.parseFileNames
-				this.detectedFileResults = videoFiles.map(videoFile => {
-					const videoFileName = videoFile.fileName.name
-					const match: DetectedFileResult | undefined = fileResults.find(el => el.fileName == videoFileName)
-					if (match != undefined) {
-						return new FileLinkRow(videoFileName, match.name, match.season, match.episode)
-					} else {
-						return new FileLinkRow(videoFileName, null, null, null)
-					}
-				}).sort((a, b) => (a.fileName > b.fileName) ? 1 : -1)
-				this.activeModal = true
+		const { parseFileNames } = await Gql("query")({
+			parseFileNames: [
+				{
+					fileNames: videoFiles.map(el => el.fileName.name)
+				}, 
+				{
+					fileName: true,
+					name: true,
+					season: true,
+					episode: true
+				}
+			]
+		})
+		const fileResults = parseFileNames
+		this.detectedFileResults = videoFiles.map(videoFile => {
+			const videoFileName = videoFile.fileName.name
+			const match = fileResults.find(el => el.fileName == videoFileName)
+			if (match != undefined) {
+				return new FileLinkRow(videoFileName, match.name, match.season ?? null, match.episode ?? null)
+			} else {
+				return new FileLinkRow(videoFileName, null, null, null)
 			}
-		)
+		}).sort((a, b) => (a.fileName > b.fileName) ? 1 : -1)
+		this.activeModal = true
 	}
 	
 	private pushNode(treeRoot: TreeNode, pathList: string[], childObject: VideoFile): void {
@@ -180,31 +159,27 @@ export default class FileView extends Vue {
 		return this.videoFiles.filter(el => el.fileName.name == nodeName)
 	}
 
-	public setViewed(node: TreeNode, updatedViewStatus: ViewStatus): void {
+	public async setViewed(node: TreeNode, updatedViewStatus: ViewStatus): Promise<void> {
 		if (node.videoFile == null) {
 			throw new Error("Node is not a video, may be a directory")
 		} else {
-			graphClient.mutation(
-				{
-					setViewStatus: [
-						{ 
-							status: updatedViewStatus,
-							videoFilePaths: [ node.videoFile.filePath.path ]
-						}
-					]
-				},
-				data => {
-					const responseItems: Map<string, number> = data.setViewStatus
-					for (const [fileName, mediaFileId] of Object.entries(responseItems)) {
-						const nodes: VideoFile[] = this.videoFilesByName(fileName)
-						for (const node of nodes) {
-							node.mediaFileId = mediaFileId
-							node.viewStatus = updatedViewStatus
-						}
-					}
-
+			const response = await Gql("mutation")({
+				setViewStatus: [
+					{
+						status: updatedViewStatus,
+						videoFilePaths: [ node.videoFile.filePath.path ]
+					},
+					true
+				]
+			})
+			const responseItems: Map<string, number> = response.setViewStatus
+			for (const [fileName, mediaFileId] of Object.entries(responseItems)) {
+				const nodes: VideoFile[] = this.videoFilesByName(fileName)
+				for (const node of nodes) {
+					node.mediaFileId = mediaFileId
+					node.viewStatus = updatedViewStatus
 				}
-			)
+			}
 		}
 	}
 }

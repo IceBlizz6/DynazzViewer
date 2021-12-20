@@ -76,11 +76,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { MalSeasonIdentifier, AnimeSeasonSeries, AnimeSeasonFlagState, MalYearSeason, ExtDatabase } from '@/graph/schema'
-import graphClient from '@/lib/graph-client'
+import { Vue } from 'vue-property-decorator'
+import { AnimeSeasonFlagState, MalYearSeason, ExtDatabase } from '@/zeus'
 
-@Component
 export default class AnimeSeasonView extends Vue {
 	private seasonHeaders: MalSeasonIdentifier[] = []
 	private selected: MalSeasonIdentifier | null = null
@@ -98,7 +96,7 @@ export default class AnimeSeasonView extends Vue {
 	private yearInput: number | null = null
 	private seasonInput: MalYearSeason = MalYearSeason.WINTER
 
-	protected mounted(): void {
+	public mounted(): void {
 		this.refreshHeaders()
 	}
 

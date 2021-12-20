@@ -53,20 +53,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop,  Vue } from 'vue-property-decorator'
-import { TreeNode } from '@/lib/TreeNode'
-import { ViewStatus, VideoFile } from '@/graph/schema'
-import FileView from '@/views/FileView.vue'
+import { Vue, Options } from "vue-class-component"
+import { Prop } from "vue-property-decorator"
+import { TreeNode } from "@/lib/TreeNode"
+import FileView from "@/views/FileView.vue"
+import { ViewStatus } from "@/zeus"
+import { VideoFile } from "@/lib/Queries"
 
-@Component
 export default class FileTree extends Vue {
-	@Prop({required: true})
+	@Prop({ required: true })
 	private readonly label!: string
 
-	@Prop({required: true})
+	@Prop({ required: true })
 	private readonly nodes!: TreeNode[]
 
-	@Prop({required: true})
+	@Prop({ required: true })
 	private readonly parentNode!: TreeNode
 
 	private showChildren = true

@@ -15,17 +15,17 @@
 	</section>
 </template>
 
-
 <script lang="ts">
-import { Component, Prop,  Vue } from 'vue-property-decorator'
-import { ViewStatus, MediaUnit } from '@/graph/schema'
+import { Vue } from "vue-class-component"
 import moment from 'moment'
 import MediaView from '@/views/MediaView.vue'
+import { ViewStatus } from "@/zeus"
+import { Prop } from "vue-property-decorator"
+import { MediaUnit } from "@/lib/Queries"
 
-@Component
 export default class MediaSeries extends Vue {
-	@Prop({required: true})
-	public source!: MediaUnit
+	@Prop({ required: true })
+	public readonly source!: MediaUnit
 
 	private selectSeries(): void {
 		const parent = this.$parent

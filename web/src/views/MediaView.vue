@@ -7,7 +7,7 @@
 				:source="mediaItem">
 			</MediaSeries>
 		</article>
-		<b-modal :active.sync="activeModal">
+		<b-modal v-model:active="activeModal">
 			<article class="series-modal" v-if="this.selected != null">
 				<div class="series-modal-img">
 					<img v-if="selected.images.length > 0" :src="selected.images[0].url">
@@ -48,13 +48,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import graphClient from '@/lib/graph-client'
-import { ViewStatus, MediaUnit, MediaPart } from '@/graph/schema'
+import { Options, Vue } from 'vue-class-component'
+import { Chain, Gql, ViewStatus, ZeusHook } from '@/zeus'
 import MediaSeries from '@/components/MediaSeries.vue'
 import numeral from 'numeral'
+import queries, { MediaUnit, MediaPart } from "@/lib/Queries"
 
-@Component({
+@Options({
 	components: {
 		MediaSeries
 	}
@@ -68,8 +68,10 @@ export default class MediaView extends Vue {
 	public stateViewed = ViewStatus.Viewed
 	public stateSkipped = ViewStatus.Skipped
 
-	protected mounted(): void {
-		this.mediaQuery()
+	public async mounted(): Promise<void> {
+		const response = await queries.listMediaUnits()
+		this.source = response.listMediaUnits
+		this.selected = null
 	}
 
 	private episodeFormat(value: number): string {
@@ -80,59 +82,29 @@ export default class MediaView extends Vue {
 		return mediaPart.mediaFile != null
 	}
 
-	private mediaQuery(): void {
-		graphClient.query(
-			{
-				listMediaUnits: {
-					id: 1,
-					name: 1,
-					images: {
-						url: 1
-					},
-					children: {
-						id: 1,
-						name: 1,
-						seasonNumber: 1,
-						sortOrder: 1,
-						children: {
-							id: 1,
-							episodeNumber: 1,
-							name: 1,
-							status: 1,
-							sortOrder: 1,
-							aired: 1,
-							mediaFile: {
-								id: 1,
-							}
-						}
-					}
-				}
-			},
-			data => {
-				this.source = data.listMediaUnits
-				this.selected = null
-			}
-		)
-	}
-
 	public selectSeries(item: MediaUnit): void {
 		this.selected = item
 		this.activeModal = true
 	}
 			
-	private setEpisodeWatch(episode: MediaPart, status: ViewStatus): void {
-		graphClient.mutation(
+	private async setEpisodeWatch(episode: MediaPart, status: ViewStatus): Promise<void> {
+		const response = await Gql("mutation")(
 			{
-				setEpisodeWatchState: [{ mediaPartId: episode.id, status: status }]
-			},
-			data => {
-				if (data.setEpisodeWatchState) {
-					episode.status = status
-				} else {
-					throw new Error("Operation failed")
-				}
+				setEpisodeWatchState: [
+					{
+						mediaPartId: episode.id,
+						status: status
+					},
+					true
+				]
 			}
 		)
+		const success = response
+		if (success) {
+			episode.status = status
+		} else {
+			throw new Error("Operation failed")
+		}
 	}
 }
 </script>

@@ -1,19 +1,17 @@
-import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
+import { Vue } from "vue-class-component"
+import { createWebHistory, createRouter, RouteRecordRaw } from "vue-router"
 import FileView from '@/views/FileView.vue'
 import MediaView from '@/views/MediaView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import MediaSearchView from '@/views/MediaSearchView.vue'
 import AnimeSeasonView from '@/views/AnimeSeasonView.vue'
 
-Vue.use(VueRouter)
-
 export const MediaViewUrl = '/media'
 export const FileViewUrl = '/'
 export const MediaSearchViewUrl = '/media-search'
 export const AnimeSeasonViewUrl = '/anime-season'
 
-const routes: Array<RouteConfig> = [
+const routes: RouteRecordRaw[] = [
 	{
 		path: MediaViewUrl,
 		name: 'Media',
@@ -35,17 +33,18 @@ const routes: Array<RouteConfig> = [
 		component: FileView
 	},
 	{
-		path: '*',
+		path: "/:catchAll(.*)",
 		name: 'Not found',
 		component: NotFoundView
 	}
 ]
 
-const router = new VueRouter({
-	mode: 'history',
-	base: process.env.BASE_URL,
-	routes
-})
+const router = createRouter(
+    {
+        history: createWebHistory(),
+        routes: routes
+    }
+)
 
 export class RouterHandler {
 	static currentPath(app: Vue) {

@@ -6,17 +6,17 @@
 		<p>{{ searchStatus }}</p>
 		<section class="media-search-results">
 			<ul class="media-search-result-list">
-				<li v-for="item in searchResults" :key="item.inner.extDbCode" class="search-result-item">
+				<li v-for="item in searchResults" :key="item.extDbCode" class="search-result-item">
 					<div class="result-item-img">
-						<img :src="item.inner.imageUrl" />
+						<img :src="item.imageUrl" />
 					</div>
 					<div class="result-item-info">
-						<p><strong>{{ item.inner.name }}</strong></p>
+						<p><strong>{{ item.name }}</strong></p>
 						<dl>
 							<dt>Source</dt>
-							<dd>{{ item.inner.extDb }}</dd>
+							<dd>{{ item.extDb }}</dd>
 							<dt>Code</dt>
-							<dd>{{ item.inner.extDbCode }}</dd>
+							<dd>{{ item.extDbCode }}</dd>
 						</dl>
 					</div>
 					<button v-if="item.state == stateNew" class="result-item-action" v-on:click="addOrUpdate(item)">Add</button>
@@ -29,9 +29,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import graphClient from '@/lib/graph-client'
-import { ExtDatabase, MediaSearchResultItem } from '@/graph/schema'
+import { Vue } from 'vue-property-decorator'
+import { ExtDatabase, Gql } from '@/zeus'
 
 enum ResultItemStatus {
 	NEW,
@@ -40,13 +39,16 @@ enum ResultItemStatus {
 }
 
 class ResultHeaderItem {
-	public inner: MediaSearchResultItem
 	public state: ResultItemStatus
 
-	public constructor(inner: MediaSearchResultItem) {
-		this.inner = inner
-
-		if (inner.saved) {
+	public constructor(
+		saved: boolean,
+		public extDb: ExtDatabase,
+		public extDbCode: string,
+		public imageUrl: string,
+		public name: string,
+	) {
+		if (saved) {
 			this.state = ResultItemStatus.SAVED
 		} else {
 			this.state = ResultItemStatus.NEW
@@ -54,7 +56,6 @@ class ResultHeaderItem {
 	}
 }
 
-@Component
 export default class MediaSearchView extends Vue {
 	public searchText = ""
 	public searchStatus = "Ready"
@@ -74,47 +75,50 @@ export default class MediaSearchView extends Vue {
 		}
 	}
 
-	public addOrUpdate(item: ResultHeaderItem): void {
+	public async addOrUpdate(item: ResultHeaderItem): Promise<void> {
 		item.state = ResultItemStatus.SAVING
-
-		graphClient.mutation(
-			{
-				externalMediaAdd: [{ db: item.inner.extDb, code: item.inner.extDbCode }]
-			},
-			data => {
-				const success: boolean = data.externalMediaAdd
-				if (success) {
-					item.state = ResultItemStatus.SAVED
-				} else {
-					item.state = ResultItemStatus.NEW
-				}
-
-			}
-		)
+		const { externalMediaAdd } = await Gql("mutation")({
+			externalMediaAdd: [
+				{
+					db: item.extDb,
+					code: item.extDbCode
+				},
+				true
+			]
+		})
+		if (externalMediaAdd) {
+			item.state = ResultItemStatus.SAVED
+		} else {
+			item.state = ResultItemStatus.NEW
+		}
 	}
 
-	private query(): void {
-		graphClient.query(
-			{
-				externalMediaSearch: [
-					{ 
-						db: ExtDatabase.MyAnimeList, 
-						name: this.searchText
-					}, 
-					{
-						name: 1,
-						extDb: 1,
-						extDbCode: 1,
-						imageUrl: 1,
-						saved: 1
-					}
-				]
-			},
-			data => {
-				this.searchStatus = "Search complete"
-				const rawResults = data.externalMediaSearch
-				this.searchResults = rawResults.map(el => new ResultHeaderItem(el))
-			}
+	private async query(): Promise<void> {
+		this.searchStatus = "Search complete"
+		const response = await Gql("query")({
+			externalMediaSearch: [
+				{
+					db: ExtDatabase.MyAnimeList, 
+					name: this.searchText
+				},
+				{
+					name: true,
+					extDb: true,
+					extDbCode: true,
+					imageUrl: true,
+					saved: true
+				}
+			]
+		})
+		const rawResults = response.externalMediaSearch
+		this.searchResults = rawResults.map(
+			el => new ResultHeaderItem(
+				el.saved,
+				el.extDb,
+				el.extDbCode,
+				el.imageUrl,
+				el.name
+			)
 		)
 	}
 }

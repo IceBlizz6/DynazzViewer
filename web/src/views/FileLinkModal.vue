@@ -63,11 +63,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Vue, Prop } from 'vue-property-decorator'
 import { FileLinkRow } from "@/lib/FileLinkRow"
-import graphClient from '@/lib/graph-client'
-import { ExtDatabase, MediaPartCollection } from '@/graph/schema'
-import { PromiseQueue } from '@/lib/PromiseQueue'
+import { ExtDatabase, Gql } from '@/zeus'
+import { MediaPartCollection } from "@/lib/Queries"
 
 interface MediaName {
 	mediaName: string
@@ -93,7 +92,6 @@ interface QueryResult {
 	saved: boolean
 }
 
-@Component
 export default class FileLinkModal extends Vue {
 	@Prop({ required: true })
 	private readonly detectedFileResults!: FileLinkRow[]
@@ -139,81 +137,73 @@ export default class FileLinkModal extends Vue {
 		)
 	}
 
-	private internalMediaSearch(mediaName: MediaName): Promise<SearchResult> {
-		return graphClient.queryWithReturn(
-			{
-				internalMediaSearch: [
-					{
-						name: mediaName.mediaName
-					},
-					{
-						id: 1,
-						name: 1,
-						databaseEntry: {
-							mediaDatabase: 1,
-							code: 1,
-						}
+	private async internalMediaSearch(mediaName: MediaName): Promise<SearchResult> {
+		const response = await Gql("query")({
+			internalMediaSearch: [
+				{
+					name: mediaName.mediaName
+				},
+				{
+					id: true,
+					name: true,
+					databaseEntry: {
+						mediaDatabase: true,
+						code: true,
 					}
-				],
-			},
-			data => {
-				const results = data.internalMediaSearch.map(result => {
-					if (result.databaseEntry == null) {
-						throw new Error("Result has no DB entry")
-					} else {
-						const t: QueryResult = {
-							extDb: result.databaseEntry.mediaDatabase,
-							extDbCode: result.databaseEntry.code,
-							saved: true,
-							name: result.name
-						}
-						return t
-					}
-				})
-				const t: SearchResult = {
-					mediaName: mediaName,
-					results: results,
-					selectedResult: null,
+				}
+			]
+		})
+		const results = response.internalMediaSearch.map(result => {
+			if (result.databaseEntry == null) {
+				throw new Error("Result has no DB entry")
+			} else {
+				const t: QueryResult = {
+					extDb: result.databaseEntry.mediaDatabase,
+					extDbCode: result.databaseEntry.code,
+					saved: true,
+					name: result.name
 				}
 				return t
 			}
-		)
+		})
+		const t: SearchResult = {
+			mediaName: mediaName,
+			results: results,
+			selectedResult: null,
+		}
+		return t
 	}
 
-	private myAnimeListSearch(mediaName: MediaName): Promise<SearchResult> {
-		return graphClient.queryWithReturn(
-			{
-				externalMediaSearch: [
-					{
-						name: mediaName.mediaName,
-						db: ExtDatabase.MyAnimeList
-					},
-					{
-						name: 1,
-						saved: 1,
-						extDb: 1,
-						extDbCode: 1,
-					}
-				]
-			},
-			data => {
-				const results = data.externalMediaSearch.map(result => {
-					const ret: QueryResult = {
-						extDb: result.extDb,
-						extDbCode: result.extDbCode,
-						saved: result.saved,
-						name: result.name,
-					}
-					return ret
-				})
-				const r: SearchResult = {
-					mediaName: mediaName,
-					results: results,
-					selectedResult: null,
+	private async myAnimeListSearch(mediaName: MediaName): Promise<SearchResult> {
+		const response = await Gql("query")({
+			externalMediaSearch: [
+				{
+					name: mediaName.mediaName,
+					db: ExtDatabase.MyAnimeList
+				},
+				{
+					name: true,
+					saved: true,
+					extDb: true,
+					extDbCode: true,
 				}
-				return r
+			]
+		})
+		const results = response.externalMediaSearch.map(result => {
+			const ret: QueryResult = {
+				extDb: result.extDb,
+				extDbCode: result.extDbCode,
+				saved: result.saved,
+				name: result.name,
 			}
-		)
+			return ret
+		})
+		const r: SearchResult = {
+			mediaName: mediaName,
+			results: results,
+			selectedResult: null,
+		}
+		return r
 	}
 
 	private handleQueryResults(results: SearchResult[]): void {
@@ -222,125 +212,93 @@ export default class FileLinkModal extends Vue {
 		this.querying = false
 	}
 
-	private finalizeSelection(): void {
-		this.addUnsavedMedia().then(
-			success => {
-				if (success) {
-					const queue = new PromiseQueue()
-					for (const result of this.queryResults) {
-						if (result.selectedResult != null) {
-							const selectedResult = result.selectedResult
-							queue.add(() => this.queryForLink(result.mediaName, selectedResult))
-						}
-					}
-					queue.run()
-					this.$emit("finalized")
-				}
+	private async finalizeSelection(): Promise<void> {
+		const success = await this.addUnsavedMedia()
+		for (const result of this.queryResults) {
+			if (result.selectedResult != null) {
+				const selectedResult = result.selectedResult
+				await this.queryForLink(result.mediaName, selectedResult)
 			}
-		)
-		
+		}
+		this.$emit("finalized")
 	}
 
-	private addUnsavedMedia(): Promise<boolean> {
-		const queue = new PromiseQueue()
+	private async addUnsavedMedia(): Promise<void> {
 		for (const result of this.queryResults) {
 			const selectedResult = result.selectedResult
 			if (selectedResult != null && !selectedResult.saved) {
-				queue.add(
-					() => {
-						return graphClient.mutationWithReturn(
-							{
-								externalMediaAdd: [
-									{
-										db: selectedResult.extDb,
-										code: selectedResult.extDbCode
-									}
-								]
-							},
-							data => {
-								const success = data.externalMediaAdd
-								if (!success) {
-									throw new Error("Adding media " + selectedResult.name + " has failed")
-								}
-								return success
-							}
-						)
-					}
-				)
+				const { externalMediaAdd } = await Gql("mutation")({
+					externalMediaAdd: [
+						{
+							db: selectedResult.extDb,
+							code: selectedResult.extDbCode
+						},
+						true
+					]
+				})
+				if (!externalMediaAdd) {
+					throw new Error("Adding media " + selectedResult.name + " has failed")
+				}
 			}
 		}
-		return queue.run()
 	}
 
-	private queryForLink(mediaName: MediaName, result: QueryResult): Promise<boolean> {
-		return graphClient.queryWithReturn(
-			{
-				internalMediaLookup: [
-					{
-						db: result.extDb,
-						code: result.extDbCode
-					},
-					{
-						id: 1,
-						name: 1,
-						seasonNumber: 1,
-						children: {
-							id: 1,
-							episodeNumber: 1,
-							name: 1,
-						}
+	private async queryForLink(mediaName: MediaName, result: QueryResult): Promise<void> {
+		const response = await Gql("query")({
+			internalMediaLookup: [
+				{
+					db: result.extDb,
+					code: result.extDbCode
+				},
+				{
+					id: true,
+					name: true,
+					seasonNumber: true,
+					children: {
+						id: true,
+						episodeNumber: true,
+						name: true,
 					}
-				]
-			},
-			data => {
-				const entry = data.internalMediaLookup
-				if (entry == null) {
-					throw new Error("Unable to find match for " + result.extDbCode)
 				}
-				return entry
-
-			}
-		).then(entry => {
-			return this.linkCollection(mediaName, entry)
+			]
 		})
+		const match = response.internalMediaLookup
+		if (match == null) {
+			throw new Error("Unable to find match for " + result.extDbCode)
+		} else {
+			return this.linkCollection(mediaName, match)
+		}
 	}
 
-	private linkCollection(mediaName: MediaName, partCollection: MediaPartCollection): Promise<boolean> {
-		const queue = new PromiseQueue()
+	private async linkCollection(mediaName: MediaName, partCollection: MediaPartCollection): Promise<void> {
 		for (const file of mediaName.files) {
 			if (file.seasonNumber == partCollection.seasonNumber) {
 				const episode = partCollection.children
 					.find(episode => episode.episodeNumber == file.episodeNumber)
 				if (episode !== undefined) {
-					queue.add(() => this.linkEpisode(file.fileName, episode.id))
+					await this.linkEpisode(file.fileName, episode.id)
 				}
 			} else {
 				throw new Error("Unable to link " + file.fileName + " on " + partCollection.name + 
 					" season " + partCollection.seasonNumber + ", season number does not match")
 			}
 		}
-		return queue.run()
 	}
 
-	private linkEpisode(fileName: string, mediaPartId: number): Promise<boolean> {
-		return graphClient.mutationWithReturn(
-			{
-				linkVideoFileWithName: [
-					{
-						mediaFileName: fileName,
-						mediaPartId: mediaPartId
-					}
-				]
-			},
-			data => {
-				if (!data.linkVideoFileWithName) {
-					throw new Error("Link failed for " + fileName + " on " + mediaPartId)
-				} else {
-					console.log("Linked " + fileName + " on " + mediaPartId)
-				}
-				return data.linkVideoFileWithName
-			}
-		)
+	private async linkEpisode(fileName: string, mediaPartId: number): Promise<void> {
+		const { linkVideoFileWithName } = await Gql("mutation")({
+			linkVideoFileWithName: [
+				{
+					mediaFileName: fileName,
+					mediaPartId: mediaPartId
+				},
+				true
+			]
+		})
+		const success = linkVideoFileWithName
+		if (!success) {
+			throw new Error("Link failed for " + fileName + " on " + mediaPartId)
+		}
 	}
 
 	private groupBy<TKey, TItem>(list: TItem[], keyGetter: (item: TItem) => TKey): Map<TKey, TItem[]> {

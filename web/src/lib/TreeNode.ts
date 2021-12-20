@@ -1,4 +1,4 @@
-import { VideoFile } from '@/graph/schema'
+import { VideoFile } from "@/lib/Queries"
 
 export class TreeNode {
 	public name: string
