@@ -22,6 +22,7 @@ class CorsRequestFilter(
             response.setHeader("Access-Control-Allow-Origin", origin)
         }
         response.setHeader("Access-Control-Allow-Credentials", "true")
+        response.setHeader("Access-Control-Allow-Headers", "content-type")
         if (apiEndpoint == request.requestURI) {
             filterChain.doFilter(request, CustomHttpServletResponseWrapper(response))
         } else {
