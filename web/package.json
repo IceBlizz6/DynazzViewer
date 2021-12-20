@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "lint": "eslint src/*.ts src/*.vue src/**/*.ts src/**/*.vue --fix"
   },
   "dependencies": {
     "@types/numeral": "^2.0.2",
