@@ -28,9 +28,19 @@ header {
 	top: 0;
 	left: 0;
 	right: 0;
-	background-color: lightblue;
-	margin-bottom: 15px;
+	background-color: var(--primary-invert);
+	padding-bottom: 5px;
 	padding-left: 20px;
 	border-style: solid;
+}
+
+header a {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+header a:hover {
+	background-color: var(--primary);
+	color: var(--primary-invert);
 }
 </style>

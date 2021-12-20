@@ -165,14 +165,13 @@ export default class MediaView extends Vue {
 }
 
 .series-modal {
-	background-color: white;
 	padding: 20px;
 	overflow-y: auto;
 }
 
 .series-season {
 	border-top-style: solid;
-	border-top-color: darkblue;
+	border-top-color: var(--primary);
 	margin-bottom: 15px;
 }
 
@@ -198,7 +197,7 @@ export default class MediaView extends Vue {
 }
 
 .episode-item:hover {
-	background-color: lightgray;
+	background-color: var(--primary-invert-highlight);
 }
 
 .toolbar-action:hover {

@@ -262,6 +262,6 @@ export default class FileTree extends Vue {
 
 <style>
 .file-node:hover {
-	background-color: lightgray;
+	background-color: var(--primary-invert-highlight);
 }
 </style>

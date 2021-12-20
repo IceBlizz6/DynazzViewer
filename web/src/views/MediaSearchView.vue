@@ -1,15 +1,15 @@
 <template>
 	<article class="media-search-root">
 		<h1>Media search</h1>
-		<input
+		<o-input
 			v-model="searchText"
 			type="text"
-			placeholder="media name"
+			placeholder="name..."
 			@keyup.enter="runSearch"
-		>
-		<button @click="runSearch">
+		/>
+		<o-button @click="runSearch">
 			Search
-		</button>
+		</o-button>
 		<p>{{ searchStatus }}</p>
 		<section class="media-search-results">
 			<ul class="media-search-result-list">
@@ -30,27 +30,27 @@
 							<dd>{{ item.extDbCode }}</dd>
 						</dl>
 					</div>
-					<button
+					<o-button
 						v-if="item.state == stateNew"
 						class="result-item-action"
 						@click="addOrUpdate(item)"
 					>
 						Add
-					</button>
-					<button
+					</o-button>
+					<o-button
 						v-if="item.state == stateSaved"
 						class="result-item-action"
 						@click="addOrUpdate(item)"
 					>
 						Update
-					</button>
-					<button
+					</o-button>
+					<o-button
 						v-if="item.state == stateSaving"
 						class="result-item-action"
 						disabled
 					>
 						Saving...
-					</button>
+					</o-button>
 				</li>
 			</ul>
 		</section>
@@ -164,11 +164,11 @@ export default class MediaSearchView extends Vue {
 }
 
 .search-result-item {
-	background-color: aliceblue;
+	background-color: var(--primary-invert);
 	margin: 10px;
 	padding: 10px;
 	border-style: ridge;
-	border-color: gray;
+	border-color: var(--primary-invert-highlight);
 	display: grid;
 	grid-template-columns: 50% 50%;
 	grid-template-rows: auto 30px;

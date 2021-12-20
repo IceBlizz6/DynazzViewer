@@ -77,15 +77,15 @@ export default class MediaSeries extends Vue {
 	grid-template-rows: 10% 1fr;
 	column-gap: 10px;
 	padding: 5px;
-	background-color: whitesmoke;
+	background-color: var(--primary-inverted);
 	margin: 10px;
 	border-style: solid;
-	border-color: gray;
+	border-color: transparent;
 }
 
 .series-item:hover {
-	background-color: aliceblue;
+	background-color: var(--primary-inverted-highlight);
 	border-style: solid;
-	border-color: darkblue;
+	border-color: var(--primary)
 }
 </style>

@@ -249,7 +249,7 @@ export default class FileView extends Vue {
 }
 
 .directory-node:hover {
-	background-color: lightgray;
+	background-color: var(--primary-invert-highlight);
 }
 
 .tree-icon {

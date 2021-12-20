@@ -1,31 +1,34 @@
 <template>
 	<article class="anime-parent-section">
 		<section>
-			<label>Year</label>
-			<input
-				v-model="yearInput"
-				type="number"
-				placeholder="year"
-			>
+			<o-field label="Year">
+				<o-input
+					v-model="yearInput"
+					type="number"
+					placeholder="year"
+				/>
+			</o-field>
 
-			<label>Season</label>
-			<select v-model="seasonInput">
-				<option :value="seasonWinter">
-					Winter
-				</option>
-				<option :value="seasonSpring">
-					Spring
-				</option>
-				<option :value="seasonSummer">
-					Summer
-				</option>
-				<option :value="seasonFall">
-					Fall
-				</option>
-			</select>
-			<button @click="addAnimeSeason">
+			<o-field label="Season">
+				<o-select v-model="seasonInput">
+					<option :value="seasonWinter">
+						Winter
+					</option>
+					<option :value="seasonSpring">
+						Spring
+					</option>
+					<option :value="seasonSummer">
+						Summer
+					</option>
+					<option :value="seasonFall">
+						Fall
+					</option>
+				</o-select>
+			</o-field>
+
+			<o-button @click="addAnimeSeason">
 				Add
-			</button>
+			</o-button>
 		</section>
 		<hr>
 		<section>
@@ -44,23 +47,26 @@
 		<section v-if="selected != null">
 			<h1>{{ selected.year }} - {{ selected.season }}</h1>
 			<div>
-				<input
+				<o-checkbox
 					v-model="enableWatch"
 					type="checkbox"
 				>
-				<label>Watch</label>
+					Watch
+				</o-checkbox>
 				|
-				<input
+				<o-checkbox
 					v-model="enableSkip"
 					type="checkbox"
 				>
-				<label>Skip</label>
+					Skip
+				</o-checkbox>
 				|
-				<input
+				<o-checkbox
 					v-model="enableNone"
 					type="checkbox"
 				>
-				<label>None</label>
+					None
+				</o-checkbox>
 			</div>
 			<ul class="selected-series-list">
 				<li
@@ -90,26 +96,26 @@
 						<dd>{{ series.flag }}</dd>
 					</dl>
 					<div class="series-action">
-						<button @click="flagWatch(series)">
+						<o-button @click="flagWatch(series)">
 							Watch
-						</button>
-						<button @click="flagSkip(series)">
+						</o-button>
+						<o-button @click="flagSkip(series)">
 							Skip
-						</button>
-						<button @click="flagNone(series)">
+						</o-button>
+						<o-button @click="flagNone(series)">
 							Clear
-						</button>
+						</o-button>
 					</div>
 					<div>
 						<p v-if="series.saved == true">
 							<strong>[In library]</strong>
 						</p>
-						<button 
+						<o-button 
 							v-if="series.saved == false"
 							@click="addMediaSeries(series)"
 						>
 							Add to library
-						</button>
+						</o-button>
 					</div>
 				</li>
 			</ul>
@@ -254,11 +260,11 @@ export default class AnimeSeasonView extends Vue {
 }
 
 .season-header {
-	background-color: aliceblue;
+	background-color: var(--primary-invert);
 }
 
 .season-header:hover {
-	background-color: lightblue;
+	background-color: var(--primary-invert-highlight);
 }
 
 .selected-series-list {
@@ -267,7 +273,7 @@ export default class AnimeSeasonView extends Vue {
 }
 
 .series-item {
-	background-color: whitesmoke;
+	background-color: var(--primary-invert);
 	border-style: solid;
 	display: grid;
 	grid-template-columns: 50% 45%;
