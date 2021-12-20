@@ -1,14 +1,25 @@
 <template>
 	<article class="media-search-root">
 		<h1>Media search</h1>
-		<input type="text" v-model="searchText" placeholder="media name" v-on:keyup.enter="runSearch" />
-		<button v-on:click="runSearch">Search</button>
+		<input
+			v-model="searchText"
+			type="text"
+			placeholder="media name"
+			@keyup.enter="runSearch"
+		>
+		<button @click="runSearch">
+			Search
+		</button>
 		<p>{{ searchStatus }}</p>
 		<section class="media-search-results">
 			<ul class="media-search-result-list">
-				<li v-for="item in searchResults" :key="item.extDbCode" class="search-result-item">
+				<li
+					v-for="item in searchResults"
+					:key="item.extDbCode"
+					class="search-result-item"
+				>
 					<div class="result-item-img">
-						<img :src="item.imageUrl" />
+						<img :src="item.imageUrl">
 					</div>
 					<div class="result-item-info">
 						<p><strong>{{ item.name }}</strong></p>
@@ -19,9 +30,27 @@
 							<dd>{{ item.extDbCode }}</dd>
 						</dl>
 					</div>
-					<button v-if="item.state == stateNew" class="result-item-action" v-on:click="addOrUpdate(item)">Add</button>
-					<button v-if="item.state == stateSaved" class="result-item-action" v-on:click="addOrUpdate(item)">Update</button>
-					<button v-if="item.state == stateSaving" class="result-item-action" disabled>Saving...</button>
+					<button
+						v-if="item.state == stateNew"
+						class="result-item-action"
+						@click="addOrUpdate(item)"
+					>
+						Add
+					</button>
+					<button
+						v-if="item.state == stateSaved"
+						class="result-item-action"
+						@click="addOrUpdate(item)"
+					>
+						Update
+					</button>
+					<button
+						v-if="item.state == stateSaving"
+						class="result-item-action"
+						disabled
+					>
+						Saving...
+					</button>
 				</li>
 			</ul>
 		</section>

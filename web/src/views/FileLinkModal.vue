@@ -4,60 +4,95 @@
 			<h1>Detected media names</h1>
 			<table>
 				<tr>
-					<th></th>
+					<th />
 					<th>File name</th>
 					<th>Media name</th>
 					<th>S</th>
 					<th>Ep</th>
 				</tr>
-				<tr v-for="result in detectedFileResults" :key="result.fileName">
+				<tr
+					v-for="result in detectedFileResults"
+					:key="result.fileName"
+				>
 					<td>
-						<input type="checkbox" :checked="result.mediaName != null" />
+						<input
+							type="checkbox"
+							:checked="result.mediaName != null"
+						>
 					</td>
 					<td>{{ result.fileName }}</td>
 					<td>
-						<input type="text" :value="result.mediaName" />
+						<input
+							type="text"
+							:value="result.mediaName"
+						>
 					</td>
 					<td>
-						<input type="number" :value="result.seasonNumber" />
+						<input
+							type="number"
+							:value="result.seasonNumber"
+						>
 					</td>
 					<td>
-						<input type="number" :value="result.episodeNumber" />
+						<input
+							type="number"
+							:value="result.episodeNumber"
+						>
 					</td>
 				</tr>
 			</table>
-			<b-button class="next-button" @click="moveToQuerySelection">NEXT</b-button>
+			<b-button
+				class="next-button"
+				@click="moveToQuerySelection"
+			>
+				NEXT
+			</b-button>
 		</section>
 
 		<section v-if="modalState == 2">
 			<h1>Link to media</h1>
 			<hr>
 			<ul>
-				<li v-for="mediaName in mediaNames" :key="mediaName.mediaName">
+				<li
+					v-for="mediaName in mediaNames"
+					:key="mediaName.mediaName"
+				>
 					{{ mediaName.mediaName }} ({{ mediaName.files.length }} files)
 				</li>
 			</ul>
 			<template v-if="!querying">
-				<b-button @click="useMyLibrary">My library</b-button>
-				<b-button @click="useMyAnimeList">MyAnimeList</b-button>
+				<b-button @click="useMyLibrary">
+					My library
+				</b-button>
+				<b-button @click="useMyAnimeList">
+					MyAnimeList
+				</b-button>
 			</template>
-			
 		</section>
 
 		<section v-if="modalState == 3">
 			<h1>Verify result</h1>
 			<hr>
 			<ul>
-				<li v-for="result in queryResults" :key="result.mediaName.mediaName">
+				<li
+					v-for="result in queryResults"
+					:key="result.mediaName.mediaName"
+				>
 					{{ result.mediaName.mediaName }}
 					<b-select v-model="result.selectedResult">
-						<option v-for="(opt, index) in result.results" :key="index" :value="opt">
+						<option
+							v-for="(opt, index) in result.results"
+							:key="index"
+							:value="opt"
+						>
 							{{ opt.name }} ({{ opt.extDbCode }}:{{ opt.extDbCode }})
 						</option>
 					</b-select>
 				</li>
 			</ul>
-			<b-button @click="finalizeSelection">Finalize</b-button>
+			<b-button @click="finalizeSelection">
+				Finalize
+			</b-button>
 		</section>
 	</article>
 </template>

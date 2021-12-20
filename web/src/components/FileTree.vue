@@ -1,52 +1,113 @@
 <template>
 	<li>
 		<div class="tree-item-header directory-node">
-			<span @click="toggleChildren()" >
-				<img class="tree-icon" src="@/assets/FolderContentAvailable.png">
+			<span @click="toggleChildren()">
+				<img
+					class="tree-icon"
+					src="@/assets/FolderContentAvailable.png"
+				>
 				<span>{{ label }}</span>
 			</span>
-			<span class="toolbar-action" @click="detectLink(parentNode)">
-				<img class="tree-icon" src="@/assets/Link.png">
+			<span
+				class="toolbar-action"
+				@click="detectLink(parentNode)"
+			>
+				<img
+					class="tree-icon"
+					src="@/assets/Link.png"
+				>
 				Detect/Link
 			</span>
 		</div>
-		<ul class="tree-children-list" v-if="showChildren">
+		<ul
+			v-if="showChildren"
+			class="tree-children-list"
+		>
 			<FileTree
 				v-for="node in childrenDirectories"
+				:key="node.name"
 				:parent-node="node"
 				:nodes="node.children"
 				:label="node.name"
-				:key="node.name">
-			</FileTree>
-			<li v-for="node in childrenFiles" :key="node.localId">
+			/>
+			<li
+				v-for="node in childrenFiles"
+				:key="node.localId"
+			>
 				<div
 					v-if="node.videoFile != null"
 					class="tree-item-header file-node"
 				>
-					<img v-if="node.videoFile.viewStatus == 'None'" class="tree-icon" src="@/assets/videofiles/Neutral.png">
-					<img v-if="node.videoFile.viewStatus == 'Viewed'" class="tree-icon" src="@/assets/videofiles/Viewed.png">
-					<img v-if="node.videoFile.viewStatus == 'Skipped'" class="tree-icon" src="@/assets/videofiles/Skipped.png">
-					<img v-if="isLinked(node.videoFile)" class="tree-icon" src="@/assets/Link.png">
+					<img
+						v-if="node.videoFile.viewStatus == 'None'"
+						class="tree-icon"
+						src="@/assets/videofiles/Neutral.png"
+					>
+					<img
+						v-if="node.videoFile.viewStatus == 'Viewed'"
+						class="tree-icon"
+						src="@/assets/videofiles/Viewed.png"
+					>
+					<img
+						v-if="node.videoFile.viewStatus == 'Skipped'"
+						class="tree-icon"
+						src="@/assets/videofiles/Skipped.png"
+					>
+					<img
+						v-if="isLinked(node.videoFile)"
+						class="tree-icon"
+						src="@/assets/Link.png"
+					>
 
 					<span>{{ node.videoFile.fileName.name }}</span>
-					<span class="toolbar-action" @click="playVideo(node)">
-						<img class="tree-icon" src="@/assets/videofiles/Play.png">
+					<span
+						class="toolbar-action"
+						@click="playVideo(node)"
+					>
+						<img
+							class="tree-icon"
+							src="@/assets/videofiles/Play.png"
+						>
 						Play
 					</span>
-					<span class="toolbar-action" @click="setStatusNone(node)">
-						<img class="tree-icon" src="@/assets/videofiles/Neutral.png">
+					<span
+						class="toolbar-action"
+						@click="setStatusNone(node)"
+					>
+						<img
+							class="tree-icon"
+							src="@/assets/videofiles/Neutral.png"
+						>
 						Undo
 					</span>
-					<span class="toolbar-action" @click="setStatusViewed(node)">
-						<img class="tree-icon" src="@/assets/videofiles/Viewed.png">
+					<span
+						class="toolbar-action"
+						@click="setStatusViewed(node)"
+					>
+						<img
+							class="tree-icon"
+							src="@/assets/videofiles/Viewed.png"
+						>
 						Viewed
 					</span>
-					<span class="toolbar-action" @click="setStatusSkipped(node)">
-						<img class="tree-icon" src="@/assets/videofiles/Skipped.png">
+					<span
+						class="toolbar-action"
+						@click="setStatusSkipped(node)"
+					>
+						<img
+							class="tree-icon"
+							src="@/assets/videofiles/Skipped.png"
+						>
 						Skipped
 					</span>
-					<span class="toolbar-action" @click="showExplorer(node)">
-						<img class="tree-icon" src="@/assets/FolderOpen.png">
+					<span
+						class="toolbar-action"
+						@click="showExplorer(node)"
+					>
+						<img
+							class="tree-icon"
+							src="@/assets/FolderOpen.png"
+						>
 						Show
 					</span>
 				</div>

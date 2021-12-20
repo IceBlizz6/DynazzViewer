@@ -2,39 +2,87 @@
 	<article>
 		<article class="series-list">
 			<MediaSeries
-				v-for="mediaItem in this.source"
+				v-for="mediaItem in source"
 				:key="mediaItem.id"
-				:source="mediaItem">
-			</MediaSeries>
+				:source="mediaItem"
+			/>
 		</article>
 		<b-modal v-model:active="activeModal">
-			<article class="series-modal" v-if="this.selected != null">
+			<article
+				v-if="selected != null"
+				class="series-modal"
+			>
 				<div class="series-modal-img">
-					<img v-if="selected.images.length > 0" :src="selected.images[0].url">
+					<img
+						v-if="selected.images.length > 0"
+						:src="selected.images[0].url"
+					>
 				</div>
 				<span class="series-title">{{ selected.name }}</span>
 				<div class="series-season-list">
-					<section class="series-season" v-for="season in selected.children" :key="season.id">
+					<section
+						v-for="season in selected.children"
+						:key="season.id"
+						class="series-season"
+					>
 						<p>{{ season.name }}</p>
 						<ul>
-							<li class="episode-item" v-for="episode in season.children" :key="episode.id">
-								<img v-if="episode.status == stateNone" class="tree-icon" src="@/assets/videofiles/Neutral.png">
-								<img v-if="episode.status == stateViewed" class="tree-icon" src="@/assets/videofiles/Viewed.png">
-								<img v-if="episode.status == stateSkipped" class="tree-icon" src="@/assets/videofiles/Skipped.png">
-								<img v-if="isLinked(episode)" class="tree-icon" src="@/assets/Link.png">
+							<li
+								v-for="episode in season.children"
+								:key="episode.id"
+								class="episode-item"
+							>
+								<img
+									v-if="episode.status == stateNone"
+									class="tree-icon"
+									src="@/assets/videofiles/Neutral.png"
+								>
+								<img
+									v-if="episode.status == stateViewed"
+									class="tree-icon"
+									src="@/assets/videofiles/Viewed.png"
+								>
+								<img
+									v-if="episode.status == stateSkipped"
+									class="tree-icon"
+									src="@/assets/videofiles/Skipped.png"
+								>
+								<img
+									v-if="isLinked(episode)"
+									class="tree-icon"
+									src="@/assets/Link.png"
+								>
 
-								{{ episodeFormat(episode.episodeNumber) }} | {{  episode.name }}
+								{{ episodeFormat(episode.episodeNumber) }} | {{ episode.name }}
 								<div class="toolbar">
-									<span class="toolbar-action" @click="setEpisodeWatch(episode, stateNone)">
-										<img class="tree-icon" src="@/assets/videofiles/Neutral.png">
+									<span
+										class="toolbar-action"
+										@click="setEpisodeWatch(episode, stateNone)"
+									>
+										<img
+											class="tree-icon"
+											src="@/assets/videofiles/Neutral.png"
+										>
 										Undo
 									</span>
-									<span class="toolbar-action" @click="setEpisodeWatch(episode, stateViewed)">
-										<img class="tree-icon" src="@/assets/videofiles/Viewed.png">
+									<span
+										class="toolbar-action"
+										@click="setEpisodeWatch(episode, stateViewed)"
+									>
+										<img
+											class="tree-icon"
+											src="@/assets/videofiles/Viewed.png"
+										>
 										Viewed
 									</span>
-									<span class="toolbar-action" @click="setEpisodeWatch(episode, stateSkipped)">
-										<img class="tree-icon" src="@/assets/videofiles/Skipped.png">
+									<span
+										class="toolbar-action"
+										@click="setEpisodeWatch(episode, stateSkipped)"
+									>
+										<img
+											class="tree-icon"
+											src="@/assets/videofiles/Skipped.png"
+										>
 										Skipped
 									</span>
 								</div>

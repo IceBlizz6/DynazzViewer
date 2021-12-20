@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<MenuHeader></MenuHeader>
+		<MenuHeader />
 		<main>
-			<router-view/>
+			<router-view />
 		</main>
 	</div>
 </template>

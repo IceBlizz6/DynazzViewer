@@ -2,24 +2,39 @@
 	<article class="anime-parent-section">
 		<section>
 			<label>Year</label>
-			<input type="number" placeholder="year" v-model="yearInput" />
+			<input
+				v-model="yearInput"
+				type="number"
+				placeholder="year"
+			>
 
 			<label>Season</label>
 			<select v-model="seasonInput">
-				<option :value="seasonWinter">Winter</option>
-				<option :value="seasonSpring">Spring</option>
-				<option :value="seasonSummer">Summer</option>
-				<option :value="seasonFall">Fall</option>
+				<option :value="seasonWinter">
+					Winter
+				</option>
+				<option :value="seasonSpring">
+					Spring
+				</option>
+				<option :value="seasonSummer">
+					Summer
+				</option>
+				<option :value="seasonFall">
+					Fall
+				</option>
 			</select>
-			<button v-on:click="addAnimeSeason">Add</button>
+			<button @click="addAnimeSeason">
+				Add
+			</button>
 		</section>
 		<hr>
 		<section>
 			<ul>
-				<li class="seasonHeader"
+				<li
 					v-for="seasonHeader in seasonHeaders"
 					:key="`${seasonHeader.year}-${seasonHeader.season}`"
-					v-on:click="selectHeader(seasonHeader)"
+					class="seasonHeader"
+					@click="selectHeader(seasonHeader)"
 				>
 					{{ seasonHeader.year }} - {{ seasonHeader.season }}
 				</li>
@@ -29,23 +44,39 @@
 		<section v-if="selected != null">
 			<h1>{{ selected.year }} - {{ selected.season }}</h1>
 			<div>
-				<input type="checkbox" v-model="enableWatch" />
+				<input
+					v-model="enableWatch"
+					type="checkbox"
+				>
 				<label>Watch</label>
 				|
-				<input type="checkbox" v-model="enableSkip" />
+				<input
+					v-model="enableSkip"
+					type="checkbox"
+				>
 				<label>Skip</label>
 				|
-				<input type="checkbox" v-model="enableNone" />
+				<input
+					v-model="enableNone"
+					type="checkbox"
+				>
 				<label>None</label>
 			</div>
 			<ul class="selectedSeriesList">
-				<li class="seriesItem" v-for="series in seriesFilteredList" 
-					:key="series.malId"
+				<li
+					v-for="series in seriesFilteredList"
+					:key="series.malId" 
+					class="seriesItem"
 				>
-					<a class="seriesTitle" 
+					<a
+						class="seriesTitle" 
 						target="_blank" 
-						:href="series.url">{{ series.title }}</a>
-					<img class="seriesImage" :src="series.imageUrl" />
+						:href="series.url"
+					>{{ series.title }}</a>
+					<img
+						class="seriesImage"
+						:src="series.imageUrl"
+					>
 					<dl class="seriesInfo">
 						<dt>ID</dt>
 						<dd>{{ series.malId }}</dd>
@@ -59,15 +90,26 @@
 						<dd>{{ series.flag }}</dd>
 					</dl>
 					<div class="seriesAction">
-						<button v-on:click="flagWatch(series)">Watch</button>
-						<button v-on:click="flagSkip(series)">Skip</button>
-						<button v-on:click="flagNone(series)">Clear</button>
+						<button @click="flagWatch(series)">
+							Watch
+						</button>
+						<button @click="flagSkip(series)">
+							Skip
+						</button>
+						<button @click="flagNone(series)">
+							Clear
+						</button>
 					</div>
 					<div>
-						<p v-if="series.saved == true"><strong>[In library]</strong></p>
+						<p v-if="series.saved == true">
+							<strong>[In library]</strong>
+						</p>
 						<button 
-							v-on:click="addMediaSeries(series)"
-							v-if="series.saved == false">Add to library</button>
+							v-if="series.saved == false"
+							@click="addMediaSeries(series)"
+						>
+							Add to library
+						</button>
 					</div>
 				</li>
 			</ul>

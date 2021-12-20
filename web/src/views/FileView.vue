@@ -1,17 +1,25 @@
 <template>
 	<article>
-		<section v-for="root in this.roots" :key="root.name">
+		<section
+			v-for="root in roots"
+			:key="root.name"
+		>
 			<ul class="tree-children-list">
 				<FileTree
 					:parent-node="root"
 					:label="root.name"
-					:nodes="root.children">
-				</FileTree>
+					:nodes="root.children"
+				/>
 			</ul>
 		</section>
-		<b-modal v-model:active="activeModal" class="link-modal" width="80%" destroy-on-hide>
+		<b-modal
+			v-model:active="activeModal"
+			class="link-modal"
+			width="80%"
+			destroy-on-hide
+		>
 			<FileLinkModal
-				:detectedFileResults="detectedFileResults"
+				:detected-file-results="detectedFileResults"
 				@finalized="closeModal"
 			/>
 		</b-modal>

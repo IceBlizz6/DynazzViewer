@@ -1,8 +1,14 @@
 <template>
-	<section class="series-item" @click="selectSeries">
+	<section
+		class="series-item"
+		@click="selectSeries"
+	>
 		<span class="series-header">{{ source.name }}</span>
 		<div class="series-img">
-			<img v-if="source.images.length > 0" :src="source.images[0].url">
+			<img
+				v-if="source.images.length > 0"
+				:src="source.images[0].url"
+			>
 		</div>
 		<dl class="series-details">
 			<dt>Episodes watched</dt>
