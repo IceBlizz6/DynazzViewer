@@ -37,7 +37,7 @@ class DefaultConfiguration(
     override val rootStorageDirectory: String
         get() = userDirectory
 
-    override val storageMode: StorageMode = StorageMode.FILE
+    override val storageMode: StorageMode = StorageMode.File(rootStorageDirectory)
 
     override var rootDirectoryPaths: Set<String>
         get() = readSet("directories", setOf())

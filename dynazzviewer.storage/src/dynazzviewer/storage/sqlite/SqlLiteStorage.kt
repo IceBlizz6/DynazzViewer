@@ -25,12 +25,10 @@ import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
 
 class SqlLiteStorage(
-    storageMode: StorageMode,
-    rootStorageDirectory: String
+    storageMode: StorageMode
 ) : Storage {
     companion object {
         const val CONNECTION_PREFIX = "jdbc:sqlite:"
-        const val DB_FILENAME = "media.db"
     }
 
     private val entityManagerFactory: EntityManagerFactory
@@ -39,17 +37,8 @@ class SqlLiteStorage(
         val unitInfo = HibernatePersistenceUnitInfo()
         val map = HashMap<String, Any>()
         map.put(JPA_JDBC_DRIVER, "org.sqlite.JDBC")
-        when (storageMode) {
-            StorageMode.FILE -> {
-                val filename = rootStorageDirectory + File.separatorChar + DB_FILENAME
-                map.put(JPA_JDBC_URL, CONNECTION_PREFIX + filename)
-                map.put("hibernate.hbm2ddl.auto", "update")
-            }
-            StorageMode.MEMORY -> {
-                map.put(JPA_JDBC_URL, "$CONNECTION_PREFIX:memory:")
-                map.put("hibernate.hbm2ddl.auto", "create-drop")
-            }
-        }.let { }
+        map.put(JPA_JDBC_URL, CONNECTION_PREFIX + storageMode.path)
+        map.put("hibernate.hbm2ddl.auto", storageMode.initOperation.opName)
         map.put(DIALECT, "org.sqlite.hibernate.dialect.SQLiteDialect")
         map.put(SHOW_SQL, false)
         map.put(QUERY_STARTUP_CHECKING, false)
