@@ -10,7 +10,6 @@ import dynazzviewer.services.HttpWebJsonParser
 import dynazzviewer.services.descriptors.HttpThrottledWebParser
 import dynazzviewer.services.descriptors.jikan.JikanApi
 import dynazzviewer.services.descriptors.tvmaze.TvMazeApi
-import dynazzviewer.storage.StorageMode
 import dynazzviewer.storage.sqlite.SqlLiteStorage
 import dynazzviewer.ui.config.DefaultConfiguration
 import graphql.execution.ExecutionStrategy
@@ -47,7 +46,8 @@ open class GraphQLConfig {
         val configuration = DefaultConfiguration(settingsController)
         val systemFileSource = SystemFileSource(configuration)
         val fileCache = FileCache(systemFileSource)
-        val storage = SqlLiteStorage(StorageMode.File(configuration.rootStorageDirectory))
+        val storageMode = configuration.storageMode
+        val storage = SqlLiteStorage(storageMode)
         val fileEntryFactory = FileEntryFactory(configuration, storage)
         val fileRepository = FileSystemRepository(fileCache, fileEntryFactory)
         val fileController = FileSystemController(

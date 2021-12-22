@@ -19,7 +19,6 @@ import org.hibernate.cfg.AvailableSettings.USE_REFLECTION_OPTIMIZER
 import org.hibernate.cfg.AvailableSettings.USE_SECOND_LEVEL_CACHE
 import org.hibernate.cfg.AvailableSettings.USE_STRUCTURED_CACHE
 import org.hibernate.jpa.HibernatePersistenceProvider
-import java.io.File
 import java.util.HashMap
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory

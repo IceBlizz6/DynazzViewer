@@ -1,13 +1,12 @@
 package dynazzviewer.ui.config
 
-import dynazzviewer.config.Configuration
 import dynazzviewer.files.FileConfiguration
 import dynazzviewer.storage.StorageMode
 import java.io.File
 
 class DefaultConfiguration(
     private val config: SettingController
-) : Configuration, FileConfiguration, UserConfiguration {
+) : FileConfiguration, UserConfiguration {
     companion object {
         const val cacheDirectory = "cache"
         const val userDirectory = "user"
@@ -34,10 +33,7 @@ class DefaultConfiguration(
     override val cacheDirectoryPath: String
         get() = cacheDirectory
 
-    override val rootStorageDirectory: String
-        get() = userDirectory
-
-    override val storageMode: StorageMode = StorageMode.File(rootStorageDirectory)
+    val storageMode: StorageMode = StorageMode.File(userDirectory)
 
     override var rootDirectoryPaths: Set<String>
         get() = readSet("directories", setOf())
@@ -45,7 +41,7 @@ class DefaultConfiguration(
 
     init {
         ensureDirectoryExists(cacheDirectoryPath)
-        ensureDirectoryExists(rootStorageDirectory)
+        ensureDirectoryExists(userDirectory)
     }
 
     private fun assignNullIfEmpty(key: String, value: String?) {
