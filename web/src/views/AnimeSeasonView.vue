@@ -127,6 +127,7 @@
 import { Vue } from 'vue-property-decorator'
 import { AnimeSeasonFlagState, MalYearSeason, ExtDatabase, Gql } from '@/zeus'
 import queries, { AnimeSeasonSeries, MalSeasonIdentifier } from "@/lib/Queries"
+import moment from 'moment'
 
 export default class AnimeSeasonView extends Vue {
 	private seasonHeaders: MalSeasonIdentifier[] = []
@@ -147,6 +148,8 @@ export default class AnimeSeasonView extends Vue {
 
 	public mounted(): void {
 		this.refreshHeaders()
+		const now = moment()
+		this.yearInput = now.year()
 	}
 
 	private async refreshHeaders(): Promise<void> {
