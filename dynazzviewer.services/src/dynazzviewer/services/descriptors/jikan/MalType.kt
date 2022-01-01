@@ -13,6 +13,6 @@ enum class MalType(
     OVA("OVA"),
     MOVIE("Movie"),
     SPECIAL("Special"),
-    UNKNOWN("Unknown"),
+    UNKNOWN("-"),
     MUSIC("Music"),
 }
