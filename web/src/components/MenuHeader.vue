@@ -33,6 +33,7 @@ header {
 	padding-left: 30px;
 	border-bottom: solid;
 	border-bottom-color: var(--primary-invert-highlight);
+	z-index: 100;
 }
 
 header a {
