@@ -23,11 +23,11 @@ class DefaultConfiguration(
         }
 
     override var videoExtensions: Set<String>
-        get() = readSet("VideoExtensions", setOf("mkv", "avi"))
+        get() = readSet("VideoExtensions", setOf("mkv", "avi", "mp4"))
         set(value) = writeSet("VideoExtensions", value)
 
     override var extensionFilter: Set<String>
-        get() = readSet("FileExtensions", setOf("mkv", "avi"))
+        get() = readSet("FileExtensions", setOf("mkv", "avi", "mp4"))
         set(value) = writeSet("FileExtensions", value)
 
     override val cacheDirectoryPath: String
