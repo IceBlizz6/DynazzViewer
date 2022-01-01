@@ -2,6 +2,7 @@ package dynazzviewer.ui.web
 
 import dynazzviewer.ui.config.SettingController
 import java.io.FileInputStream
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.util.Properties
 
@@ -10,8 +11,10 @@ class WebSettingsController : SettingController {
     private val properties = Properties()
 
     init {
-        val fileInputStream = FileInputStream(propertiesPath)
-        properties.load(fileInputStream)
+        try {
+            val fileInputStream = FileInputStream(propertiesPath)
+            properties.load(fileInputStream)
+        } catch (_: FileNotFoundException) { }
     }
 
     override fun save() {
