@@ -7,6 +7,14 @@
 			placeholder="name..."
 			@keyup.enter="runSearch"
 		/>
+		<div class="block">
+			<o-radio v-model="apiSelection" :native-value="apiAnime">
+				MyAnimeList
+			</o-radio>
+			<o-radio v-model="apiSelection" :native-value="apiImdb">
+				Imdb
+			</o-radio>
+		</div>
 		<o-button @click="runSearch">
 			Search
 		</o-button>
@@ -94,6 +102,10 @@ export default class MediaSearchView extends Vue {
 	public stateSaved = ResultItemStatus.SAVED
 	public stateSaving = ResultItemStatus.SAVING
 
+	private apiAnime = ExtDatabase.MyAnimeList
+	private apiImdb = ExtDatabase.TvMaze
+	private apiSelection = this.apiAnime
+
 	public runSearch(): void {
 		if (this.searchText.length == 0) {
 			this.searchStatus = "Unable to start search, empty query"
@@ -126,7 +138,7 @@ export default class MediaSearchView extends Vue {
 		const response = await Gql("query")({
 			externalMediaSearch: [
 				{
-					db: ExtDatabase.MyAnimeList, 
+					db: this.apiSelection, 
 					name: this.searchText
 				},
 				{
