@@ -7,7 +7,7 @@
 			placeholder="name..."
 			@keyup.enter="runSearch"
 		/>
-		<div class="block">
+		<div>
 			<o-radio v-model="apiSelection" :native-value="apiAnime">
 				MyAnimeList
 			</o-radio>
