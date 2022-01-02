@@ -48,6 +48,27 @@ main {
 	border-color: var(--primary);
 }
 
+.o-radio {
+	padding: 5px;
+	margin-left: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background: var(--primary-invert-highlight);
+	border-radius: 8px;
+}
+
+.o-radio input {
+	border: solid;
+	border-color: var(--primary-invert-highlight);
+	background: var(--primary-invert);
+}
+
+.o-radio--checked input {
+	border: solid;
+	border-color: var(--primary);
+	background: var(--primary);
+}
+
 body {
 	background-color: var(--primary-invert);
 }
