@@ -86,6 +86,6 @@ export default class MediaSeries extends Vue {
 .series-item:hover {
 	background-color: var(--primary-inverted-highlight);
 	border-style: solid;
-	border-color: var(--primary)
+	border-color: var(--primary);
 }
 </style>

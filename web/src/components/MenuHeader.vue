@@ -29,7 +29,7 @@ header {
 	left: 0;
 	right: 0;
 	background-color: var(--primary-invert);
-	padding-bottom: 0px;
+	padding-bottom: 0;
 	padding-left: 30px;
 	border-bottom: solid;
 	border-bottom-color: var(--primary-invert-highlight);
@@ -44,7 +44,6 @@ header a {
 	font-size: 1.2em;
 	padding-top: 15px;
 	padding-bottom: 15px;
-
 	margin-bottom: 0;
 }
 

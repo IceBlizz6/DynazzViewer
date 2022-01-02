@@ -26,25 +26,21 @@ main {
 }
 
 :root {
-	--primary: rgba(187, 187, 187, 1);
-	--primary-invert: rgba(28, 28, 28, 1);
-	--primary-invert-highlight: rgba(99, 99, 99, 1);
-
+	--primary: rgb(187 187 187 / 100%);
+	--primary-invert: rgb(28 28 28 / 100%);
+	--primary-invert-highlight: rgb(99 99 99 / 100%);
 	--oruga-tooltip-background-color: var(--primary-invert);
 	--oruga-tooltip-color: var(--primary);
 	--oruga-modal-content-background-color: background-color: var(--primary-invert);
 	--oruga-modal-content-fullscreen-background-color: background-color: var(--primary-invert);
 	--oruga-modal-overlay-background-color: var(--primary-invert);
-
 	--oruga-button-background-color: var(--primary-invert-highlight);
 	--oruga-button-color: var(--primary);
 	--oruga-button-border: 1px solid var(--primary-invert);
-
 	--oruga-checkbox-active-background-color: var(--primary-invert-highlight);
 	--oruga-checkbox-background-color: var(--primary-invert-highlight);
 	--oruga-checkbox-border-color: var(--primary-invert-highlight);
 	--oruga-checkbox-checkmark-color: var(--primary);
-
 	--oruga-field-label-color: var(--primary);
 }
 
@@ -56,9 +52,14 @@ body {
 	background-color: var(--primary-invert);
 }
 
-p, a, dt, dd, span, li, h1 {
+p,
+a,
+dt,
+dd,
+span,
+li,
+h1 {
 	color: var(--primary);
 	font-size: 1.05em;
-	
 }
 </style>
