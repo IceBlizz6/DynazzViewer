@@ -55,6 +55,13 @@
 				</o-checkbox>
 				|
 				<o-checkbox
+					v-model="enableMaybe"
+					type="checkbox"
+				>
+					Maybe
+				</o-checkbox>
+				|
+				<o-checkbox
 					v-model="enableSkip"
 					type="checkbox"
 				>
@@ -99,6 +106,9 @@
 						<o-button @click="flagWatch(series)">
 							Watch
 						</o-button>
+						<o-button @click="flagMaybe(series)">
+							Maybe
+						</o-button>
 						<o-button @click="flagSkip(series)">
 							Skip
 						</o-button>
@@ -135,6 +145,7 @@ export default class AnimeSeasonView extends Vue {
 	private selectedSeriesList: AnimeSeasonSeries[] = []
 
 	private enableWatch = false
+	private enableMaybe = false
 	private enableSkip = false
 	private enableNone = false
 
@@ -190,6 +201,10 @@ export default class AnimeSeasonView extends Vue {
 		this.setFlagState(item, AnimeSeasonFlagState.Skip)
 	}
 
+	private flagMaybe(item: AnimeSeasonSeries): void {
+		this.setFlagState(item, AnimeSeasonFlagState.Maybe)
+	}
+
 	private flagNone(item: AnimeSeasonSeries): void {
 		this.setFlagState(item, AnimeSeasonFlagState.None)
 	}
@@ -209,19 +224,22 @@ export default class AnimeSeasonView extends Vue {
 
 	private get seriesFilteredList(): AnimeSeasonSeries[] {
 		const enableWatch = this.enableWatch
+		const enableMaybe = this.enableMaybe
 		const enableSkip = this.enableSkip
 		const enableNone = this.enableNone
 
 		return this.selectedSeriesList.filter(el => {
-			if (!enableWatch && !enableSkip && !enableNone) {
+			if (!enableWatch && !enableSkip && !enableNone && !enableMaybe) {
 				return true
-			} else if (enableWatch && enableSkip && enableNone) {
+			} else if (enableWatch && enableSkip && enableNone && enableMaybe) {
 				return true
 			} else if (enableWatch && el.flag == AnimeSeasonFlagState.Watch) {
 				return true
 			} else if (enableSkip && el.flag == AnimeSeasonFlagState.Skip) {
 				return true
 			} else if (enableNone && el.flag == AnimeSeasonFlagState.None) {
+				return true
+			} else if (enableMaybe && el.flag == AnimeSeasonFlagState.Maybe) {
 				return true
 			} else {
 				return false
