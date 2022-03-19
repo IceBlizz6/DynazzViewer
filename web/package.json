@@ -8,7 +8,8 @@
     "generate": "zeus http://localhost:8080/graphql src",
     "lint:ts": "eslint src/*.ts src/*.vue src/**/*.ts src/**/*.vue --fix",
     "lint:css": "stylelint src/*.vue src/**/*.vue --fix",
-    "lint": "npm run lint:ts && npm run lint:css"
+    "lint:vue": "npx vue-tsc --noEmit",
+    "lint": "npm run lint:ts && npm run lint:css && npm run lint:vue"
   },
   "dependencies": {
     "@babel/types": "^7.17.0",
@@ -20,8 +21,6 @@
     "graphql-zeus": "^4.0.4",
     "moment": "^2.29.1",
     "numeral": "^2.0.6",
-    "vue-class-component": "^8.0.0-rc.1",
-    "vue-property-decorator": "^10.0.0-rc.3",
     "vue": "^3.2.31",
     "vue-router": "^4.0.14",
     "vue-tsc": "^0.33.2-patch.1"
@@ -36,7 +35,8 @@
   "eslintConfig": {
     "root": true,
     "env": {
-      "node": true
+      "node": true,
+      "vue/setup-compiler-macros": true
     },
     "extends": [
       "plugin:vue/vue3-recommended",

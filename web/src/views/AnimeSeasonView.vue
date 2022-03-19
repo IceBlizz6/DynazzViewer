@@ -3,14 +3,14 @@
 		<section>
 			<o-field label="Year">
 				<o-input
-					v-model="yearInput"
+					v-model="state.yearInput"
 					type="number"
 					placeholder="year"
 				/>
 			</o-field>
 
 			<o-field label="Season">
-				<o-select v-model="seasonInput">
+				<o-select v-model="state.seasonInput">
 					<option :value="seasonWinter">
 						Winter
 					</option>
@@ -44,32 +44,32 @@
 			</ul>
 		</section>
 		<hr>
-		<section v-if="selected != null">
-			<h1>{{ selected.year }} - {{ selected.season }}</h1>
+		<section v-if="state.selected != null">
+			<h1>{{ state.selected.year }} - {{ state.selected.season }}</h1>
 			<div>
 				<o-checkbox
-					v-model="enableWatch"
+					v-model="state.enableWatch"
 					type="checkbox"
 				>
 					Watch
 				</o-checkbox>
 				|
 				<o-checkbox
-					v-model="enableMaybe"
+					v-model="state.enableMaybe"
 					type="checkbox"
 				>
 					Maybe
 				</o-checkbox>
 				|
 				<o-checkbox
-					v-model="enableSkip"
+					v-model="state.enableSkip"
 					type="checkbox"
 				>
 					Skip
 				</o-checkbox>
 				|
 				<o-checkbox
-					v-model="enableNone"
+					v-model="state.enableNone"
 					type="checkbox"
 				>
 					None
@@ -133,165 +133,162 @@
 	</article>
 </template>
 
-<script lang="ts">
-import { Vue } from 'vue-property-decorator'
+<script setup lang="ts">
+import { computed, onMounted, reactive } from "vue"
 import { AnimeSeasonFlagState, MalYearSeason, ExtDatabase, Gql } from '@/zeus'
 import queries, { AnimeSeasonSeries, MalSeasonIdentifier } from "@/lib/Queries"
 import moment from 'moment'
 
-export default class AnimeSeasonView extends Vue {
-	private seasonHeaders: MalSeasonIdentifier[] = []
-	private selected: MalSeasonIdentifier | null = null
-	private selectedSeriesList: AnimeSeasonSeries[] = []
+const seasonWinter = MalYearSeason.WINTER
+const seasonSpring = MalYearSeason.SPRING
+const seasonSummer = MalYearSeason.SUMMER
+const seasonFall = MalYearSeason.FALL
 
-	private enableWatch = false
-	private enableMaybe = false
-	private enableSkip = false
-	private enableNone = false
+class State {
+	public seasonHeaders: MalSeasonIdentifier[] = []
+	public selected: MalSeasonIdentifier | null = null
+	public selectedSeriesList: AnimeSeasonSeries[] = []
 
-	private seasonWinter = MalYearSeason.WINTER
-	private seasonSpring = MalYearSeason.SPRING
-	private seasonSummer = MalYearSeason.SUMMER
-	private seasonFall = MalYearSeason.FALL
+	public enableWatch = false
+	public enableMaybe = false
+	public enableSkip = false
+	public enableNone = false
 
-	private yearInput: number | null = null
-	private seasonInput: MalYearSeason = MalYearSeason.WINTER
+	public yearInput: number | null = null
+	public seasonInput: MalYearSeason = MalYearSeason.WINTER
+}
+const state = reactive(new State())
 
-	public mounted(): void {
-		this.refreshHeaders()
-		const now = moment()
-		this.yearInput = now.year()
-	}
+function flagWatch(item: AnimeSeasonSeries): void {
+	setFlagState(item, AnimeSeasonFlagState.Watch)
+}
 
-	private async refreshHeaders(): Promise<void> {
-		const seasonList = await queries.animeSeasonList()
-		this.seasonHeaders = seasonList.animeSeasonList
-	}
+function flagSkip(item: AnimeSeasonSeries): void {
+	setFlagState(item, AnimeSeasonFlagState.Skip)
+}
 
-	private get orderedSeasonHeader(): MalSeasonIdentifier[] {
-		const seasonOrder: MalYearSeason[] = [
-			MalYearSeason.WINTER,
-			MalYearSeason.SPRING,
-			MalYearSeason.SUMMER,
-			MalYearSeason.FALL
+function flagMaybe(item: AnimeSeasonSeries): void {
+	setFlagState(item, AnimeSeasonFlagState.Maybe)
+}
+
+function flagNone(item: AnimeSeasonSeries): void {
+	setFlagState(item, AnimeSeasonFlagState.None)
+}
+
+async function refreshHeaders(): Promise<void> {
+	const seasonList = await queries.animeSeasonList()
+	state.seasonHeaders = seasonList.animeSeasonList
+}
+
+async function setFlagState(item: AnimeSeasonSeries, state: AnimeSeasonFlagState): Promise<void> {
+	const data = await Gql("mutation")({
+		animeSeasonMark: [
+			{ malId: item.malId, flag: state },
+			true
 		]
-		return this.seasonHeaders.sort(
-			(a, b): number => {
-				if (a.year != b.year) {
-					return a.year - b.year
-				} else {
-					const aIndex = seasonOrder.indexOf(a.season) 
-					const bIndex = seasonOrder.indexOf(b.season) 
-					return aIndex - bIndex
-				}
-			}
-		)
+	})
+	const success = data.animeSeasonMark
+	if (success) {
+		item.flag = state
 	}
+}
 
-	private async querySelectedSeries(item: MalSeasonIdentifier): Promise<void> {
-		const { animeSeason } = await queries.animeSeasonSeries(item.year, item.season)
-		this.selectedSeriesList = animeSeason
+function selectHeader(item: MalSeasonIdentifier): void {
+	state.selectedSeriesList = []
+	if (state.selected == item) {
+		state.selected = null
+	} else {
+		state.selected = item
+		querySelectedSeries(item)
 	}
+}
 
-	private flagWatch(item: AnimeSeasonSeries): void {
-		this.setFlagState(item, AnimeSeasonFlagState.Watch)
-	}
-
-	private flagSkip(item: AnimeSeasonSeries): void {
-		this.setFlagState(item, AnimeSeasonFlagState.Skip)
-	}
-
-	private flagMaybe(item: AnimeSeasonSeries): void {
-		this.setFlagState(item, AnimeSeasonFlagState.Maybe)
-	}
-
-	private flagNone(item: AnimeSeasonSeries): void {
-		this.setFlagState(item, AnimeSeasonFlagState.None)
-	}
-
-	private async setFlagState(item: AnimeSeasonSeries, state: AnimeSeasonFlagState): Promise<void> {
-		const data = await Gql("mutation")({
-			animeSeasonMark: [
-				{ malId: item.malId, flag: state },
+async function addAnimeSeason(): Promise<void> {
+	if (state.yearInput == null) {
+		console.error("Missing year")
+	} else {
+		const { animeSeasonAdd } = await Gql("mutation")({
+			animeSeasonAdd: [
+				{ year: state.yearInput, season: state.seasonInput },
 				true
 			]
 		})
-		const success = data.animeSeasonMark
+		const success = animeSeasonAdd
 		if (success) {
-			item.flag = state
-		}
-	}
-
-	private get seriesFilteredList(): AnimeSeasonSeries[] {
-		const enableWatch = this.enableWatch
-		const enableMaybe = this.enableMaybe
-		const enableSkip = this.enableSkip
-		const enableNone = this.enableNone
-
-		return this.selectedSeriesList.filter(el => {
-			if (!enableWatch && !enableSkip && !enableNone && !enableMaybe) {
-				return true
-			} else if (enableWatch && enableSkip && enableNone && enableMaybe) {
-				return true
-			} else if (enableWatch && el.flag == AnimeSeasonFlagState.Watch) {
-				return true
-			} else if (enableSkip && el.flag == AnimeSeasonFlagState.Skip) {
-				return true
-			} else if (enableNone && el.flag == AnimeSeasonFlagState.None) {
-				return true
-			} else if (enableMaybe && el.flag == AnimeSeasonFlagState.Maybe) {
-				return true
-			} else {
-				return false
-			}
-		})
-	}
-
-	private selectHeader(item: MalSeasonIdentifier): void {
-		this.selectedSeriesList = []
-		if (this.selected == item) {
-			this.selected = null
-		} else {
-			this.selected = item
-			this.querySelectedSeries(item)
-		}
-	}
-
-	private async addAnimeSeason(): Promise<void> {
-		if (this.yearInput == null) {
-			console.error("Missing year")
-		} else {
-			const { animeSeasonAdd } = await Gql("mutation")({
-				animeSeasonAdd: [
-					{ year: this.yearInput, season: this.seasonInput },
-					true
-				]
-			})
-			const success = animeSeasonAdd
-			if (success) {
-				this.selected = null
-				this.selectedSeriesList = []
-				this.refreshHeaders()
-			}
-		}
-	}
-
-	private async addMediaSeries(item: AnimeSeasonSeries): Promise<void> {
-		const { externalMediaAdd } = await Gql("mutation")({
-			externalMediaAdd: [
-				{
-					db: ExtDatabase.MyAnimeList,
-					code: item.malId.toString(),
-				},
-				true
-			]
-		})
-		const success: boolean = externalMediaAdd
-		if (success) {
-			item.saved = true
+			state.selected = null
+			state.selectedSeriesList = []
+			refreshHeaders()
 		}
 	}
 }
+
+async function querySelectedSeries(item: MalSeasonIdentifier): Promise<void> {
+	const { animeSeason } = await queries.animeSeasonSeries(item.year, item.season)
+	state.selectedSeriesList = animeSeason
+}
+
+async function addMediaSeries(item: AnimeSeasonSeries): Promise<void> {
+	const { externalMediaAdd } = await Gql("mutation")({
+		externalMediaAdd: [
+			{
+				db: ExtDatabase.MyAnimeList,
+				code: item.malId.toString(),
+			},
+			true
+		]
+	})
+	const success: boolean = externalMediaAdd
+	if (success) {
+		item.saved = true
+	}
+}
+
+const orderedSeasonHeader = computed((): MalSeasonIdentifier[] => {
+	const seasonOrder: MalYearSeason[] = [
+		MalYearSeason.WINTER,
+		MalYearSeason.SPRING,
+		MalYearSeason.SUMMER,
+		MalYearSeason.FALL
+	]
+	const copy = [ ...state.seasonHeaders ]
+	return copy.sort(
+		(a, b): number => {
+			if (a.year != b.year) {
+				return a.year - b.year
+			} else {
+				const aIndex = seasonOrder.indexOf(a.season) 
+				const bIndex = seasonOrder.indexOf(b.season) 
+				return aIndex - bIndex
+			}
+		}
+	)
+})
+
+const seriesFilteredList = computed((): AnimeSeasonSeries[] => {
+	return state.selectedSeriesList.filter(el => {
+		if (!state.enableWatch && !state.enableSkip && !state.enableNone && !state.enableMaybe) {
+			return true
+		} else if (state.enableWatch && state.enableSkip && state.enableNone && state.enableMaybe) {
+			return true
+		} else if (state.enableWatch && el.flag == AnimeSeasonFlagState.Watch) {
+			return true
+		} else if (state.enableSkip && el.flag == AnimeSeasonFlagState.Skip) {
+			return true
+		} else if (state.enableNone && el.flag == AnimeSeasonFlagState.None) {
+			return true
+		} else if (state.enableMaybe && el.flag == AnimeSeasonFlagState.Maybe) {
+			return true
+		} else {
+			return false
+		}
+	})
+})
+
+onMounted(() => {
+	refreshHeaders()
+	const now = moment()
+	state.yearInput = now.year()
+})
 </script>
 
 <style scoped>

@@ -2,27 +2,27 @@
 	<article>
 		<article class="series-list">
 			<MediaSeries
-				v-for="mediaItem in source"
+				v-for="mediaItem in state.source"
 				:key="mediaItem.id"
 				:source="mediaItem"
 				@click="selectSeries(mediaItem)"
 			/>
 		</article>
-		<o-modal v-model:active="activeModal">
+		<o-modal v-model:active="state.activeModal">
 			<article
-				v-if="selected != null"
+				v-if="state.selected != null"
 				class="series-modal"
 			>
 				<div class="series-modal-img">
 					<img
-						v-if="selected.images.length > 0"
-						:src="selected.images[0].url"
+						v-if="state.selected.images.length > 0"
+						:src="state.selected.images[0].url"
 					>
 				</div>
-				<span class="series-title">{{ selected.name }}</span>
+				<span class="series-title">{{ state.selected.name }}</span>
 				<div class="series-season-list">
 					<section
-						v-for="season in selected.children"
+						v-for="season in state.selected.children"
 						:key="season.id"
 						class="series-season"
 					>
@@ -96,66 +96,66 @@
 	</article>
 </template>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component'
+<script setup lang="ts">
+import { onMounted, reactive } from "vue"
 import { Gql, ViewStatus } from '@/zeus'
 import MediaSeries from '@/components/MediaSeries.vue'
 import numeral from 'numeral'
 import queries, { MediaUnit, MediaPart } from "@/lib/Queries"
 
-@Options({
-	components: {
-		MediaSeries
-	}
-})
-export default class MediaView extends Vue {
+class State {
 	public source: MediaUnit[] = []
 	public selected: MediaUnit | null = null
 	public activeModal = false
+}
+const state = reactive(new State())
 
-	public stateNone = ViewStatus.None
-	public stateViewed = ViewStatus.Viewed
-	public stateSkipped = ViewStatus.Skipped
+const stateNone = ViewStatus.None
+const stateViewed = ViewStatus.Viewed
+const stateSkipped = ViewStatus.Skipped
 
-	public async mounted(): Promise<void> {
-		const response = await queries.listMediaUnits()
-		this.source = response.listMediaUnits
-		this.selected = null
-	}
-
-	private episodeFormat(value: number): string {
+function episodeFormat(value: number | undefined): string {
+	if (value === undefined) {
+		throw new Error("Not supported")
+	} else {
 		return "E" + numeral(value).format("00")
 	}
+}
 
-	private isLinked(mediaPart: MediaPart): boolean {
-		return mediaPart.mediaFile != null
-	}
+function isLinked(mediaPart: MediaPart): boolean {
+	return mediaPart.mediaFile != null
+}
 
-	public selectSeries(item: MediaUnit): void {
-		this.selected = item
-		this.activeModal = true
-	}
-			
-	private async setEpisodeWatch(episode: MediaPart, status: ViewStatus): Promise<void> {
-		const response = await Gql("mutation")(
-			{
-				setEpisodeWatchState: [
-					{
-						mediaPartId: episode.id,
-						status: status
-					},
-					true
-				]
-			}
-		)
-		const success = response
-		if (success) {
-			episode.status = status
-		} else {
-			throw new Error("Operation failed")
+function selectSeries(item: MediaUnit): void {
+	state.selected = item
+	state.activeModal = true
+}
+
+async function setEpisodeWatch(episode: MediaPart, status: ViewStatus): Promise<void> {
+	const response = await Gql("mutation")(
+		{
+			setEpisodeWatchState: [
+				{
+					mediaPartId: episode.id,
+					status: status
+				},
+				true
+			]
 		}
+	)
+	const success = response
+	if (success) {
+		episode.status = status
+	} else {
+		throw new Error("Operation failed")
 	}
 }
+
+onMounted(async() => {
+	const response = await queries.listMediaUnits()
+	state.source = response.listMediaUnits
+	state.selected = null
+})
 </script>
 
 <style>
@@ -192,16 +192,16 @@ export default class MediaView extends Vue {
 	visibility: hidden;
 }
 
+.toolbar-action:hover {
+	cursor: pointer;
+	border-style: solid;
+}
+
 .episode-item:hover .toolbar-action {
 	visibility: visible;
 }
 
 .episode-item:hover {
 	background-color: var(--primary-invert-highlight);
-}
-
-.toolbar-action:hover {
-	cursor: pointer;
-	border-style: solid;
 }
 </style>

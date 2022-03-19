@@ -1,6 +1,6 @@
 <template>
 	<article class="modal-body">
-		<section v-if="modalState == 1">
+		<section v-if="state.modalState == 1">
 			<h1>Detected media names</h1>
 			<table>
 				<tr>
@@ -49,18 +49,18 @@
 			</o-button>
 		</section>
 
-		<section v-if="modalState == 2">
+		<section v-if="state.modalState == 2">
 			<h1>Link to media</h1>
 			<hr>
 			<ul>
 				<li
-					v-for="mediaName in mediaNames"
+					v-for="mediaName in state.mediaNames"
 					:key="mediaName.mediaName"
 				>
 					{{ mediaName.mediaName }} ({{ mediaName.files.length }} files)
 				</li>
 			</ul>
-			<template v-if="!querying">
+			<template v-if="!state.querying">
 				<o-button @click="useMyLibrary">
 					My library
 				</o-button>
@@ -70,12 +70,12 @@
 			</template>
 		</section>
 
-		<section v-if="modalState == 3">
+		<section v-if="state.modalState == 3">
 			<h1>Verify result</h1>
 			<hr>
 			<ul>
 				<li
-					v-for="result in queryResults"
+					v-for="result in state.queryResults"
 					:key="result.mediaName.mediaName"
 				>
 					{{ result.mediaName.mediaName }}
@@ -97,11 +97,10 @@
 	</article>
 </template>
 
-<script lang="ts">
-import { Vue, Prop } from 'vue-property-decorator'
+<script setup lang="ts">
+import { reactive } from "vue"
 import { FileLinkRow } from "@/lib/FileLinkRow"
 import { ExtDatabase, Gql } from '@/zeus'
-import { MediaPartCollection } from "@/lib/Queries"
 
 interface MediaName {
 	mediaName: string
@@ -127,227 +126,231 @@ interface QueryResult {
 	saved: boolean
 }
 
-export default class FileLinkModal extends Vue {
-	@Prop({ required: true })
-	private readonly detectedFileResults!: FileLinkRow[]
-	
-	private modalState = 1
-	private mediaNames: MediaName[] = []
-	private querying = false
-	private queryResults: SearchResult[] = []
+interface Props {
+	detectedFileResults: FileLinkRow[]
+}
+const props = defineProps<Props>()
 
-	private moveToQuerySelection(): void {
-		this.mediaNames = []
-		const resultWithName = this.detectedFileResults.filter(e => e.mediaName != null)
-		const map = this.groupBy<string, FileLinkRow>(resultWithName, e => {
-			if (e.mediaName == null) {
-				throw new Error("Media name cannot be empty")
-			} else {
-				return e.mediaName
-			}
-		})
-		for (const [key, value] of map.entries()) {
-			this.mediaNames.push({ mediaName: key, files: value })
-		}
-		this.modalState = 2
-	}
+class State {
+	public modalState: number = 1
+	public mediaNames: MediaName[] = []
+	public querying = false
+	public queryResults: SearchResult[] = []
+}
+const state = reactive(new State())
 
-	private useMyLibrary(): void {
-		this.querying = true
-		const promises = this.mediaNames.map(e => this.internalMediaSearch(e))
-		Promise.all(promises).then(
-			results => {
-				this.handleQueryResults(results)
-			}
-		)
-	}
+interface Emits {
+	(event: "finalized"): void
+}
+const emit = defineEmits<Emits>()
 
-	private useMyAnimeList(): void {
-		this.querying = true
-		const promises = this.mediaNames.map(e => this.myAnimeListSearch(e))
-		Promise.all(promises).then(
-			results => {
-				this.handleQueryResults(results)
-			}
-		)
-	}
-
-	private async internalMediaSearch(mediaName: MediaName): Promise<SearchResult> {
-		const response = await Gql("query")({
-			internalMediaSearch: [
-				{
-					name: mediaName.mediaName
-				},
-				{
-					id: true,
-					name: true,
-					databaseEntry: {
-						mediaDatabase: true,
-						code: true,
-					}
-				}
-			]
-		})
-		const results = response.internalMediaSearch.map(result => {
-			if (result.databaseEntry == null) {
-				throw new Error("Result has no DB entry")
-			} else {
-				const t: QueryResult = {
-					extDb: result.databaseEntry.mediaDatabase,
-					extDbCode: result.databaseEntry.code,
-					saved: true,
-					name: result.name
-				}
-				return t
-			}
-		})
-		const t: SearchResult = {
-			mediaName: mediaName,
-			results: results,
-			selectedResult: null,
-		}
-		return t
-	}
-
-	private async myAnimeListSearch(mediaName: MediaName): Promise<SearchResult> {
-		const response = await Gql("query")({
-			externalMediaSearch: [
-				{
-					name: mediaName.mediaName,
-					db: ExtDatabase.MyAnimeList
-				},
-				{
-					name: true,
-					saved: true,
-					extDb: true,
-					extDbCode: true,
-				}
-			]
-		})
-		const results = response.externalMediaSearch.map(result => {
-			const ret: QueryResult = {
-				extDb: result.extDb,
-				extDbCode: result.extDbCode,
-				saved: result.saved,
-				name: result.name,
-			}
-			return ret
-		})
-		const r: SearchResult = {
-			mediaName: mediaName,
-			results: results,
-			selectedResult: null,
-		}
-		return r
-	}
-
-	private handleQueryResults(results: SearchResult[]): void {
-		this.queryResults = results
-		this.modalState = 3
-		this.querying = false
-	}
-
-	private async finalizeSelection(): Promise<void> {
-		await this.addUnsavedMedia()
-		for (const result of this.queryResults) {
-			if (result.selectedResult != null) {
-				const selectedResult = result.selectedResult
-				await this.queryForLink(result.mediaName, selectedResult)
-			}
-		}
-		this.$emit("finalized")
-	}
-
-	private async addUnsavedMedia(): Promise<void> {
-		for (const result of this.queryResults) {
-			const selectedResult = result.selectedResult
-			if (selectedResult != null && !selectedResult.saved) {
-				const { externalMediaAdd } = await Gql("mutation")({
-					externalMediaAdd: [
-						{
-							db: selectedResult.extDb,
-							code: selectedResult.extDbCode
-						},
-						true
-					]
-				})
-				if (!externalMediaAdd) {
-					throw new Error("Adding media " + selectedResult.name + " has failed")
-				}
-			}
-		}
-	}
-
-	private async queryForLink(mediaName: MediaName, result: QueryResult): Promise<void> {
-		const response = await Gql("query")({
-			internalMediaLookup: [
-				{
-					db: result.extDb,
-					code: result.extDbCode
-				},
-				{
-					id: true,
-					name: true,
-					seasonNumber: true,
-					children: {
-						id: true,
-						episodeNumber: true,
-						name: true,
-					}
-				}
-			]
-		})
-		const match = response.internalMediaLookup
-		if (match == null) {
-			throw new Error("Unable to find match for " + result.extDbCode)
+function moveToQuerySelection(): void {
+	state.mediaNames = []
+	const resultWithName = props.detectedFileResults.filter(e => e.mediaName != null)
+	const map = groupBy<string, FileLinkRow>(resultWithName, e => {
+		if (e.mediaName == null) {
+			throw new Error("Media name cannot be empty")
 		} else {
-			return this.linkCollection(mediaName, match)
+			return e.mediaName
+		}
+	})
+	for (const [key, value] of map.entries()) {
+		state.mediaNames.push({ mediaName: key, files: value })
+	}
+	state.modalState = 2
+}
+
+function useMyLibrary(): void {
+	state.querying = true
+	const promises = state.mediaNames.map(e => internalMediaSearch(e))
+	Promise.all(promises).then(
+		results => {
+			handleQueryResults(results)
+		}
+	)
+}
+
+function useMyAnimeList(): void {
+	state.querying = true
+	const promises = state.mediaNames.map(e => myAnimeListSearch(e))
+	Promise.all(promises).then(
+		results => {
+			handleQueryResults(results)
+		}
+	)
+}
+
+async function internalMediaSearch(mediaName: MediaName): Promise<SearchResult> {
+	const response = await Gql("query")({
+		internalMediaSearch: [
+			{
+				name: mediaName.mediaName
+			},
+			{
+				id: true,
+				name: true,
+				databaseEntry: {
+					mediaDatabase: true,
+					code: true,
+				}
+			}
+		]
+	})
+	const results = response.internalMediaSearch.map(result => {
+		if (result.databaseEntry == null) {
+			throw new Error("Result has no DB entry")
+		} else {
+			const t: QueryResult = {
+				extDb: result.databaseEntry.mediaDatabase,
+				extDbCode: result.databaseEntry.code,
+				saved: true,
+				name: result.name
+			}
+			return t
+		}
+	})
+	const t: SearchResult = {
+		mediaName: mediaName,
+		results: results,
+		selectedResult: null,
+	}
+	return t
+}
+
+async function myAnimeListSearch(mediaName: MediaName): Promise<SearchResult> {
+	const response = await Gql("query")({
+		externalMediaSearch: [
+			{
+				name: mediaName.mediaName,
+				db: ExtDatabase.MyAnimeList
+			},
+			{
+				name: true,
+				saved: true,
+				extDb: true,
+				extDbCode: true,
+			}
+		]
+	})
+	const results = response.externalMediaSearch.map(result => {
+		const ret: QueryResult = {
+			extDb: result.extDb,
+			extDbCode: result.extDbCode,
+			saved: result.saved,
+			name: result.name,
+		}
+		return ret
+	})
+	const r: SearchResult = {
+		mediaName: mediaName,
+		results: results,
+		selectedResult: null,
+	}
+	return r
+}
+
+function handleQueryResults(results: SearchResult[]): void {
+	state.queryResults = results
+	state.modalState = 3
+	state.querying = false
+}
+
+async function finalizeSelection(): Promise<void> {
+	await addUnsavedMedia()
+	for (const result of state.queryResults) {
+		if (result.selectedResult != null) {
+			const selectedResult = result.selectedResult
+			await queryForLink(result.mediaName, selectedResult)
 		}
 	}
+	emit("finalized")
+}
 
-	private async linkCollection(mediaName: MediaName, partCollection: MediaPartCollection): Promise<void> {
+async function queryForLink(mediaName: MediaName, result: QueryResult): Promise<void> {
+	const response = await Gql("query")({
+		internalMediaLookup: [
+			{
+				db: result.extDb,
+				code: result.extDbCode
+			},
+			{
+				id: true,
+				name: true,
+				seasonNumber: true,
+				children: {
+					id: true,
+					episodeNumber: true,
+					name: true,
+				}
+			}
+		]
+	})
+	const match = response.internalMediaLookup
+	if (match == null) {
+		throw new Error("Unable to find match for " + result.extDbCode)
+	} else {
 		for (const file of mediaName.files) {
-			if (file.seasonNumber == partCollection.seasonNumber) {
-				const episode = partCollection.children
+			if (file.seasonNumber == match.seasonNumber) {
+				const episode = match.children
 					.find(episode => episode.episodeNumber == file.episodeNumber)
 				if (episode !== undefined) {
-					await this.linkEpisode(file.fileName, episode.id)
+					await linkEpisode(file.fileName, episode.id)
 				}
 			} else {
-				throw new Error("Unable to link " + file.fileName + " on " + partCollection.name + 
-					" season " + partCollection.seasonNumber + ", season number does not match")
+				throw new Error("Unable to link " + file.fileName + " on " + match.name + 
+					" season " + match.seasonNumber + ", season number does not match")
 			}
 		}
 	}
+}
 
-	private async linkEpisode(fileName: string, mediaPartId: number): Promise<void> {
-		const { linkVideoFileWithName } = await Gql("mutation")({
-			linkVideoFileWithName: [
-				{
-					mediaFileName: fileName,
-					mediaPartId: mediaPartId
-				},
-				true
-			]
-		})
-		const success = linkVideoFileWithName
-		if (!success) {
-			throw new Error("Link failed for " + fileName + " on " + mediaPartId)
+async function addUnsavedMedia(): Promise<void> {
+	for (const result of state.queryResults) {
+		const selectedResult = result.selectedResult
+		if (selectedResult != null && !selectedResult.saved) {
+			const { externalMediaAdd } = await Gql("mutation")({
+				externalMediaAdd: [
+					{
+						db: selectedResult.extDb,
+						code: selectedResult.extDbCode
+					},
+					true
+				]
+			})
+			if (!externalMediaAdd) {
+				throw new Error("Adding media " + selectedResult.name + " has failed")
+			}
 		}
 	}
+}
 
-	private groupBy<TKey, TItem>(list: TItem[], keyGetter: (item: TItem) => TKey): Map<TKey, TItem[]> {
-		const map = new Map()
-		list.forEach((item) => {
-			const key = keyGetter(item)
-			const collection = map.get(key)
-			if (!collection) {
-				map.set(key, [item])
-			} else {
-				collection.push(item)
-			}
-		})
-		return map
+async function linkEpisode(fileName: string, mediaPartId: number): Promise<void> {
+	const { linkVideoFileWithName } = await Gql("mutation")({
+		linkVideoFileWithName: [
+			{
+				mediaFileName: fileName,
+				mediaPartId: mediaPartId
+			},
+			true
+		]
+	})
+	const success = linkVideoFileWithName
+	if (!success) {
+		throw new Error("Link failed for " + fileName + " on " + mediaPartId)
 	}
+}
+
+function groupBy<TKey, TItem>(list: TItem[], keyGetter: (item: TItem) => TKey): Map<TKey, TItem[]> {
+	const map = new Map()
+	list.forEach((item) => {
+		const key = keyGetter(item)
+		const collection = map.get(key)
+		if (!collection) {
+			map.set(key, [item])
+		} else {
+			collection.push(item)
+		}
+	})
+	return map
 }
 </script>

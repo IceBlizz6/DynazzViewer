@@ -1,7 +1,7 @@
 <template>
 	<li>
 		<div class="tree-item-header directory-node">
-			<span @click="toggleChildren()">
+			<span @click="toggleChildren">
 				<img
 					class="tree-icon"
 					src="@/assets/FolderContentAvailable.png"
@@ -31,17 +31,18 @@
 			</span>
 		</div>
 		<ul
-			v-if="showChildren"
+			v-if="state.showChildren"
 			class="tree-children-list"
 		>
-			<FileTree
+			<FileTree.default
 				v-for="node in childrenDirectories"
 				:key="node.name"
 				:parent-node="node"
-				:nodes="node.children"
+				:nodes="node.children!"
 				:label="node.name"
-				:file-view="fileView"
+				:tree="tree"
 				:is-root="false"
+				:on-detect-link="onDetectLink"
 			/>
 			<li
 				v-for="node in childrenFiles"
@@ -149,113 +150,110 @@
 	</li>
 </template>
 
-<script lang="ts">
-import { Vue } from "vue-class-component"
-import { Prop } from "vue-property-decorator"
+<script setup lang="ts">
+import { computed, reactive } from "vue"
 import { TreeNode } from "@/lib/TreeNode"
-import FileView from "@/views/FileView.vue"
 import { ViewStatus } from "@/zeus"
 import { VideoFile } from "@/lib/Queries"
+import { Tree } from "@/lib/Tree"
+import * as FileTree from "@/components/FileTree.vue"
 
-export default class FileTree extends Vue {
-	@Prop({ required: true })
-	private readonly label!: string
+interface Props {
+	label: string
+	nodes: TreeNode[]
+	parentNode: TreeNode
+	tree: Tree
+	isRoot: boolean
+	onDetectLink(videoFiles: VideoFile[]): void
+}
 
-	@Prop({ required: true })
-	private readonly nodes!: TreeNode[]
+const props = defineProps<Props>()
 
-	@Prop({ required: true })
-	private readonly parentNode!: TreeNode
+class State {
+	public showChildren: boolean = true
+}
+const state = reactive(new State())
 
-	@Prop({ required: true })
-	private readonly fileView!: FileView
+function removeRoot(): void {
+	props.tree.removeRoot(props.parentNode)
+}
 
-	@Prop({ required: true })
-	private readonly isRoot!: boolean
+function toggleChildren(): void {
+	state.showChildren = !state.showChildren
+}
 
-	private showChildren = true
-	
-	private get childrenDirectories(): TreeNode[] {
-		return this.nodes
-			.filter(el => el.children != null)
-			.sort(
-				(a: TreeNode, b: TreeNode) => (a.name > b.name)? 1 : -1
-			)
-	}
+function isLinked(videoFile: VideoFile): boolean {
+	return videoFile.linkedMediaPartId != null
+}
 
-	private get childrenFiles(): TreeNode[] {
-		return this.nodes
-			.filter(el => el.videoFile != null)
-			.sort(
-				(a, b) => {
-					if (a.videoFile == null || b.videoFile == null) {
-						throw new Error("Sort encountered node without video")
-					} else {
-						return (a.videoFile.fileName.name > b.videoFile.fileName.name)? 1 : -1
-					}
-				}
-			)
-	}
+function setStatusViewed(node: TreeNode): void {
+	setViewed(node, ViewStatus.Viewed)
+}
 
-	private removeRoot(): void {
-		this.fileView.removeRoot(this.parentNode)
-	}
+function setStatusSkipped(node: TreeNode): void {
+	setViewed(node, ViewStatus.Skipped)
+}
 
-	private isLinked(videoFile: VideoFile): boolean {
-		return videoFile.linkedMediaPartId != null
-	}
-	
-	private toggleChildren(): void {
-		this.showChildren = !this.showChildren
-	}
+function setStatusNone(node: TreeNode): void {
+	setViewed(node, ViewStatus.None)
+}
 
-	private showExplorer(node: TreeNode): void {
-		if (node.videoFile == null) {
-			throw new Error("Node is not a video file")
-		} else {
-			this.fileView.showExplorer(node.videoFile)
-		}
-	}
-
-	private setStatusViewed(node: TreeNode): void {
-		this.setViewed(node, ViewStatus.Viewed)
-	}
-
-	private setStatusSkipped(node: TreeNode): void {
-		this.setViewed(node, ViewStatus.Skipped)
-	}
-
-	private setStatusNone(node: TreeNode): void {
-		this.setViewed(node, ViewStatus.None)
-	}
-
-	private setViewed(node: TreeNode, status: ViewStatus): void {
-		this.fileView.setViewed(node, status)
-	}
-
-	private playVideo(node: TreeNode): void {
-		if (node.videoFile == null) {
-			throw new Error("Node is not a video")
-		} else {
-			this.fileView.playVideo(node.videoFile)
-		}
-	}
-
-	private detectLink(node: TreeNode): void {
-		if (node.children == null) {
-			throw new Error("Node is not a directory")
-		} else {
-			const videoFiles = node.children
-				.map(el => el.videoFile)
-				.filter(this.notEmpty)
-			this.fileView.detectLink(videoFiles)
-		}
-	}
-
-	public notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
-		return value !== null && value !== undefined
+function showExplorer(node: TreeNode): void {
+	if (node.videoFile == null) {
+		throw new Error("Node is not a video file")
+	} else {
+		props.tree.showExplorer(node.videoFile)
 	}
 }
+
+function setViewed(node: TreeNode, status: ViewStatus): void {
+	props.tree.setViewed(node, status)
+}
+
+function playVideo(node: TreeNode): void {
+	if (node.videoFile == null) {
+		throw new Error("Node is not a video")
+	} else {
+		props.tree.playVideo(node.videoFile)
+	}
+}
+
+function detectLink(node: TreeNode): void {
+	if (node.children == null) {
+		throw new Error("Node is not a directory")
+	} else {
+		const videoFiles = node.children
+			.map(el => el.videoFile)
+			.filter(notEmpty)
+		props.onDetectLink(videoFiles)
+	}
+}
+
+function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+	return value !== null && value !== undefined
+}
+
+const childrenDirectories = computed((): TreeNode[] => {
+	return props.nodes
+		.filter(el => el.children != null)
+		.sort(
+			(a: TreeNode, b: TreeNode) => (a.name > b.name)? 1 : -1
+		)
+})
+
+const childrenFiles = computed((): TreeNode[] => {
+	return props.nodes
+		.filter(el => el.videoFile != null)
+		.sort(
+			(a, b) => {
+				if (a.videoFile == null || b.videoFile == null) {
+					throw new Error("Sort encountered node without video")
+				} else {
+					return (a.videoFile.fileName.name > b.videoFile.fileName.name)? 1 : -1
+				}
+			}
+		)
+})
 </script>
 
 <style scoped>

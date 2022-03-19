@@ -7,17 +7,8 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { Options, Vue } from "vue-class-component"
+<script setup lang="ts">
 import MenuHeader from "@/components/MenuHeader.vue"
-
-@Options({
-	components: {
-		MenuHeader
-	}
-})
-export default class App extends Vue {
-}
 </script>
 
 <style>
@@ -63,6 +54,7 @@ main {
 	background: var(--primary-invert);
 }
 
+/* stylelint-disable-next-line selector-class-pattern */
 .o-radio--checked input {
 	border: solid;
 	border-color: var(--primary);

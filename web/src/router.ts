@@ -1,4 +1,3 @@
-import { Vue } from "vue-class-component"
 import { createWebHistory, createRouter, RouteRecordRaw } from "vue-router"
 import FileView from '@/views/FileView.vue'
 import MediaView from '@/views/MediaView.vue'
@@ -45,18 +44,5 @@ const router = createRouter(
 		routes: routes
 	}
 )
-
-export class RouterHandler {
-	private static currentPath(app: Vue): string {
-		return app.$route.path
-	}
-
-	public static navigate(app: Vue, path: string): void {
-		const current = RouterHandler.currentPath(app)
-		if (current != path) {
-			app.$router.push(path)
-		}
-	}
-}
 
 export default router

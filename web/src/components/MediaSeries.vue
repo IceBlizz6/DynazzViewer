@@ -20,38 +20,38 @@
 	</section>
 </template>
 
-<script lang="ts">
-import { Vue } from "vue-class-component"
+<script setup lang="ts">
 import moment from 'moment'
 import { ViewStatus } from "@/zeus"
-import { Prop } from "vue-property-decorator"
 import { MediaUnit } from "@/lib/Queries"
+import { computed } from "vue"
 
-export default class MediaSeries extends Vue {
-	@Prop({ required: true })
-	public readonly source!: MediaUnit
-
-	private get episodesWatched(): number {
-		return this.source.children
-			.flatMap(season => season.children)
-			.filter(ep => ep.status == ViewStatus.Viewed)
-			.length
-	}
-
-	private get episodesAired(): number {
-		const today = moment().format("YYYY-MM-DD")
-		return this.source.children
-			.flatMap(season => season.children)
-			.filter(ep => ep.aired != null && today > ep.aired)
-			.length
-	}
-
-	private get episodesAnnounced(): number {
-		return this.source.children
-			.flatMap(season => season.children)
-			.length
-	}
+interface Props {
+	source: MediaUnit
 }
+
+const props = defineProps<Props>()
+
+const episodesWatched = computed((): number => {
+	return props.source.children
+		.flatMap(season => season.children)
+		.filter(ep => ep.status == ViewStatus.Viewed)
+		.length
+})
+
+const episodesAired = computed((): number => {
+	const today = moment().format("YYYY-MM-DD")
+	return props.source.children
+		.flatMap(season => season.children)
+		.filter(ep => ep.aired != null && today > ep.aired)
+		.length
+})
+
+const episodesAnnounced = computed((): number => {
+	return props.source.children
+		.flatMap(season => season.children)
+		.length
+})
 </script>
 
 <style scoped>

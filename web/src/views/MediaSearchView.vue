@@ -2,27 +2,33 @@
 	<article class="media-search-root">
 		<h1>Media search</h1>
 		<o-input
-			v-model="searchText"
+			v-model="state.searchText"
 			type="text"
 			placeholder="name..."
 			@keyup.enter="runSearch"
 		/>
 		<div>
-			<o-radio v-model="apiSelection" :native-value="apiAnime">
+			<o-radio
+				v-model="state.apiSelection"
+				:native-value="apiAnime"
+			>
 				MyAnimeList
 			</o-radio>
-			<o-radio v-model="apiSelection" :native-value="apiImdb">
+			<o-radio
+				v-model="state.apiSelection"
+				:native-value="apiImdb"
+			>
 				Imdb
 			</o-radio>
 		</div>
 		<o-button @click="runSearch">
 			Search
 		</o-button>
-		<p>{{ searchStatus }}</p>
+		<p>{{ state.searchStatus }}</p>
 		<section class="media-search-results">
 			<ul class="media-search-result-list">
 				<li
-					v-for="item in searchResults"
+					v-for="item in state.searchResults"
 					:key="item.extDbCode"
 					class="search-result-item"
 				>
@@ -65,9 +71,9 @@
 	</article>
 </template>
 
-<script lang="ts">
-import { Vue } from 'vue-property-decorator'
+<script setup lang="ts">
 import { ExtDatabase, Gql } from '@/zeus'
+import { reactive } from "vue"
 
 enum ResultItemStatus {
 	NEW,
@@ -93,75 +99,77 @@ class ResultHeaderItem {
 	}
 }
 
-export default class MediaSearchView extends Vue {
+const stateNew = ResultItemStatus.NEW
+const stateSaved = ResultItemStatus.SAVED
+const stateSaving = ResultItemStatus.SAVING
+
+const apiAnime = ExtDatabase.MyAnimeList
+const apiImdb = ExtDatabase.TvMaze
+
+class State {
 	public searchText = ""
 	public searchStatus = "Ready"
 	public searchResults: ResultHeaderItem[] = []
 
-	public stateNew = ResultItemStatus.NEW
-	public stateSaved = ResultItemStatus.SAVED
-	public stateSaving = ResultItemStatus.SAVING
+	public apiSelection = apiAnime
+}
+const state = reactive(new State())
 
-	private apiAnime = ExtDatabase.MyAnimeList
-	private apiImdb = ExtDatabase.TvMaze
-	private apiSelection = this.apiAnime
-
-	public runSearch(): void {
-		if (this.searchText.length == 0) {
-			this.searchStatus = "Unable to start search, empty query"
-		} else {
-			this.searchResults = []
-			this.searchStatus = "Searching..."
-			this.query()
-		}
+function runSearch(): void {
+	if (state.searchText.length == 0) {
+		state.searchStatus = "Unable to start search, empty query"
+	} else {
+		state.searchResults = []
+		state.searchStatus = "Searching..."
+		query()
 	}
+}
 
-	public async addOrUpdate(item: ResultHeaderItem): Promise<void> {
-		item.state = ResultItemStatus.SAVING
-		const { externalMediaAdd } = await Gql("mutation")({
-			externalMediaAdd: [
-				{
-					db: item.extDb,
-					code: item.extDbCode
-				},
-				true
-			]
-		})
-		if (externalMediaAdd) {
-			item.state = ResultItemStatus.SAVED
-		} else {
-			item.state = ResultItemStatus.NEW
-		}
+async function addOrUpdate(item: ResultHeaderItem): Promise<void> {
+	item.state = ResultItemStatus.SAVING
+	const { externalMediaAdd } = await Gql("mutation")({
+		externalMediaAdd: [
+			{
+				db: item.extDb,
+				code: item.extDbCode
+			},
+			true
+		]
+	})
+	if (externalMediaAdd) {
+		item.state = ResultItemStatus.SAVED
+	} else {
+		item.state = ResultItemStatus.NEW
 	}
+}
 
-	private async query(): Promise<void> {
-		const response = await Gql("query")({
-			externalMediaSearch: [
-				{
-					db: this.apiSelection, 
-					name: this.searchText
-				},
-				{
-					name: true,
-					extDb: true,
-					extDbCode: true,
-					imageUrl: true,
-					saved: true
-				}
-			]
-		})
-		this.searchStatus = "Search complete"
-		const rawResults = response.externalMediaSearch
-		this.searchResults = rawResults.map(
-			el => new ResultHeaderItem(
-				el.saved,
-				el.extDb,
-				el.extDbCode,
-				el.imageUrl,
-				el.name
-			)
+async function query(): Promise<void> {
+	const response = await Gql("query")({
+		externalMediaSearch: [
+			{
+				db: state.apiSelection, 
+				name: state.searchText
+			},
+			{
+				name: true,
+				extDb: true,
+				extDbCode: true,
+				imageUrl: true,
+				saved: true
+			}
+		]
+	})
+	state.searchStatus = "Search complete"
+	const rawResults = response.externalMediaSearch
+	state.searchResults = rawResults.map(
+		el => new ResultHeaderItem(
+			el.saved,
+			el.extDb,
+			el.extDbCode,
+			el.imageUrl,
+			el.name
 		)
-	}
+	)
 }
 </script>
 
