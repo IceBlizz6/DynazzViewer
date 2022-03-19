@@ -1,51 +1,16 @@
 {
-  "extends": [
-	  "stylelint-config-standard",
-	  "stylelint-config-recommended-vue"
-  ],
-  "rules": {
-	"indentation": "tab",
-	"color-hex-case": "upper",
-	"color-hex-length": "long",
-	"function-name-case": null,
-	"declaration-no-important": null,
-	"no-descending-specificity": null,
-	"at-rule-no-unknown": [
-		true,
-		{
-			"ignoreAtRules": [ 
-				"include",
-				"mixin",
-				"if",
-				"else",
-				"each",
-				"return" 
-			]
-		}
+	"extends": [
+		"stylelint-config-html/vue",
+		"stylelint-config-standard",
+		"stylelint-config-recommended-vue"
 	],
-	"selector-pseudo-element-no-unknown": [
-		true,
-		{
-			"ignorePseudoElements": [ "v-deep" ]
-		}
-	],
-	"property-no-unknown": [
-		true,
-		{
-			"ignoreProperties": [ "content-visibility" ]
-		}
-	],
-	"selector-class-pattern": [
-		"^(quill.*)|^(gantt.*)|^(([a-z]|[\\-]|&| |\\.|:|[0-9]|,|\\(|\\)|\\>|\\<|\\[|\\]|=|\\n|\\s|\\+)*)$",
-		{
-			"resolveNestedSelectors": true
-		}
-	],
-	"selector-id-pattern": [
-		"^(quill.*)|^(gantt.*)|^(([a-z]|[\\-]|&| |\\.|:|[0-9]|,|\\(|\\)|\\>|\\<|\\[|\\]|=|\\n|\\s|\\+)*)$",
-		{
-			"resolveNestedSelectors": true
-		}
-	]
-  }
+	"rules": {
+		"indentation": "tab",
+		"color-hex-case": "upper",
+		"color-hex-length": "long",
+		"declaration-block-no-redundant-longhand-properties": null,
+		"at-rule-no-unknown": true,
+		"selector-pseudo-element-no-unknown": true,
+		"property-no-unknown": true
+	}
 }
