@@ -35,20 +35,20 @@ class SqlLiteStorage(
     init {
         val unitInfo = HibernatePersistenceUnitInfo()
         val map = HashMap<String, Any>()
-        map.put(JPA_JDBC_DRIVER, "org.sqlite.JDBC")
-        map.put(JPA_JDBC_URL, CONNECTION_PREFIX + storageMode.path)
-        map.put("hibernate.hbm2ddl.auto", storageMode.initOperation.opName)
-        map.put(DIALECT, "org.sqlite.hibernate.dialect.SQLiteDialect")
-        map.put(SHOW_SQL, false)
-        map.put(QUERY_STARTUP_CHECKING, false)
-        map.put(GENERATE_STATISTICS, false)
-        map.put(USE_REFLECTION_OPTIMIZER, false)
-        map.put(USE_SECOND_LEVEL_CACHE, false)
-        map.put(USE_QUERY_CACHE, false)
-        map.put(USE_STRUCTURED_CACHE, false)
-        map.put(STATEMENT_BATCH_SIZE, 20)
-        map.put("hibernate.connection.autocommit", false)
-        map.put("hibernate.connection.provider_disables_autocommit", true)
+        map[JPA_JDBC_DRIVER] = "org.sqlite.JDBC"
+        map[JPA_JDBC_URL] = CONNECTION_PREFIX + storageMode.path
+        map["hibernate.hbm2ddl.auto"] = storageMode.initOperation.opName
+        map[DIALECT] = "org.sqlite.hibernate.dialect.SQLiteDialect"
+        map[SHOW_SQL] = false
+        map[QUERY_STARTUP_CHECKING] = false
+        map[GENERATE_STATISTICS] = false
+        map[USE_REFLECTION_OPTIMIZER] = false
+        map[USE_SECOND_LEVEL_CACHE] = false
+        map[USE_QUERY_CACHE] = false
+        map[USE_STRUCTURED_CACHE] = false
+        map[STATEMENT_BATCH_SIZE] = 20
+        map["hibernate.connection.autocommit"] = false
+        map["hibernate.connection.provider_disables_autocommit"] = true
         val persistenceProvider = HibernatePersistenceProvider()
         entityManagerFactory = persistenceProvider
             .createContainerEntityManagerFactory(unitInfo, map)
