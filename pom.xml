@@ -18,6 +18,7 @@
     <properties>
         <kotlin.version>1.6.20</kotlin.version>
         <kotlin-coroutines.version>1.6.1-native-mt</kotlin-coroutines.version>
+        <kotlin-serialization.version>1.0-M1-1.4.0-rc</kotlin-serialization.version>
         <ktlint.version>1.12.1</ktlint.version>
         <querydsl.version>5.0.0</querydsl.version>
 
@@ -45,6 +46,11 @@
             <artifactId>kotlinx-coroutines-core</artifactId>
             <version>${kotlin-coroutines.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-serialization-runtime</artifactId>
+            <version>${kotlin-serialization.version}</version>
+        </dependency>
 
         <!-- Unit test -->
         <dependency>
@@ -58,6 +64,11 @@
     <build>
         <sourceDirectory>${project.basedir}/src</sourceDirectory>
         <testSourceDirectory>${project.basedir}/test</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/testresources</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
@@ -97,6 +108,7 @@
                 <configuration>
                     <compilerPlugins>
                         <plugin>jpa</plugin>
+                        <plugin>kotlinx-serialization</plugin>
                     </compilerPlugins>
                     <args>
                         <arg>-java-parameters</arg>

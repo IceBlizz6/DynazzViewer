@@ -1,14 +1,18 @@
 package dynazzviewer.services.descriptors.tvmaze
 
 import dynazzviewer.entities.ExtDatabase
-import dynazzviewer.services.WebJsonParser
+import dynazzviewer.services.WebClient
 import dynazzviewer.services.descriptors.DescriptionUnit
 import dynazzviewer.services.descriptors.DescriptorApi
 import dynazzviewer.services.descriptors.ResultHeader
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 class TvMazeApi(
-    private val parser: WebJsonParser
+    private val webClient: WebClient
 ) : DescriptorApi {
+    private val parser = Json { ignoreUnknownKeys = true }
+
     override fun querySearch(db: ExtDatabase, name: String): List<ResultHeader>? {
         return if (db == ExtDatabase.TvMaze) {
             search(name).map { e -> e.toResultHeader() }
@@ -30,17 +34,20 @@ class TvMazeApi(
     fun search(name: String): List<SearchShowResult> {
         val queryString = name.replace(' ', '+')
         val uri = "http://api.tvmaze.com/search/shows?q=$queryString"
-        val results = parser.parseJsonRequest(uri, Array<SearchShowResult>::class.java)
+        val json = webClient.requestData(uri)
+        val results = parser.decodeFromString<Array<SearchShowResult>>(json)
         return results.toList()
     }
 
     fun episodes(tvMazeId: String): List<Episode> {
         val uri = "http://api.tvmaze.com/shows/$tvMazeId/episodes?specials=1"
-        return parser.parseJsonRequest(uri, Array<Episode>::class.java).toList()
+        val json = webClient.requestData(uri)
+        return parser.decodeFromString<Array<Episode>>(json).toList()
     }
 
     fun showDetails(tvMazeId: String): ShowDetails {
         val uri = "http://api.tvmaze.com/shows/$tvMazeId"
-        return parser.parseJsonRequest(uri, ShowDetails::class.java)
+        val json = webClient.requestData(uri)
+        return parser.decodeFromString(json)
     }
 }

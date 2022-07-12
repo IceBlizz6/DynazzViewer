@@ -6,8 +6,7 @@ import dynazzviewer.files.FileCache
 import dynazzviewer.files.FileEntryFactory
 import dynazzviewer.files.FileSystemRepository
 import dynazzviewer.files.SystemFileSource
-import dynazzviewer.services.HttpWebJsonParser
-import dynazzviewer.services.descriptors.HttpThrottledWebParser
+import dynazzviewer.services.HttpWebClient
 import dynazzviewer.services.descriptors.jikan.JikanApi
 import dynazzviewer.services.descriptors.tvmaze.TvMazeApi
 import dynazzviewer.storage.sqlite.SqlLiteStorage
@@ -56,30 +55,26 @@ open class GraphQLConfig {
             userConfiguration = configuration,
             fileRepository = fileRepository
         )
-
+        val webClient = HttpWebClient(secondsThrottleDelay = 2)
         val jikanApi = JikanApi(
-            parser = HttpThrottledWebParser(secondsInterval = 2),
+            webClient = webClient,
             fetchRelated = true,
             autoFillEpisodes = true,
             autoFillEpisodeAirDates = true
         )
-
         val tvMazeApi = TvMazeApi(
-            parser = HttpWebJsonParser()
+            webClient = webClient
         )
-
         val apiServiceController = ServiceDescriptorController(
             descriptorServices = listOf(jikanApi, tvMazeApi),
             listener = fileController,
             storage = storage
         )
-
         val animeSeasonController = AnimeSeasonController(
             storage = storage,
             api = jikanApi,
             config = configuration
         )
-
         return GraphQLSchemaGenerator()
             .withOperationsFromSingleton(FileSystemGraph(fileController))
             .withOperationsFromSingleton(ConfigGraph(configuration))

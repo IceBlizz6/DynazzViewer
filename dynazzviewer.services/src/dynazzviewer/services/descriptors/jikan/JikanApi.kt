@@ -1,22 +1,25 @@
 package dynazzviewer.services.descriptors.jikan
 
 import dynazzviewer.entities.ExtDatabase
-import dynazzviewer.services.WebJsonParser
+import dynazzviewer.services.WebClient
 import dynazzviewer.services.descriptors.DescriptionUnit
 import dynazzviewer.services.descriptors.DescriptorApi
 import dynazzviewer.services.descriptors.ResultHeader
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import java.time.LocalDate
 
 class JikanApi(
-    private val parser: WebJsonParser,
+    private val webClient: WebClient,
     private val fetchRelated: Boolean = true,
     private val autoFillEpisodes: Boolean = true,
     private val autoFillEpisodeAirDates: Boolean = true
 ) : DescriptorApi {
     companion object {
-        private const val BASE_URL = "https://api.jikan.moe/v3"
         private const val EPISODE_AIR_DAYS_INTERVAL = 7
     }
+
+    private val parser = Json { ignoreUnknownKeys = true }
 
     override fun querySearch(db: ExtDatabase, name: String): List<ResultHeader>? {
         return if (db == ExtDatabase.MyAnimeList) {
@@ -44,7 +47,7 @@ class JikanApi(
                     .flatMap { e -> e.show.genres.map { genre -> genre.name } }
                     .toSet(),
                 imageUrls = jikanSeries
-                    .map { e -> e.show.imageUrl }
+                    .map { e -> e.show.images.jpg.medium }
                     .toSet()
             )
         } else {
@@ -60,14 +63,14 @@ class JikanApi(
         }
     }
 
-    private fun autoFillEpisodes(episodes: List<Episode>, numberOfEpisodes: Int): List<Episode> {
+    private fun autoFillEpisodes(episodes: List<AnimeEpisode>, numberOfEpisodes: Int): List<AnimeEpisode> {
         if (episodes.count() != numberOfEpisodes) {
-            val mutableEpisodes = mutableListOf<Episode>()
+            val mutableEpisodes = mutableListOf<AnimeEpisode>()
             mutableEpisodes.addAll(episodes)
             for (index in 1..numberOfEpisodes) {
-                val exists = episodes.filter { e -> e.episodeId == index }.any()
+                val exists = episodes.any { e -> e.episodeId == index }
                 if (!exists) {
-                    val autoFill = Episode(episodeId = index, title = "Episode $index")
+                    val autoFill = AnimeEpisode(episodeId = index, title = "Episode $index", aired = null, filler = null, recap = null)
                     mutableEpisodes.add(autoFill)
                 }
             }
@@ -78,7 +81,7 @@ class JikanApi(
     }
 
     private fun autoFillEpisodeAirDates(
-        episodes: List<Episode>,
+        episodes: List<AnimeEpisode>,
         start: LocalDate,
         end: LocalDate
     ) {
@@ -90,7 +93,7 @@ class JikanApi(
         ) {
             for (episode in episodes) {
                 val daysAfter = EPISODE_AIR_DAYS_INTERVAL * (episode.episodeId - 1)
-                episode.aired = start.plusDays(daysAfter.toLong()).atStartOfDay()
+                episode.aired = start.plusDays(daysAfter.toLong())
             }
         }
     }
@@ -101,7 +104,7 @@ class JikanApi(
 
     private fun lookup(code: Int, completedMalIds: MutableSet<Int>): List<JikanSeries> {
         val seriesData = series(code)
-        val episodes = if (autoFillEpisodes) {
+        val episodes = if (autoFillEpisodes && seriesData.episodes != null) {
             autoFillEpisodes(episodes(code), seriesData.episodes)
         } else {
             episodes(code)
@@ -111,14 +114,14 @@ class JikanApi(
             seriesData.aired.to != null
         ) {
             autoFillEpisodeAirDates(
-                episodes, seriesData.aired.from.toLocalDate(),
-                seriesData.aired.to.toLocalDate()
+                episodes,
+                seriesData.aired.from,
+                seriesData.aired.to
             )
         }
-        val relatedList = seriesData
-            .related
-            .filter { e -> e.key.includeInBatch }
-            .map { e -> e.value }
+        val relatedList = related(seriesData.malId)
+            .filter { e -> e.relation.includeInBatch }
+            .map { e -> e.entry }
             .flatMap { e -> e.toList() }
             .map { e -> e.malId }
         val desc = JikanSeries(seriesData, episodes)
@@ -135,7 +138,7 @@ class JikanApi(
 
     private fun fetchSingleSeries(code: Int): JikanSeries {
         val seriesData = series(code)
-        val episodes = if (autoFillEpisodes) {
+        val episodes = if (autoFillEpisodes && seriesData.episodes != null) {
             autoFillEpisodes(episodes(code), seriesData.episodes)
         } else {
             episodes(code)
@@ -145,60 +148,77 @@ class JikanApi(
             seriesData.aired.to != null
         ) {
             autoFillEpisodeAirDates(
-                episodes, seriesData.aired.from.toLocalDate(),
-                seriesData.aired.to.toLocalDate()
+                episodes,
+                seriesData.aired.from,
+                seriesData.aired.to
             )
         }
         return JikanSeries(seriesData, episodes)
     }
 
-    fun episodes(malId: Int): List<Episode> {
-        val firstRequest = requestEpisodes(malId, 1)
-        if (firstRequest.episodesLastPage > 1) {
-            val episodeList: MutableList<Episode> = mutableListOf()
-            episodeList.addAll(firstRequest.episodes)
-            for (page in 2..firstRequest.episodesLastPage) {
-                val request = requestEpisodes(malId, page)
-                episodeList.addAll(request.episodes)
+    private inline fun <reified T> fetchSingle(path: String): T {
+        return makeRequest<T>(path).single()
+    }
+
+    private inline fun <reified T> fetchListOf(path: String): List<T> {
+        return makeRequest<List<T>>(path).flatten()
+    }
+
+    private inline fun <reified T> makeRequest(path: String): List<T> {
+        val firstResponse = doRequest<T>(url(path, null))
+        val list = mutableListOf<T>()
+        list.add(firstResponse.data)
+        val firstPagination = firstResponse.pagination
+        if (firstPagination != null) {
+            var nextPage = firstPagination.currentPage + 1
+            var hasNext = firstPagination.hasNextPage
+            while (hasNext) {
+                val response = doRequest<T>(url(path, nextPage))
+                list.add(response.data)
+                nextPage = response.pagination!!.currentPage + 1
+                hasNext = response.pagination.hasNextPage
             }
-            return episodeList
-        } else {
-            return firstRequest.episodes
         }
+        return list
     }
 
-    fun series(malId: Int): Show {
-        val uri = "$BASE_URL/anime/$malId"
-        return parser.parseJsonRequest(uri, Show::class.java)
+    private inline fun <reified T> doRequest(fullPath: String): JikanResponse<T> {
+        val jsonContent = webClient.requestData(fullPath)
+        return parser.decodeFromString(jsonContent)
     }
 
-    fun search(searchText: String): List<ResultItem> {
-        val uri = "$BASE_URL/search/anime?q=${searchText.replace(' ', '+')}"
-        return parser.parseJsonRequest(uri, SearchResult::class.java).results
+    private fun url(path: String, page: Int?): String {
+        val base = "https://api.jikan.moe/v4"
+        val builder = org.apache.http.client.utils.URIBuilder(base + path)
+        if (page != null) {
+            builder.addParameter("page", page.toString())
+        }
+        return builder.build().toString()
     }
 
-    fun season(year: Int, season: MalYearSeason): List<AnimeSeasonEntry> {
-        val uri = "$BASE_URL/season/$year/${season.seasonName}"
-        return parser.parseJsonRequest(uri, MalSeasonList::class.java).anime
+    fun series(malId: Int): AnimeShow {
+        return fetchSingle("/anime/$malId/full")
     }
 
-    fun seasonWithResponse(year: Int, season: MalYearSeason): AnimeSeasonResponse {
-        val uri = "$BASE_URL/season/$year/${season.seasonName}"
-        val response = parser.parseJsonRequestWithResponse(uri, MalSeasonList::class.java)
-        return AnimeSeasonResponse(response.inner.anime, response.content)
+    fun search(searchText: String): List<AnimeShow> {
+        return fetchListOf(
+            "/anime?q=${searchText.replace(' ', '+')}"
+        )
     }
 
-    fun parseSeason(content: String): List<AnimeSeasonEntry> {
-        return parser.parseRawString(content, MalSeasonList::class.java).anime
+    fun season(year: Int, season: MalYearSeason): List<AnimeShow> {
+        return fetchListOf("/seasons/$year/${season.seasonName}")
     }
 
-    private fun requestEpisodes(malId: Int, page: Int): EpisodeCollection {
-        val uri = "$BASE_URL/anime/$malId/episodes/$page"
-        return parser.parseJsonRequest(uri, EpisodeCollection::class.java)
+    fun seasonFromJson(json: String): List<AnimeShow> {
+        return parser.decodeFromString(json)
     }
 
-    class AnimeSeasonResponse(
-        val series: List<AnimeSeasonEntry>,
-        val jsonContent: String
-    )
+    private fun episodes(malId: Int): List<AnimeEpisode> {
+        return fetchListOf<AnimeEpisode>("/anime/$malId/episodes")
+    }
+
+    private fun related(malId: Int): List<AnimeRelation> {
+        return fetchListOf("/anime/$malId/relations")
+    }
 }

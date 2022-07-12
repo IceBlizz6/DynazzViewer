@@ -8,8 +8,10 @@ import dynazzviewer.services.descriptors.jikan.MalType
 import dynazzviewer.services.descriptors.jikan.MalYearSeason
 import dynazzviewer.storage.MediaIdentity
 import dynazzviewer.storage.Storage
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.io.File
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 class AnimeSeasonController(
     val storage: Storage,
@@ -27,8 +29,8 @@ class AnimeSeasonController(
 
     fun addAnimeSeason(year: Int, season: MalYearSeason) {
         val file = path(year, season)
-        val response = api.seasonWithResponse(year, season)
-        val json = response.jsonContent
+        val response = api.season(year, season)
+        val json = Json.encodeToString(response)
         file.writeText(json)
     }
 
@@ -42,7 +44,7 @@ class AnimeSeasonController(
     fun load(year: Int, season: MalYearSeason): List<AnimeSeasonSeries> {
         val file = path(year, season)
         val json = file.readText()
-        val series = api.parseSeason(json)
+        val series = api.seasonFromJson(json)
 
         storage.read().use { context ->
             val storedFlags = context.animeSeasonSeries(series.map { it.malId })
@@ -51,9 +53,9 @@ class AnimeSeasonController(
             return series.map {
                 AnimeSeasonSeries(
                     title = it.title,
-                    imageUrl = it.imageUrl,
+                    imageUrl = it.images.jpg.medium,
                     type = it.type,
-                    airingStart = it.airingStart,
+                    airingStart = it.aired.from,
                     episodes = it.episodes,
                     malId = it.malId,
                     score = it.score,
@@ -102,9 +104,9 @@ class AnimeSeasonController(
         val title: String,
         val imageUrl: String,
         val type: MalType,
-        val airingStart: LocalDateTime?,
-        val episodes: Int,
-        val score: Double,
+        val airingStart: LocalDate?,
+        val episodes: Int?,
+        val score: Double?,
         val flag: AnimeSeasonFlagState,
         val saved: Boolean
     )
