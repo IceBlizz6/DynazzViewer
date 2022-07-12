@@ -16,10 +16,10 @@
     </modules>
 
     <properties>
-        <kotlin.version>1.6.20</kotlin.version>
-        <kotlin-coroutines.version>1.6.1-native-mt</kotlin-coroutines.version>
+        <kotlin.version>1.7.10</kotlin.version>
+        <kotlin-coroutines.version>1.6.3</kotlin-coroutines.version>
         <kotlin-serialization.version>1.0-M1-1.4.0-rc</kotlin-serialization.version>
-        <ktlint.version>1.12.1</ktlint.version>
+        <ktlint.version>1.14.0</ktlint.version>
         <querydsl.version>5.0.0</querydsl.version>
 
         <jvm.target>1.8</jvm.target>
@@ -126,7 +126,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.0</version>
+                <version>3.10.1</version>
                 <executions>
                     <execution>
                         <goals>
