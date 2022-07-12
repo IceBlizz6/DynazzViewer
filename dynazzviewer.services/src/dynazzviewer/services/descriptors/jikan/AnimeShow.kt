@@ -46,7 +46,7 @@ class AnimeShow(
         @SerialName("small_image_url")
         val medium: String,
         @SerialName("large_image_url")
-        val large: String,
+        val large: String
     )
 
     @Serializable

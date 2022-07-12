@@ -10,7 +10,7 @@ import kotlin.reflect.KClass
 class JpaPredicateBuilder<QTEntity : EntityPathBase<TEntity>, TEntity>(
     private val source: QTEntity,
     private var query: JPAQuery<TEntity>,
-    private val nameGenerator: JoinNameGenerator,
+    private val nameGenerator: JoinNameGenerator
 ) : PredicateBuilder<QTEntity, TEntity> {
     override fun filter(
         transform: (QTEntity) -> BooleanExpression

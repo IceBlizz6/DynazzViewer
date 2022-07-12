@@ -70,7 +70,13 @@ class JikanApi(
             for (index in 1..numberOfEpisodes) {
                 val exists = episodes.any { e -> e.episodeId == index }
                 if (!exists) {
-                    val autoFill = AnimeEpisode(episodeId = index, title = "Episode $index", aired = null, filler = null, recap = null)
+                    val autoFill = AnimeEpisode(
+                        episodeId = index,
+                        title = "Episode $index",
+                        aired = null,
+                        filler = null,
+                        recap = null
+                    )
                     mutableEpisodes.add(autoFill)
                 }
             }
