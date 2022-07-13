@@ -176,13 +176,13 @@ class JikanApi(
         list.add(firstResponse.data)
         val firstPagination = firstResponse.pagination
         if (firstPagination != null) {
-            var nextPage = firstPagination.currentPage + 1
+            var nextPage = 2
             var hasNext = firstPagination.hasNextPage
             while (hasNext) {
                 val response = doRequest<T>(url(path, nextPage))
                 list.add(response.data)
-                nextPage = response.pagination!!.currentPage + 1
-                hasNext = response.pagination.hasNextPage
+                nextPage += 1
+                hasNext = response.pagination!!.hasNextPage
             }
         }
         return list
