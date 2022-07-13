@@ -1,22 +1,34 @@
 package dynazzviewer.services.descriptors.jikan
 
-import com.fasterxml.jackson.annotation.JsonValue
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 enum class RelatedType(
-    @JsonValue
-    private val value: String,
     val includeInBatch: Boolean
 ) {
-    ADAPTATION("Adaptation", false),
-    SIDE_STORY("Side story", true),
-    PARENT_STORY("Parent story", true),
-    OTHER("Other", false),
-    PREQUEL("Prequel", true),
-    SEQUEL("Sequel", true),
-    SUMMARY("Summary", false),
-    ALTERNATIVE_SETTING("Alternative setting", false),
-    ALTERNATIVE_VERSION("Alternative version", false),
-    FULL_STORY("Full story", true),
-    SPIN_OFF("Spin-off", false),
-    CHARACTER("Character", false)
+    @SerialName("Adaptation")
+    ADAPTATION(false),
+    @SerialName("Side story")
+    SIDE_STORY(true),
+    @SerialName("Parent story")
+    PARENT_STORY(true),
+    @SerialName("Other")
+    OTHER(false),
+    @SerialName("Prequel")
+    PREQUEL(true),
+    @SerialName("Sequel")
+    SEQUEL(true),
+    @SerialName("Summary")
+    SUMMARY(false),
+    @SerialName("Alternative setting")
+    ALTERNATIVE_SETTING(false),
+    @SerialName("Alternative version")
+    ALTERNATIVE_VERSION(false),
+    @SerialName("Full story")
+    FULL_STORY(true),
+    @SerialName("Spin-off")
+    SPIN_OFF(false),
+    @SerialName("Character")
+    CHARACTER(false)
 }
