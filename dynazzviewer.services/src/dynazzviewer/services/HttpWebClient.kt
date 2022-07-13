@@ -23,24 +23,21 @@ open class HttpWebClient(
     }
 
     private fun blockUntilReady() {
-        val now = LocalDateTime.now()
         val requestTime = lastRequestTime
-        if (requestTime == null) {
-            this.lastRequestTime = now
-        } else {
+        if (requestTime != null) {
             val targetTime = requestTime.plusSeconds(secondsThrottleDelay)
+            val now = LocalDateTime.now()
             if (now.isBefore(targetTime)) {
                 val milliSecondPauseTime = now.until(targetTime, ChronoUnit.MILLIS)
                 sleep(milliSecondPauseTime)
             }
         }
+        this.lastRequestTime = LocalDateTime.now()
     }
 
     private fun sleep(milliseconds: Long) {
-        if (milliseconds > 0) {
-            runBlocking {
-                delay(milliseconds)
-            }
+        runBlocking {
+            delay(milliseconds)
         }
     }
 }
