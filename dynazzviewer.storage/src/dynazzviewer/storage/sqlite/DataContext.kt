@@ -93,7 +93,10 @@ internal open class DataContext(
     override fun matchExtKey(keys: List<String>): MediaUnit? {
         return stream(QExtReference.extReference)
             .filter { it.uniqueExtKey.`in`(keys) }
-            .fetchSingleOrNull()?.root
+            .fetchList()
+            .map { it.root }
+            .distinctBy { it.id }
+            .singleOrNull()
     }
 
     override fun mediaFileById(id: Int): MediaFile {
