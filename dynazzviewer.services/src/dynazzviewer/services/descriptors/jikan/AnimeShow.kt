@@ -41,9 +41,9 @@ class AnimeShow(
 
     @Serializable
     class ImageLinks(
-        @SerialName("image_url")
-        val icon: String,
         @SerialName("small_image_url")
+        val small: String,
+        @SerialName("image_url")
         val medium: String,
         @SerialName("large_image_url")
         val large: String
