@@ -72,7 +72,8 @@
 </template>
 
 <script setup lang="ts">
-import { ExtDatabase, Gql } from '@/zeus'
+import { graphClient } from '@/lib/GraphClient'
+import { ExtDatabase } from '@/zeus'
 import { reactive } from "vue"
 
 enum ResultItemStatus {
@@ -127,7 +128,7 @@ function runSearch(): void {
 
 async function addOrUpdate(item: ResultHeaderItem): Promise<void> {
 	item.state = ResultItemStatus.SAVING
-	const { externalMediaAdd } = await Gql("mutation")({
+	const { externalMediaAdd } = await graphClient.mutation({
 		externalMediaAdd: [
 			{
 				db: item.extDb,
@@ -144,7 +145,7 @@ async function addOrUpdate(item: ResultHeaderItem): Promise<void> {
 }
 
 async function query(): Promise<void> {
-	const response = await Gql("query")({
+	const response = await graphClient.query({
 		externalMediaSearch: [
 			{
 				db: state.apiSelection, 

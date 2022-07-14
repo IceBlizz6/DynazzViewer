@@ -1,7 +1,8 @@
 import { ListFunc } from './ListFunc'
 import { VideoFile, VideoFileResponse } from './Queries'
 import { TreeNode } from '@/lib/TreeNode'
-import { Gql, ViewStatus } from '@/zeus'
+import { ViewStatus } from '@/zeus'
+import { graphClient } from './GraphClient'
 
 export interface Tree {
 	roots: TreeNode[]
@@ -28,7 +29,7 @@ export class TreeImpl implements Tree {
 		if (node.videoFile == null) {
 			throw new Error("Node is not a video, may be a directory")
 		} else {
-			const response = await Gql("mutation")({
+			const response = await graphClient.mutation({
 				setViewStatus: [
 					{
 						status: updatedViewStatus,
@@ -55,7 +56,7 @@ export class TreeImpl implements Tree {
 		if (!included) {
 			throw new Error("Node is not a root directory")
 		} else {
-			const { removeRootDirectory } = await Gql("mutation")({
+			const { removeRootDirectory } = await graphClient.mutation({
 				removeRootDirectory: [
 					{
 						rootPath: node.name
@@ -74,7 +75,7 @@ export class TreeImpl implements Tree {
 	}
 
 	public async showExplorer(node: VideoFile): Promise<void> {
-		const { showExplorer } = await Gql("mutation")({
+		const { showExplorer } = await graphClient.mutation({
 			showExplorer: [
 				{
 					path: node.filePath.path
@@ -88,7 +89,7 @@ export class TreeImpl implements Tree {
 	}
 
 	public async playVideo(node: VideoFile): Promise<void> {
-		const success = await Gql("mutation")({
+		const success = await graphClient.mutation({
 			playVideo: [
 				{
 					path: node.filePath.path

@@ -135,9 +135,10 @@
 
 <script setup lang="ts">
 import { computed, onMounted, reactive } from "vue"
-import { AnimeSeasonFlagState, MalYearSeason, ExtDatabase, Gql } from '@/zeus'
+import { AnimeSeasonFlagState, MalYearSeason, ExtDatabase } from '@/zeus'
 import queries, { AnimeSeasonSeries, MalSeasonIdentifier } from "@/lib/Queries"
 import moment from 'moment'
+import { graphClient } from "@/lib/GraphClient"
 
 const seasonWinter = MalYearSeason.WINTER
 const seasonSpring = MalYearSeason.SPRING
@@ -181,7 +182,7 @@ async function refreshHeaders(): Promise<void> {
 }
 
 async function setFlagState(item: AnimeSeasonSeries, state: AnimeSeasonFlagState): Promise<void> {
-	const data = await Gql("mutation")({
+	const data = await graphClient.mutation({
 		animeSeasonMark: [
 			{ malId: item.malId, flag: state },
 			true
@@ -207,7 +208,7 @@ async function addAnimeSeason(): Promise<void> {
 	if (state.yearInput == null) {
 		console.error("Missing year")
 	} else {
-		const { animeSeasonAdd } = await Gql("mutation")({
+		const { animeSeasonAdd } = await graphClient.mutation({
 			animeSeasonAdd: [
 				{ year: state.yearInput, season: state.seasonInput },
 				true
@@ -228,7 +229,7 @@ async function querySelectedSeries(item: MalSeasonIdentifier): Promise<void> {
 }
 
 async function addMediaSeries(item: AnimeSeasonSeries): Promise<void> {
-	const { externalMediaAdd } = await Gql("mutation")({
+	const { externalMediaAdd } = await graphClient.mutation({
 		externalMediaAdd: [
 			{
 				db: ExtDatabase.MyAnimeList,

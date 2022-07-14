@@ -98,10 +98,11 @@
 
 <script setup lang="ts">
 import { onMounted, reactive } from "vue"
-import { Gql, ViewStatus } from '@/zeus'
+import { ViewStatus } from '@/zeus'
 import MediaSeries from '@/components/MediaSeries.vue'
 import numeral from 'numeral'
 import queries, { MediaUnit, MediaPart } from "@/lib/Queries"
+import { graphClient } from "@/lib/GraphClient"
 
 class State {
 	public source: MediaUnit[] = []
@@ -132,7 +133,7 @@ function selectSeries(item: MediaUnit): void {
 }
 
 async function setEpisodeWatch(episode: MediaPart, status: ViewStatus): Promise<void> {
-	const response = await Gql("mutation")(
+	const response = await graphClient.mutation(
 		{
 			setEpisodeWatchState: [
 				{

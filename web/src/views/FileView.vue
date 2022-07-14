@@ -34,13 +34,13 @@
 </template>
 
 <script setup lang="ts">
-import { Gql } from '@/zeus'
 import FileTree from "@/components/FileTree.vue"
 import FileLinkModal from "@/views/FileLinkModal.vue"
 import queries, { VideoFile } from "@/lib/Queries"
 import { Tree, TreeImpl } from "@/lib/Tree"
 import { onMounted, reactive } from "vue"
 import { FileLinkRow } from '@/lib/FileLinkRow'
+import { graphClient } from "@/lib/GraphClient"
 
 class State {
 	public tree: Tree = new TreeImpl()
@@ -50,7 +50,7 @@ class State {
 const state = reactive(new State())
 
 function addRoot(): void {
-	Gql("mutation")({
+	graphClient.mutation({
 		addRootDirectoryInteractively: true
 	})
 }
@@ -61,7 +61,7 @@ function closeModal(): void {
 
 async function detectLink(videoFiles: VideoFile[]): Promise<void> {
 	state.activeModal = false
-	const { parseFileNames } = await Gql("query")({
+	const { parseFileNames } = await graphClient.query({
 		parseFileNames: [
 			{
 				fileNames: videoFiles.map(el => el.fileName.name)

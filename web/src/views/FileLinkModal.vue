@@ -100,7 +100,8 @@
 <script setup lang="ts">
 import { reactive } from "vue"
 import { FileLinkRow } from "@/lib/FileLinkRow"
-import { ExtDatabase, Gql } from '@/zeus'
+import { ExtDatabase } from '@/zeus'
+import { graphClient } from "@/lib/GraphClient"
 
 interface MediaName {
 	mediaName: string
@@ -181,7 +182,7 @@ function useMyAnimeList(): void {
 }
 
 async function internalMediaSearch(mediaName: MediaName): Promise<SearchResult> {
-	const response = await Gql("query")({
+	const response = await graphClient.query({
 		internalMediaSearch: [
 			{
 				name: mediaName.mediaName
@@ -218,7 +219,7 @@ async function internalMediaSearch(mediaName: MediaName): Promise<SearchResult> 
 }
 
 async function myAnimeListSearch(mediaName: MediaName): Promise<SearchResult> {
-	const response = await Gql("query")({
+	const response = await graphClient.query({
 		externalMediaSearch: [
 			{
 				name: mediaName.mediaName,
@@ -267,7 +268,7 @@ async function finalizeSelection(): Promise<void> {
 }
 
 async function queryForLink(mediaName: MediaName, result: QueryResult): Promise<void> {
-	const response = await Gql("query")({
+	const response = await graphClient.query({
 		internalMediaLookup: [
 			{
 				db: result.extDb,
@@ -308,7 +309,7 @@ async function addUnsavedMedia(): Promise<void> {
 	for (const result of state.queryResults) {
 		const selectedResult = result.selectedResult
 		if (selectedResult != null && !selectedResult.saved) {
-			const { externalMediaAdd } = await Gql("mutation")({
+			const { externalMediaAdd } = await graphClient.mutation({
 				externalMediaAdd: [
 					{
 						db: selectedResult.extDb,
@@ -325,7 +326,7 @@ async function addUnsavedMedia(): Promise<void> {
 }
 
 async function linkEpisode(fileName: string, mediaPartId: number): Promise<void> {
-	const { linkVideoFileWithName } = await Gql("mutation")({
+	const { linkVideoFileWithName } = await graphClient.mutation({
 		linkVideoFileWithName: [
 			{
 				mediaFileName: fileName,

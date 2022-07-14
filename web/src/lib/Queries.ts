@@ -1,9 +1,10 @@
-import { Gql, MalYearSeason, ZeusHook } from '@/zeus'
+import { MalYearSeason, ZeusHook } from '@/zeus'
+import { graphClient } from './GraphClient'
 
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 const queries = () => {
 	const listMediaUnits = () => {
-		return Gql("query")({
+		return graphClient.query({
 			listMediaUnits: {
 				id: true,
 				name: true,
@@ -31,7 +32,7 @@ const queries = () => {
 		})
 	}
 	const listVideoFiles = () => {
-		return Gql("query")({
+		return graphClient.query({
 			listVideoFiles: {
 				root: true,
 				files: {
@@ -49,7 +50,7 @@ const queries = () => {
 		})
 	}
 	const animeSeasonList = () => {
-		return Gql("query")({
+		return graphClient.query({
 			animeSeasonList: {
 				year: true,
 				season: true,
@@ -57,7 +58,7 @@ const queries = () => {
 		})
 	}
 	const animeSeasonSeries = (year: number, season: MalYearSeason) => {
-		return Gql("query")({
+		return graphClient.query({
 			animeSeason: [
 				{
 					year: year,
