@@ -12,6 +12,7 @@ import dynazzviewer.services.descriptors.tvmaze.TvMazeApi
 import dynazzviewer.storage.sqlite.SqlLiteStorage
 import dynazzviewer.ui.config.DefaultConfiguration
 import graphql.execution.ExecutionStrategy
+import graphql.schema.GraphQLScalarType
 import graphql.schema.GraphQLSchema
 import io.leangen.graphql.GraphQLSchemaGenerator
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.time.LocalDate
 import java.util.*
 
 @Configuration
@@ -41,6 +43,10 @@ open class GraphQLConfig {
             DefaultConfiguration.userDirectory,
             DefaultConfiguration.configPropertiesFileName
         )
+        val localDateScalar: GraphQLScalarType = GraphQLScalarType.newScalar()
+            .name(LocalDate::class.simpleName)
+            .coercing(LocalDateScalar())
+            .build()
         val settingsController = WebSettingsController()
         val configuration = DefaultConfiguration(settingsController)
         val systemFileSource = SystemFileSource(configuration)
@@ -76,6 +82,7 @@ open class GraphQLConfig {
             config = configuration
         )
         return GraphQLSchemaGenerator()
+            .withAdditionalTypes(listOf(localDateScalar))
             .withOperationsFromSingleton(FileSystemGraph(fileController))
             .withOperationsFromSingleton(ConfigGraph(configuration))
             .withOperationsFromSingleton(MediaListGraph(storage))
