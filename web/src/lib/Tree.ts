@@ -34,14 +34,16 @@ export class TreeImpl implements Tree {
 						status: updatedViewStatus,
 						videoFilePaths: [ node.videoFile.filePath.path ]
 					},
-					true
+					{
+						fileName: true,
+						mediaFileId: true
+					}
 				]
 			})
-			const responseItems: Map<string, number> = response.setViewStatus
-			for (const [fileName, mediaFileId] of Object.entries(responseItems)) {
-				const nodes: VideoFile[] = this.videoFilesByName(fileName)
+			for (const entry of response.setViewStatus) {
+				const nodes: VideoFile[] = this.videoFilesByName(entry.fileName)
 				for (const node of nodes) {
-					node.mediaFileId = mediaFileId
+					node.mediaFileId = entry.mediaFileId
 					node.viewStatus = updatedViewStatus
 				}
 			}

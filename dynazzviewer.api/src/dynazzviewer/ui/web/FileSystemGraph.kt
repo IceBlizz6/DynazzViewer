@@ -16,8 +16,9 @@ class FileSystemGraph(
     }
 
     @GraphQLMutation
-    fun setViewStatus(videoFilePaths: Set<String>, status: ViewStatus): Map<String, Int> {
+    fun setViewStatus(videoFilePaths: Set<String>, status: ViewStatus): List<MediaFileIdentification> {
         return controller.setViewStatus(videoFilePaths, status)
+            .map { MediaFileIdentification(it.key, it.value) }
     }
 
     @GraphQLMutation
@@ -90,5 +91,10 @@ class FileSystemGraph(
         val name: String,
         val season: Int?,
         val episode: Int?
+    )
+
+    class MediaFileIdentification(
+        val fileName: String,
+        val mediaFileId: Int
     )
 }
