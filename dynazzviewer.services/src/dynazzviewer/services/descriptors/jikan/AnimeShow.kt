@@ -31,7 +31,8 @@ class AnimeShow(
     val score: Double?,
     @SerialName("aired")
     val aired: Dates,
-    val genres: List<AnimeGenre>
+    val genres: List<AnimeGenre>,
+    val relations: List<AnimeRelation>? = null
 ) {
     @Serializable
     class Images(

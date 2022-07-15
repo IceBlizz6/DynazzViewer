@@ -127,7 +127,7 @@ class JikanApi(
                 seriesData.aired.to
             )
         }
-        val relatedList = related(seriesData.malId)
+        val relatedList = seriesData.relations!!
             .filter { e -> e.relation.includeInBatch }
             .map { e -> e.entry }
             .flatMap { e -> e.toList() }
@@ -225,9 +225,5 @@ class JikanApi(
 
     private fun episodes(malId: Int): List<AnimeEpisode> {
         return fetchListOf<AnimeEpisode>("/anime/$malId/episodes", null)
-    }
-
-    private fun related(malId: Int): List<AnimeRelation> {
-        return fetchListOf("/anime/$malId/relations", null)
     }
 }
