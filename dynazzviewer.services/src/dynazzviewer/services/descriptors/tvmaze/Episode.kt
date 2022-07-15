@@ -2,8 +2,8 @@ package dynazzviewer.services.descriptors.tvmaze
 
 import dynazzviewer.services.descriptors.DescriptionPart
 import kotlinx.serialization.SerialName
-import java.time.LocalDate
 import kotlinx.serialization.Serializable
+import java.time.LocalDate
 
 @Serializable
 class Episode(
@@ -22,7 +22,7 @@ class Episode(
             name = name,
             aired = airDate,
             uniqueKey = "TvMaze/$id/$season/$episode",
-            episodeNumber = episode,
+            episodeNumber = episode
         )
     }
 }

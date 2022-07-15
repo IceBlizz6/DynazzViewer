@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 enum class ImageType {
     @SerialName("medium")
     MEDIUM,
+
     @SerialName("original")
     ORIGINAL,
 }

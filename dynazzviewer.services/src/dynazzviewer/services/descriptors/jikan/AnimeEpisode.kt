@@ -21,7 +21,7 @@ class AnimeEpisode(
             name = title,
             aired = aired,
             uniqueKey = "MAL/$malId/$episodeId",
-            episodeNumber = episodeId,
+            episodeNumber = episodeId
         )
     }
 }

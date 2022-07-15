@@ -8,5 +8,5 @@ class Pagination(
     @SerialName("last_visible_page")
     val lastVisiblePage: Int,
     @SerialName("has_next_page")
-    val hasNextPage: Boolean,
+    val hasNextPage: Boolean
 )

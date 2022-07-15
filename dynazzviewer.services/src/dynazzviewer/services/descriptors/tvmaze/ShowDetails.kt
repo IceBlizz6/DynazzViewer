@@ -4,8 +4,8 @@ import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.services.descriptors.DescriptionPart
 import dynazzviewer.services.descriptors.DescriptionPartCollection
 import dynazzviewer.services.descriptors.DescriptionUnit
-import java.time.LocalDate
 import kotlinx.serialization.Serializable
+import java.time.LocalDate
 
 @Serializable
 class ShowDetails(
