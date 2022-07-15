@@ -1,21 +1,21 @@
 package dynazzviewer.entities
 
-import javax.persistence.Entity
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
+import javax.persistence.*
 
 @Entity
 class MediaPartCollection(
     @ManyToOne
     val parent: MediaUnit,
-    uniqueExtKey: String,
-    databaseEntry: MediaDatabaseEntry?,
+    override val uniqueKey: String,
+    val databaseEntry: MediaDatabaseEntry?,
     var name: String,
     var sortOrder: Int?,
     var seasonNumber: Int?
-) : EntityModel, ExtReference(uniqueExtKey, databaseEntry), UniqueKey {
-    override val uniqueKey: String
-        get() = uniqueExtKey!!
+) : EntityModel, UniqueKey {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int = 0
+        private set
 
     @OneToMany(mappedBy = "parent")
     lateinit var children: List<MediaPart>
@@ -24,7 +24,4 @@ class MediaPartCollection(
     @OneToMany(mappedBy = "parent")
     lateinit var alternativeTitles: List<AlternativeTitle>
         private set
-
-    override val root: MediaUnit
-        get() = parent
 }

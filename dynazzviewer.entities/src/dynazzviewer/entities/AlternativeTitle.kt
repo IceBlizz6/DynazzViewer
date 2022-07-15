@@ -10,13 +10,13 @@ import javax.persistence.ManyToOne
 class AlternativeTitle(
     @ManyToOne
     val parent: MediaPartCollection,
-    override val name: String
-) : UniqueKey, NameContainer, EntityModel {
-    override val uniqueKey: String
-        get() = name
-
+    val name: String
+) : EntityModel, UniqueKey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int = 0
         private set
+
+    override val uniqueKey: String
+        get() = name
 }

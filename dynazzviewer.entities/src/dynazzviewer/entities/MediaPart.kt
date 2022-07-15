@@ -1,30 +1,26 @@
 package dynazzviewer.entities
 
 import java.time.LocalDate
-import javax.persistence.Entity
-import javax.persistence.ManyToOne
-import javax.persistence.OneToOne
+import javax.persistence.*
 
 @Entity
 class MediaPart(
     @ManyToOne
     var parent: MediaPartCollection,
-    uniqueExtKey: String,
-    databaseEntry: MediaDatabaseEntry?,
+    override val uniqueKey: String,
     var name: String,
     var sortOrder: Int?,
     var aired: LocalDate?,
     var episodeNumber: Int?
-) : EntityModel, IdContainer, ExtReference(uniqueExtKey, databaseEntry), UniqueKey {
+) : EntityModel, UniqueKey {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int = 0
+        private set
+
     var status: ViewStatus = ViewStatus.None
 
     @OneToOne(mappedBy = "mediaPart")
     var mediaFile: MediaFile? = null
         private set
-
-    override val uniqueKey: String
-        get() = uniqueExtKey!!
-
-    override val root: MediaUnit
-        get() = parent.parent
 }

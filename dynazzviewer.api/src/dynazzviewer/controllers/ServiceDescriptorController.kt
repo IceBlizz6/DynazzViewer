@@ -50,14 +50,18 @@ class ServiceDescriptorController(
     }
 
     private fun match(description: DescriptionUnit, context: ReadOperation): MediaUnit? {
-        val level1 = listOf(description.uniqueKey)
-        val level2 = description.children.map { e -> e.uniqueKey }
-        val level3: List<String> = description
-            .children
-            .flatMap { e -> e.episodes }
-            .map { e -> e.uniqueKey }
-        val selectAll: List<String> = listOf(level1, level2, level3).flatten().filterNotNull()
-        return context.matchExtKey(selectAll)
+        val unitUniqueKey = description.uniqueKey
+        if (unitUniqueKey == null) {
+            for (season in description.children) {
+                val mediaPartCollection = context.mediaPartCollectionByKey(season.uniqueKey)
+                if (mediaPartCollection != null) {
+                    return mediaPartCollection.parent
+                }
+            }
+            return null
+        } else {
+            return context.mediaUnitByKey(unitUniqueKey)
+        }
     }
 
     private fun insert(

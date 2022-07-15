@@ -10,15 +10,15 @@ import javax.persistence.ManyToMany
 @Entity
 class MediaUnitTag(
     @Column(unique = true)
-    override val name: String,
+    val name: String,
     @ManyToMany(mappedBy = "tags")
     val mediaUnits: List<MediaUnit>
-) : EntityModel, NameContainer, UniqueKey {
-    override val uniqueKey: String
-        get() = name
-
+) : EntityModel, UniqueKey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int = 0
         private set
+
+    override val uniqueKey: String
+        get() = name
 }

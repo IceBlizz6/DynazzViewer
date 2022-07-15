@@ -16,9 +16,9 @@ interface ReadOperation : Closeable {
 
     fun mediaParts(): List<MediaPart>
 
-    fun matchExtKey(keys: List<String>): MediaUnit?
+    fun mediaUnitByKey(uniqueKey: String): MediaUnit?
 
-    fun extRefByKey(uniqueKey: String): ExtReference
+    fun mediaPartCollectionByKey(uniqueKey: String): MediaPartCollection?
 
     fun mediaFileById(id: Int): MediaFile
 

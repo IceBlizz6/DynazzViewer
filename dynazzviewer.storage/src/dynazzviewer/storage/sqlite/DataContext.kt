@@ -43,8 +43,8 @@ internal open class DataContext(
 
     override fun mediaPartCollectionByCode(db: ExtDatabase, code: String): MediaPartCollection? {
         return stream(QMediaPartCollection.mediaPartCollection)
-            .filter { it._super.databaseEntry.mediaDatabase.eq(db) }
-            .filter { it._super.databaseEntry.code.eq(code) }
+            .filter { it.databaseEntry.mediaDatabase.eq(db) }
+            .filter { it.databaseEntry.code.eq(code) }
             .fetchSingleOrNull()
     }
 
@@ -73,12 +73,6 @@ internal open class DataContext(
             .toMap()
     }
 
-    override fun extRefByKey(uniqueKey: String): ExtReference {
-        return stream(QExtReference.extReference)
-            .filter { it.uniqueExtKey.`in`(uniqueKey) }
-            .fetchSingle()
-    }
-
     override fun mediaPartCollections(): List<MediaPartCollection> {
         return stream(QMediaPartCollection.mediaPartCollection)
             .fetchList()
@@ -90,13 +84,16 @@ internal open class DataContext(
             .fetchList()
     }
 
-    override fun matchExtKey(keys: List<String>): MediaUnit? {
-        return stream(QExtReference.extReference)
-            .filter { it.uniqueExtKey.`in`(keys) }
-            .fetchList()
-            .map { it.root }
-            .distinctBy { it.id }
-            .singleOrNull()
+    override fun mediaUnitByKey(uniqueKey: String): MediaUnit? {
+        return stream(QMediaUnit.mediaUnit)
+            .filter { it.uniqueKey.eq(uniqueKey) }
+            .fetchSingleOrNull()
+    }
+
+    override fun mediaPartCollectionByKey(uniqueKey: String): MediaPartCollection? {
+        return stream(QMediaPartCollection.mediaPartCollection)
+            .filter { it.uniqueKey.eq(uniqueKey) }
+            .fetchSingleOrNull()
     }
 
     override fun mediaFileById(id: Int): MediaFile {

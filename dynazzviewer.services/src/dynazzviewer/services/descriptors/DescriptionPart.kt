@@ -18,10 +18,9 @@ class DescriptionPart(
             parent = parent,
             sortOrder = index,
             name = name,
-            uniqueExtKey = uniqueKey,
+            uniqueKey = uniqueKey,
             aired = aired,
-            episodeNumber = episodeNumber,
-            databaseEntry = null
+            episodeNumber = episodeNumber
         )
     }
 

@@ -1,10 +1,6 @@
 package dynazzviewer.services.descriptors
 
-import dynazzviewer.entities.AlternativeTitle
-import dynazzviewer.entities.ExtDatabase
-import dynazzviewer.entities.MediaPartCollection
-import dynazzviewer.entities.MediaUnit
-import dynazzviewer.entities.UniqueKey
+import dynazzviewer.entities.*
 import dynazzviewer.services.KeyMatcher
 import dynazzviewer.storage.ReadWriteOperation
 
@@ -21,7 +17,7 @@ class DescriptionPartCollection(
     fun create(parent: MediaUnit, context: ReadWriteOperation): MediaPartCollection {
         val partCollection = MediaPartCollection(
             parent = parent,
-            uniqueExtKey = uniqueKey,
+            uniqueKey = uniqueKey,
             name = name,
             sortOrder = sortOrder,
             seasonNumber = seasonNumber,

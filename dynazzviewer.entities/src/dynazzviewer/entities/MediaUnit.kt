@@ -1,15 +1,18 @@
 package dynazzviewer.entities
 
-import javax.persistence.Entity
-import javax.persistence.ManyToMany
-import javax.persistence.OneToMany
+import javax.persistence.*
 
 @Entity
 class MediaUnit(
-    uniqueExtKey: String?,
-    databaseEntry: MediaDatabaseEntry?,
-    override var name: String
-) : EntityModel, ExtReference(uniqueExtKey, databaseEntry), NameContainer, IdContainer {
+    val uniqueKey: String?,
+    val databaseEntry: MediaDatabaseEntry?,
+    var name: String
+) : EntityModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int = 0
+        private set
+
     @ManyToMany
     var tags: MutableList<MediaUnitTag> = mutableListOf()
         private set
@@ -21,7 +24,4 @@ class MediaUnit(
     @OneToMany(mappedBy = "mediaUnit")
     lateinit var images: List<MediaImage>
         private set
-
-    override val root: MediaUnit
-        get() = this
 }

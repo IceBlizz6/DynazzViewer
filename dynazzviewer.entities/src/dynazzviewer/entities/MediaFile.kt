@@ -11,13 +11,13 @@ import javax.persistence.OneToOne
 @Entity
 data class MediaFile(
     @Column(unique = true)
-    override var name: String,
+    var name: String,
     var status: ViewStatus = ViewStatus.None,
     @OneToOne
     var mediaPart: MediaPart? = null
-) : EntityModel, IdContainer, NameContainer, Serializable {
+) : EntityModel, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    override var id: Int = 0
+    var id: Int = 0
         private set
 }
