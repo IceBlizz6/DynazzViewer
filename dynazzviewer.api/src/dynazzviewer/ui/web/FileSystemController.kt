@@ -53,14 +53,10 @@ class FileSystemController(
     }
 
     fun setViewStatus(videoFilePaths: Set<String>, status: ViewStatus): Map<String, Int> {
-        return videoFilePaths
-            .map { path ->
-                run {
-                    val name = FilePath(path).fileName.name
-                    name to viewStatusController.setMediaFileStatus(status, name)
-                }
-            }
-            .toMap()
+        return videoFilePaths.associate { path ->
+            val name = FilePath(path).fileName.name
+            name to viewStatusController.setMediaFileStatus(status, name)
+        }
     }
 
     fun playVideos(videoFilePaths: List<String>): Boolean {
