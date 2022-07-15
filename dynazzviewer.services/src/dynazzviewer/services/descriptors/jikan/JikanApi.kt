@@ -165,14 +165,14 @@ class JikanApi(
     }
 
     private inline fun <reified T> fetchSingle(path: String): T {
-        return makeRequest<T>(path).single()
+        return makeRequest<T>(path, null).single()
     }
 
-    private inline fun <reified T> fetchListOf(path: String): List<T> {
-        return makeRequest<List<T>>(path).flatten()
+    private inline fun <reified T> fetchListOf(path: String, maxPage: Int?): List<T> {
+        return makeRequest<List<T>>(path, maxPage).flatten()
     }
 
-    private inline fun <reified T> makeRequest(path: String): List<T> {
+    private inline fun <reified T> makeRequest(path: String, maxPage: Int?): List<T> {
         val firstResponse = doRequest<T>(url(path, null))
         val list = mutableListOf<T>()
         list.add(firstResponse.data)
@@ -180,7 +180,7 @@ class JikanApi(
         if (firstPagination != null) {
             var nextPage = 2
             var hasNext = firstPagination.hasNextPage
-            while (hasNext) {
+            while (hasNext && (maxPage == null || nextPage <= maxPage)) {
                 val response = doRequest<T>(url(path, nextPage))
                 list.add(response.data)
                 nextPage += 1
@@ -210,12 +210,13 @@ class JikanApi(
 
     fun search(searchText: String): List<AnimeShow> {
         return fetchListOf(
-            "/anime?q=${searchText.replace(' ', '+')}"
+            "/anime?q=${searchText.replace(' ', '+')}",
+            2
         )
     }
 
     fun season(year: Int, season: MalYearSeason): List<AnimeShow> {
-        return fetchListOf("/seasons/$year/${season.seasonName}")
+        return fetchListOf("/seasons/$year/${season.seasonName}", null)
     }
 
     fun seasonFromJson(json: String): List<AnimeShow> {
@@ -223,10 +224,10 @@ class JikanApi(
     }
 
     private fun episodes(malId: Int): List<AnimeEpisode> {
-        return fetchListOf<AnimeEpisode>("/anime/$malId/episodes")
+        return fetchListOf<AnimeEpisode>("/anime/$malId/episodes", null)
     }
 
     private fun related(malId: Int): List<AnimeRelation> {
-        return fetchListOf("/anime/$malId/relations")
+        return fetchListOf("/anime/$malId/relations", null)
     }
 }
