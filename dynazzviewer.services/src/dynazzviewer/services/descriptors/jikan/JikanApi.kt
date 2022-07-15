@@ -48,7 +48,9 @@ class JikanApi(
                     .toSet(),
                 imageUrls = jikanSeries
                     .map { e -> e.show.images.jpg.medium }
-                    .toSet()
+                    .toSet(),
+                extDatabase = null,
+                extDatabaseCode = null
             )
         } else {
             return null

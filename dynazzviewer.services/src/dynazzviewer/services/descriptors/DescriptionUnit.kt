@@ -1,5 +1,7 @@
 package dynazzviewer.services.descriptors
 
+import dynazzviewer.entities.ExtDatabase
+import dynazzviewer.entities.MediaDatabaseEntry
 import dynazzviewer.entities.MediaImage
 import dynazzviewer.entities.MediaUnit
 import dynazzviewer.services.KeyMatcher
@@ -10,13 +12,15 @@ class DescriptionUnit(
     val children: List<DescriptionPartCollection>,
     val imageUrls: Set<String>,
     val tags: Set<String>,
-    val uniqueKey: String?
+    val uniqueKey: String?,
+    val extDatabase: ExtDatabase?,
+    val extDatabaseCode: String?,
 ) {
     fun create(context: ReadWriteOperation): MediaUnit {
         val mediaUnit = MediaUnit(
             uniqueExtKey = uniqueKey,
             name = name,
-            databaseEntry = null
+            databaseEntry = extDatabase?.let { context.mediaEntryGetOrCreate(extDatabase, extDatabaseCode!!) }
         )
         context.save(mediaUnit)
         imageUrls

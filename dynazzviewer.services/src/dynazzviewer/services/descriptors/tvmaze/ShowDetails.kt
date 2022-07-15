@@ -1,26 +1,22 @@
 package dynazzviewer.services.descriptors.tvmaze
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.services.descriptors.DescriptionPart
 import dynazzviewer.services.descriptors.DescriptionPartCollection
 import dynazzviewer.services.descriptors.DescriptionUnit
 import java.time.LocalDate
+import kotlinx.serialization.Serializable
 
+@Serializable
 class ShowDetails(
-    @JsonProperty("id", required = true)
     val id: Int,
-    @JsonProperty("name", required = true)
     val name: String,
-    @JsonProperty("genres", required = true)
     val genres: List<String>,
-    @JsonProperty("status", required = true)
     val status: String,
-    @JsonProperty("premiered", required = true)
+    @Serializable(LocalDateSerializer::class)
     val premiered: LocalDate,
-    @JsonProperty("externals", required = true)
-    val externals: Map<String, String?>,
-    @JsonProperty("image", required = true)
-    val images: Map<ImageType, String>
+    val externals: ExternalRef,
+    val image: Map<ImageType, String>?
 ) {
     fun toDescriptionUnit(episodes: List<Episode>): DescriptionUnit {
         val seasonList = mutableListOf<DescriptionPartCollection>()
@@ -42,13 +38,14 @@ class ShowDetails(
                 )
             )
         }
-        val imageUrl = images[ImageType.MEDIUM]!!
         return DescriptionUnit(
             name = name,
             children = seasonList,
-            imageUrls = setOf(imageUrl),
+            imageUrls = image?.get(ImageType.MEDIUM)?.let { setOf(it) } ?: emptySet(),
             uniqueKey = "TvMaze/$id",
-            tags = genres.toSet()
+            tags = genres.toSet(),
+            extDatabase = ExtDatabase.TvMaze,
+            extDatabaseCode = id.toString()
         )
     }
 }

@@ -1,6 +1,5 @@
 package dynazzviewer.services.descriptors
 
-import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.entities.MediaPart
 import dynazzviewer.entities.MediaPartCollection
 import dynazzviewer.entities.UniqueKey
@@ -12,9 +11,7 @@ class DescriptionPart(
     val aired: LocalDate?,
     private val name: String,
     override val uniqueKey: String,
-    val episodeNumber: Int?,
-    val extDatabase: ExtDatabase,
-    val extCode: String
+    val episodeNumber: Int?
 ) : UniqueKey {
     fun create(parent: MediaPartCollection, context: ReadWriteOperation): MediaPart {
         return MediaPart(
@@ -24,7 +21,7 @@ class DescriptionPart(
             uniqueExtKey = uniqueKey,
             aired = aired,
             episodeNumber = episodeNumber,
-            databaseEntry = context.mediaEntryGetOrCreate(extDbCode = extCode, extDb = extDatabase)
+            databaseEntry = null
         )
     }
 

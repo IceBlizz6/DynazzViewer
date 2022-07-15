@@ -11,8 +11,8 @@ import dynazzviewer.storage.ReadWriteOperation
 class DescriptionPartCollection(
     val name: String,
     val episodes: List<DescriptionPart>,
-    val extDatabaseCode: String?,
     val extDatabase: ExtDatabase?,
+    val extDatabaseCode: String?,
     override val uniqueKey: String,
     val sortOrder: Int?,
     val seasonNumber: Int?,

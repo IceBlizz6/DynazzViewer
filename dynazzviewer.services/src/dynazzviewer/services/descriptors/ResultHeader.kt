@@ -5,7 +5,7 @@ import dynazzviewer.storage.MediaIdentity
 
 class ResultHeader(
     val name: String,
-    val imageUrl: String,
+    val imageUrl: String?,
     override val extDb: ExtDatabase,
     override val extDbCode: String
 ) : MediaIdentity {

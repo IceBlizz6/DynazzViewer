@@ -4,9 +4,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class ImageType {
-    @SerialName("medium")
-    MEDIUM,
-    @SerialName("original")
-    ORIGINAL,
-}
+class ExternalRef(
+    @SerialName("tvrage")
+    val tvRage: Int?,
+    @SerialName("thetvdb")
+    val theTvDb: Int?,
+    val imdb: String?
+)

@@ -74,7 +74,7 @@ class ApiServiceGraph(
 
     class MediaSearchResultItem(
         val name: String,
-        val imageUrl: String,
+        val imageUrl: String?,
         val extDb: ExtDatabase,
         val extDbCode: String,
         val saved: Boolean

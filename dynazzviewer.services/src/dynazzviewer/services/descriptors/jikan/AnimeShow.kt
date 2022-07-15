@@ -18,7 +18,7 @@ class AnimeShow(
     @SerialName("title_english")
     val englishTitle: String?,
     @SerialName("title_japanese")
-    val japaneseTitle: String,
+    val japaneseTitle: String?,
     @SerialName("title_synonyms")
     val synonymTitles: List<String>,
     @SerialName("episodes")

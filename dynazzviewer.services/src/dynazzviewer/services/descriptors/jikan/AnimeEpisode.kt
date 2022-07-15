@@ -1,6 +1,5 @@
 package dynazzviewer.services.descriptors.jikan
 
-import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.services.descriptors.DescriptionPart
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -23,8 +22,6 @@ class AnimeEpisode(
             aired = aired,
             uniqueKey = "MAL/$malId/$episodeId",
             episodeNumber = episodeId,
-            extDatabase = ExtDatabase.MyAnimeList,
-            extCode = malId
         )
     }
 }
