@@ -33,7 +33,14 @@
 					class="search-result-item"
 				>
 					<div class="result-item-img">
-						<img :src="item.imageUrl">
+						<img
+							v-if="item.imageUrl !== null"
+							:src="item.imageUrl"
+						>
+						<img
+							v-else
+							src="@/assets/SearchResultMissingImage.png"
+						>
 					</div>
 					<div class="result-item-info">
 						<p><strong>{{ item.name }}</strong></p>
@@ -89,7 +96,7 @@ class ResultHeaderItem {
 		saved: boolean,
 		public extDb: ExtDatabase,
 		public extDbCode: string,
-		public imageUrl: string,
+		public imageUrl: string | null,
 		public name: string,
 	) {
 		if (saved) {
@@ -167,7 +174,7 @@ async function query(): Promise<void> {
 			el.saved,
 			el.extDb,
 			el.extDbCode,
-			el.imageUrl,
+			el.imageUrl ?? null,
 			el.name
 		)
 	)
