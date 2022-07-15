@@ -11,7 +11,7 @@ class ViewStatusController(
 ) {
     fun setMediaPartStatus(status: ViewStatus, id: Int) {
         var mediaFileId: Int? = null
-        storage.readWrite().use { context ->
+        storage.readWrite { context ->
             val mediaPart = context.mediaPartById(id)
             mediaPart.status = status
             Optional.ofNullable(mediaPart.mediaFile)
@@ -30,7 +30,7 @@ class ViewStatusController(
 
     fun setMediaFileStatus(status: ViewStatus, id: Int) {
         var mediaPartId: Int? = null
-        storage.readWrite().use { context ->
+        storage.readWrite { context ->
             val mediaFile = context.mediaFileById(id)
             mediaFile.status = status
             Optional.ofNullable(mediaFile.mediaPart)
@@ -42,7 +42,7 @@ class ViewStatusController(
     }
 
     fun link(mediaPartId: Int, mediaFileId: Int) {
-        storage.readWrite().use { context ->
+        storage.readWrite { context ->
             val mediaPart = context.mediaPartById(mediaPartId)
             val mediaFile = context.mediaFileById(mediaFileId)
             val sharedStatus = resolveViewStatus(mediaPart.status, mediaFile.status)
@@ -61,15 +61,15 @@ class ViewStatusController(
     }
 
     fun getOrCreateMediaFile(fileName: String): Int {
-        storage.readWrite().use { context ->
+        return storage.readWrite { context ->
             val mapLookup = context.mediaFilesByName(setOf(fileName))
             val entry: MediaFile? = mapLookup[fileName]
             if (entry == null) {
                 val mediaFile = MediaFile(name = fileName)
                 context.save(mediaFile)
-                return mediaFile.id
+                mediaFile.id
             } else {
-                return entry.id
+                entry.id
             }
         }
     }

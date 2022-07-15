@@ -1,7 +1,9 @@
 package dynazzviewer.storage
 
 interface Storage {
-    fun read(): ReadOperation
+    fun readKeepAlive(): ReadOperation
 
-    fun readWrite(): ReadWriteOperation
+    fun <T> read(use: (ReadOperation) -> T): T
+
+    fun <T> readWrite(use: (ReadWriteOperation) -> T): T
 }

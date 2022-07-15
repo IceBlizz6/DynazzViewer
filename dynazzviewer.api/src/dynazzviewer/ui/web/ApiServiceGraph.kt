@@ -19,9 +19,9 @@ class ApiServiceGraph(
     @GraphQLQuery
     fun externalMediaSearch(db: ExtDatabase, name: String): List<MediaSearchResultItem> {
         val result: List<ResultHeader> = service.queryDescriptors(db, name)
-        storage.read().use { context ->
+        return storage.read { context ->
             val storedState = context.mediaUnitExist(result)
-            return result.map {
+            result.map {
                 MediaSearchResultItem(
                     name = it.name,
                     saved = storedState[it]!!,

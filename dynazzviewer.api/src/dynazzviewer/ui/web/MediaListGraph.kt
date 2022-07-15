@@ -40,7 +40,7 @@ class MediaListGraph(
 
     @GraphQLMutation
     fun setEpisodeWatchState(mediaPartId: Int, status: ViewStatus) {
-        storage.readWrite().use { context ->
+        storage.readWrite { context ->
             val mediaPart = context.mediaPartById(mediaPartId)
             mediaPart.status = status
             mediaPart.mediaFile?.let {

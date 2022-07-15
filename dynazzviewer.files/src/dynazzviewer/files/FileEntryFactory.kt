@@ -12,7 +12,7 @@ class FileEntryFactory(
     private val storage: Storage
 ) {
     fun files(root: RootDirectory, filePaths: Set<FilePath>): Set<VideoFile> {
-        storage.read().use { context ->
+        return storage.read { context ->
             val names = filePaths.map { e -> e.fileName.name }.toSet()
             val storageLookup: Map<String, MediaFile> = context.mediaFilesByName(names)
             val videoFiles = mutableSetOf<VideoFile>()
@@ -32,7 +32,7 @@ class FileEntryFactory(
                     videoFiles.add(videoFile)
                 }
             }
-            return videoFiles
+            videoFiles
         }
     }
 }

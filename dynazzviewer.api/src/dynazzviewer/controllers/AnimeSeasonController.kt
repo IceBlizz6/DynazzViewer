@@ -45,12 +45,11 @@ class AnimeSeasonController(
         val file = path(year, season)
         val json = file.readText()
         val series = api.seasonFromJson(json)
-
-        storage.read().use { context ->
+        return storage.read { context ->
             val storedFlags = context.animeSeasonSeries(series.map { it.malId })
             val mediaIds = series.map { AnimeMediaIdentity(it.malId.toString()) }
             val cacheExists = context.mediaUnitExist(mediaIds)
-            return series.map {
+            series.map {
                 AnimeSeasonSeries(
                     title = it.title,
                     imageUrl = it.images.jpg.medium,
@@ -76,7 +75,7 @@ class AnimeSeasonController(
     }
 
     fun markSeries(malId: Int, flag: AnimeSeasonFlagState) {
-        storage.readWrite().use { context ->
+        storage.readWrite { context ->
             context.setAnimeSeasonFlag(malId, flag)
         }
     }

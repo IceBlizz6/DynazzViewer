@@ -34,7 +34,7 @@ class SqlLiteStorage(
 
     init {
         val unitInfo = HibernatePersistenceUnitInfo()
-        val map = HashMap<String, Any>()
+        val map = mutableMapOf<String, Any>()
         map[JPA_JDBC_DRIVER] = "org.sqlite.JDBC"
         map[JPA_JDBC_URL] = CONNECTION_PREFIX + storageMode.path
         map["hibernate.hbm2ddl.auto"] = storageMode.initOperation.opName
@@ -54,12 +54,16 @@ class SqlLiteStorage(
             .createContainerEntityManagerFactory(unitInfo, map)
     }
 
-    override fun read(): ReadOperation {
+    override fun readKeepAlive(): ReadOperation {
         return DataContext(this)
     }
 
-    override fun readWrite(): ReadWriteOperation {
-        return TransactionDataContext(this)
+    override fun <T> read(use: (ReadOperation) -> T): T {
+        return DataContext(this).use { use(it) }
+    }
+
+    override fun <T> readWrite(use: (ReadWriteOperation) -> T): T {
+        return TransactionDataContext(this).use { use(it) }
     }
 
     internal fun createEntityManager(): EntityManager {

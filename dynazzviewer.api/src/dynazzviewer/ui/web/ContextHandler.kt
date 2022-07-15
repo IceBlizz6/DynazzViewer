@@ -10,7 +10,7 @@ class ContextHandler {
 
         fun registerRead(storage: Storage, env: ResolutionEnvironment): ReadOperation {
             val executionId = env.dataFetchingEnvironment.executionId.toString()
-            val operation = storage.read()
+            val operation = storage.readKeepAlive()
             operationList[executionId] = operation
             return operation
         }
