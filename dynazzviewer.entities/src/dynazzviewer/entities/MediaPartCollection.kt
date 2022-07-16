@@ -7,6 +7,7 @@ class MediaPartCollection(
     @ManyToOne
     val parent: MediaUnit,
     override val uniqueKey: String,
+    @ManyToOne
     val databaseEntry: MediaDatabaseEntry?,
     var name: String,
     var sortOrder: Int?,

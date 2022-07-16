@@ -5,6 +5,7 @@ import javax.persistence.*
 @Entity
 class MediaUnit(
     val uniqueKey: String?,
+    @ManyToOne
     val databaseEntry: MediaDatabaseEntry?,
     var name: String
 ) : EntityModel {
