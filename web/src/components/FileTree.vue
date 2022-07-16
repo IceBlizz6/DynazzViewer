@@ -170,7 +170,7 @@ interface Props {
 const props = defineProps<Props>()
 
 class State {
-	public showChildren: boolean = true
+	public showChildren: boolean = false
 }
 const state = reactive(new State())
 
