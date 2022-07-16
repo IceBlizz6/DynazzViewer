@@ -13,6 +13,10 @@ import javax.persistence.EntityManager
 internal open class DataContext(
     private val storage: SqlLiteStorage
 ) : ReadOperation, Closeable {
+    companion object {
+        const val inPredicateChunkSize = 500
+    }
+
     protected val entityManager: EntityManager = storage.createEntityManager()
 
     override fun alternativeTitleLike(sqlLikeString: String): List<AlternativeTitle> {
@@ -22,11 +26,16 @@ internal open class DataContext(
     }
 
     override fun mediaFilesByName(names: Set<String>): Map<String, MediaFile> {
-        return stream(QMediaFile.mediaFile)
-            .filter { it.name.`in`(names) }
-            .fetchList()
-            .map { it.name to it }
-            .toMap()
+        return names
+            .chunked(inPredicateChunkSize)
+            .map { nameListChunk ->
+                stream(QMediaFile.mediaFile)
+                    .filter { it.name.`in`(nameListChunk) }
+                    .fetchList()
+                    .associateBy { it.name }
+            }
+            .flatMap { it.entries }
+            .associate { it.key to it.value }
     }
 
     override fun mediaUnitsLike(sqlLikeString: String): List<MediaUnit> {
