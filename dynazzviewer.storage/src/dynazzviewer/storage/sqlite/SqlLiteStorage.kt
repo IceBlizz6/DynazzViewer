@@ -19,7 +19,7 @@ import org.hibernate.cfg.AvailableSettings.USE_REFLECTION_OPTIMIZER
 import org.hibernate.cfg.AvailableSettings.USE_SECOND_LEVEL_CACHE
 import org.hibernate.cfg.AvailableSettings.USE_STRUCTURED_CACHE
 import org.hibernate.jpa.HibernatePersistenceProvider
-import java.util.HashMap
+import java.io.File
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
 
@@ -64,6 +64,12 @@ class SqlLiteStorage(
 
     override fun <T> readWrite(use: (ReadWriteOperation) -> T): T {
         return TransactionDataContext(this).use { use(it) }
+    }
+
+    override fun dumpTo(file: File) {
+        DataContext(this).use { context ->
+            SqlLiteJsonDumper(context).dumpTo(file)
+        }
     }
 
     internal fun createEntityManager(): EntityManager {
