@@ -155,7 +155,7 @@ class State {
 	public enableSkip = false
 	public enableNone = false
 
-	public yearInput: number | null = null
+	public yearInput: string | null = null
 	public seasonInput: MalYearSeason = MalYearSeason.WINTER
 }
 const state = reactive(new State())
@@ -210,7 +210,7 @@ async function addAnimeSeason(): Promise<void> {
 	} else {
 		const { animeSeasonAdd } = await graphClient.mutation({
 			animeSeasonAdd: [
-				{ year: state.yearInput, season: state.seasonInput },
+				{ year: parseInt(state.yearInput), season: state.seasonInput },
 				true
 			]
 		})
@@ -288,7 +288,7 @@ const seriesFilteredList = computed((): AnimeSeasonSeries[] => {
 onMounted(() => {
 	refreshHeaders()
 	const now = moment()
-	state.yearInput = now.year()
+	state.yearInput = now.year().toString()
 })
 </script>
 
