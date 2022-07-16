@@ -102,7 +102,7 @@ class AnimeSeasonController(
         val url: String,
         val title: String,
         val imageUrl: String,
-        val type: MalType,
+        val type: MalType?,
         val airingStart: LocalDate?,
         val episodes: Int?,
         val score: Double?,

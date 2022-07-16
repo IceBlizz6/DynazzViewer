@@ -26,7 +26,7 @@ class AnimeShow(
     @SerialName("images")
     val images: Images,
     @SerialName("type")
-    val type: MalType,
+    val type: MalType?,
     @SerialName("score")
     val score: Double?,
     @SerialName("aired")
