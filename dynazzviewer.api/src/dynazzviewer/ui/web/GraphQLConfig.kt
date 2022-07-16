@@ -86,6 +86,7 @@ open class GraphQLConfig {
             .withOperationsFromSingleton(FileSystemGraph(fileController))
             .withOperationsFromSingleton(ConfigGraph(configuration))
             .withOperationsFromSingleton(MediaListGraph(storage))
+            .withOperationsFromSingleton(DataManagementGraph(storage))
             .withOperationsFromSingleton(
                 ApiServiceGraph(apiServiceController, storage, animeSeasonController)
             )
