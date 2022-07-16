@@ -39,4 +39,6 @@ interface ReadOperation : Closeable {
     fun animeSeasonSeries(malIds: List<Int>): Map<Int, AnimeSeasonFlagState>
 
     fun mediaPartCollectionByCode(db: ExtDatabase, code: String): MediaPartCollection?
+
+    fun mediaUnitByCode(db: ExtDatabase, code: String): MediaUnit?
 }

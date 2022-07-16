@@ -48,6 +48,13 @@ internal open class DataContext(
             .fetchSingleOrNull()
     }
 
+    override fun mediaUnitByCode(db: ExtDatabase, code: String): MediaUnit? {
+        return stream(QMediaUnit.mediaUnit)
+            .filter { it.databaseEntry.mediaDatabase.eq(db) }
+            .filter { it.databaseEntry.code.eq(code) }
+            .fetchSingleOrNull()
+    }
+
     override fun mediaUnitExist(list: List<MediaIdentity>): Map<MediaIdentity, Boolean> {
         val groups = list.groupBy { it.extDb }
         val allMatches = mutableListOf<MediaIdentity>()
