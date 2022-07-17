@@ -8,6 +8,7 @@ import com.querydsl.core.types.dsl.*
 import com.querydsl.jpa.impl.JPAQuery
 import javax.persistence.EntityManager
 import kotlin.reflect.KClass
+import kotlin.reflect.jvm.javaType
 
 class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<QTEntity, TEntity> {
     private val source: QTEntity
@@ -65,6 +66,18 @@ class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<
 
     override fun limit(count: Long): QueryStream<QTEntity, TEntity> {
         query = query.limit(count)
+        return this
+    }
+
+    override fun orderByWithBuilder(
+        build: (QueryBuilder<QTEntity, TEntity, OrderSpecifier<*>>) -> OrderSpecifier<*>
+    ): QueryStream<QTEntity, TEntity> {
+        val builder = JpaQueryBuilder<QTEntity, TEntity, OrderSpecifier<*>>(
+            source,
+            query,
+            joinNameGenerator
+        )
+        query = query.orderBy(build(builder))
         return this
     }
 
@@ -172,9 +185,13 @@ class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<
     }
 
     override fun filterBuild(
-        transform: (PredicateBuilder<QTEntity, TEntity>) -> BooleanExpression
+        transform: (QueryBuilder<QTEntity, TEntity, BooleanExpression>) -> BooleanExpression
     ): QueryStream<QTEntity, TEntity> {
-        val builder = JpaPredicateBuilder(source, query, joinNameGenerator)
+        val builder = JpaQueryBuilder<QTEntity, TEntity, BooleanExpression>(
+            source,
+            query,
+            joinNameGenerator
+        )
         query = query.where(transform(builder)).select(source)
         return this
     }
@@ -213,9 +230,9 @@ class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<
         ): T {
             val generatedName = nameGenerator.generate()
             val constructors = type.constructors
-            val constructorMatch = constructors.first {
-                it.parameters.size == 1 && it.parameters.single().name == "variable"
-            }
+            val constructorMatch = constructors
+                .filter { it.parameters.size == 1 }
+                .first { it.parameters.single().type.javaType == java.lang.String::class.java }
             return constructorMatch.call(generatedName)
         }
     }

@@ -42,7 +42,7 @@ class EmptyQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> :
     }
 
     override fun filterBuild(
-        transform: (PredicateBuilder<QTEntity, TEntity>) -> BooleanExpression
+        transform: (QueryBuilder<QTEntity, TEntity, BooleanExpression>) -> BooleanExpression
     ): QueryStream<QTEntity, TEntity> {
         return this
     }
@@ -74,6 +74,12 @@ class EmptyQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> :
     }
 
     override fun limit(count: Long): QueryStream<QTEntity, TEntity> {
+        return this
+    }
+
+    override fun orderByWithBuilder(
+        builder: (QueryBuilder<QTEntity, TEntity, OrderSpecifier<*>>) -> OrderSpecifier<*>
+    ): QueryStream<QTEntity, TEntity> {
         return this
     }
 

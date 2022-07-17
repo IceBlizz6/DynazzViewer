@@ -4,6 +4,8 @@ import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.entities.MediaPartCollection
 import dynazzviewer.entities.MediaUnit
 import dynazzviewer.entities.ViewStatus
+import dynazzviewer.storage.MediaUnitSort
+import dynazzviewer.storage.SortOrder
 import dynazzviewer.storage.Storage
 import io.leangen.graphql.annotations.GraphQLEnvironment
 import io.leangen.graphql.annotations.GraphQLMutation
@@ -14,9 +16,15 @@ class MediaListGraph(
     val storage: Storage
 ) {
     @GraphQLQuery
-    fun listMediaUnits(@GraphQLEnvironment env: ResolutionEnvironment): List<MediaUnit> {
+    fun listMediaUnits(
+        @GraphQLEnvironment env: ResolutionEnvironment,
+        skip: Int,
+        take: Int,
+        sort: MediaUnitSort,
+        order: SortOrder
+    ): List<MediaUnit> {
         val operation = ContextHandler.registerRead(storage, env)
-        return operation.mediaUnits()
+        return operation.mediaUnits(skip, take, sort, order)
     }
 
     @GraphQLQuery

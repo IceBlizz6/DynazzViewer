@@ -1,8 +1,6 @@
 package dynazzviewer.storage
 
 import dynazzviewer.entities.*
-import dynazzviewer.entities.AnimeSeasonFlagState
-import dynazzviewer.entities.ExtDatabase
 import java.io.Closeable
 
 interface ReadOperation : Closeable {
@@ -11,6 +9,8 @@ interface ReadOperation : Closeable {
     fun mediaPartById(id: Int): MediaPart
 
     fun mediaUnits(): List<MediaUnit>
+
+    fun mediaUnits(skip: Int, take: Int, sort: MediaUnitSort, order: SortOrder): List<MediaUnit>
 
     fun mediaPartCollections(): List<MediaPartCollection>
 

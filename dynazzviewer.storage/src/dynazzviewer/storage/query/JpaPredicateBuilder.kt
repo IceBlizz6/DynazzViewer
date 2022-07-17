@@ -7,14 +7,14 @@ import com.querydsl.core.types.dsl.ListPath
 import com.querydsl.jpa.impl.JPAQuery
 import kotlin.reflect.KClass
 
-class JpaPredicateBuilder<QTEntity : EntityPathBase<TEntity>, TEntity>(
+class JpaQueryBuilder<QTEntity : EntityPathBase<TEntity>, TEntity, TResult : Any>(
     private val source: QTEntity,
     private var query: JPAQuery<TEntity>,
     private val nameGenerator: JoinNameGenerator
-) : PredicateBuilder<QTEntity, TEntity> {
+) : QueryBuilder<QTEntity, TEntity, TResult> {
     override fun filter(
         transform: (QTEntity) -> BooleanExpression
-    ): PredicateBuilder<QTEntity, TEntity> {
+    ): QueryBuilder<QTEntity, TEntity, TResult> {
         var expr: BooleanExpression = transform(source)
         if (expr is BooleanPath) {
             expr = expr.isTrue
@@ -25,23 +25,23 @@ class JpaPredicateBuilder<QTEntity : EntityPathBase<TEntity>, TEntity>(
 
     override fun <QT : EntityPathBase<T>, T> flatMap(
         transform: (QTEntity) -> ListPath<T, QT>
-    ): PredicateBuilder<QT, T> {
+    ): QueryBuilder<QT, T, TResult> {
         val joinedSource: ListPath<T, QT> = transform(source)
         val joinedType: KClass<out QT> = joinedSource.any()::class
         val joined = JpaQueryStream.generateJoinInstance(joinedType, nameGenerator)
         val joinedQuery = query.leftJoin(joinedSource, joined).select(joined)
-        return JpaPredicateBuilder(joined, joinedQuery, nameGenerator)
+        return JpaQueryBuilder(joined, joinedQuery, nameGenerator)
     }
 
     override fun <QT : EntityPathBase<T>, T> map(
         transform: (QTEntity) -> QT
-    ): PredicateBuilder<QT, T> {
+    ): QueryBuilder<QT, T, TResult> {
         val joinedSource = transform(source)
         val joinedQuery = query.select(joinedSource)
-        return JpaPredicateBuilder(joinedSource, joinedQuery, nameGenerator)
+        return JpaQueryBuilder(joinedSource, joinedQuery, nameGenerator)
     }
 
-    override fun build(transform: (QTEntity) -> BooleanExpression): BooleanExpression {
+    override fun build(transform: (QTEntity) -> TResult): TResult {
         return transform(source)
     }
 }

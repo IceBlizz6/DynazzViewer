@@ -1,11 +1,15 @@
 package dynazzviewer.storage.sqlite
 
+import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.EntityPathBase
 import dynazzviewer.entities.*
 import dynazzviewer.entities.AnimeSeasonFlagState
 import dynazzviewer.entities.ExtDatabase
 import dynazzviewer.storage.MediaIdentity
+import dynazzviewer.storage.MediaUnitSort
 import dynazzviewer.storage.ReadOperation
+import dynazzviewer.storage.SortOrder
+import dynazzviewer.storage.query.QueryBuilder
 import dynazzviewer.storage.query.QueryStream
 import java.io.Closeable
 import javax.persistence.EntityManager
@@ -144,6 +148,30 @@ internal open class DataContext(
 
     override fun mediaUnits(): List<MediaUnit> {
         return stream(QMediaUnit.mediaUnit).fetchList()
+    }
+
+    override fun mediaUnits(
+        skip: Int,
+        take: Int,
+        sort: MediaUnitSort,
+        order: SortOrder
+    ): List<MediaUnit> {
+        return stream(QMediaUnit.mediaUnit)
+            .let { stream ->
+                when (sort) {
+                    MediaUnitSort.LAST_EPISODE_AIRED -> stream.orderByWithBuilder { builder: QueryBuilder<QMediaUnit, MediaUnit, OrderSpecifier<*>> ->
+                        builder
+                            .flatMap { it.children }
+                            .flatMap { it.children }
+                            .build { order.func(it.aired) }
+                    }
+                    MediaUnitSort.ID -> stream.orderBy { order.func(it.id) }
+                    MediaUnitSort.NAME -> stream.orderBy { order.func(it.name) }
+                }
+            }
+            .skip(skip.toLong())
+            .limit(take.toLong())
+            .fetchList()
     }
 
     override fun mediaParts(): List<MediaPart> {

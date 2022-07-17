@@ -19,7 +19,7 @@ interface QueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> {
      * Filter result set on predicate that can map to other entities
      */
     fun filterBuild(
-        transform: (PredicateBuilder<QTEntity, TEntity>) -> BooleanExpression
+        transform: (QueryBuilder<QTEntity, TEntity, BooleanExpression>) -> BooleanExpression
     ): QueryStream<QTEntity, TEntity>
 
     /**
@@ -79,6 +79,10 @@ interface QueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> {
      * Sorts result by expression
      */
     fun orderBy(transform: (QTEntity) -> OrderSpecifier<*>): QueryStream<QTEntity, TEntity>
+
+    fun orderByWithBuilder(
+        build: (QueryBuilder<QTEntity, TEntity, OrderSpecifier<*>>) -> OrderSpecifier<*>
+    ): QueryStream<QTEntity, TEntity>
 
     /**
      * Returns all rows

@@ -4,16 +4,16 @@ import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.EntityPathBase
 import com.querydsl.core.types.dsl.ListPath
 
-interface PredicateBuilder<QTEntity : EntityPathBase<TEntity>, TEntity> {
-    fun filter(transform: (QTEntity) -> BooleanExpression): PredicateBuilder<QTEntity, TEntity>
+interface QueryBuilder<QTEntity : EntityPathBase<TEntity>, TEntity, TResult : Any> {
+    fun filter(transform: (QTEntity) -> BooleanExpression): QueryBuilder<QTEntity, TEntity, TResult>
 
     fun <QT : EntityPathBase<T>, T> flatMap(
         transform: (QTEntity) -> ListPath<T, QT>
-    ): PredicateBuilder<QT, T>
+    ): QueryBuilder<QT, T, TResult>
 
     fun <QT : EntityPathBase<T>, T> map(
         transform: (QTEntity) -> QT
-    ): PredicateBuilder<QT, T>
+    ): QueryBuilder<QT, T, TResult>
 
-    fun build(transform: (QTEntity) -> BooleanExpression): BooleanExpression
+    fun build(transform: (QTEntity) -> TResult): TResult
 }
