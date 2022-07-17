@@ -179,15 +179,6 @@ class JpaQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> : QueryStream<
         return this
     }
 
-    override fun filterBuildAny(
-        transform: (PredicateBuilder<QTEntity, TEntity>) -> List<BooleanExpression>
-    ): QueryStream<QTEntity, TEntity> {
-        val builder = JpaPredicateBuilder(source, query, joinNameGenerator)
-        val filterTransform = builder.chainAny(transform)
-        query = query.where(filterTransform).select(source)
-        return this
-    }
-
     override fun <V> withSource(
         defaultValue: V,
         transform: (source: QTEntity, stream: QueryStream<QTEntity, TEntity>) -> V

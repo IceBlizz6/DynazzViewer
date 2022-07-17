@@ -23,14 +23,6 @@ interface QueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> {
     ): QueryStream<QTEntity, TEntity>
 
     /**
-     * Filter result set on predicate that can map to other entities
-     * Returns result that matches any of the predicates in list
-     */
-    fun filterBuildAny(
-        transform: (PredicateBuilder<QTEntity, TEntity>) -> List<BooleanExpression>
-    ): QueryStream<QTEntity, TEntity>
-
-    /**
      * Maps result rows one to many
      */
     fun <QT : EntityPathBase<T>, T> flatMap(

@@ -15,9 +15,5 @@ interface PredicateBuilder<QTEntity : EntityPathBase<TEntity>, TEntity> {
         transform: (QTEntity) -> QT
     ): PredicateBuilder<QT, T>
 
-    fun chainAny(
-        transform: (PredicateBuilder<QTEntity, TEntity>) -> List<BooleanExpression>
-    ): BooleanExpression
-
     fun build(transform: (QTEntity) -> BooleanExpression): BooleanExpression
 }

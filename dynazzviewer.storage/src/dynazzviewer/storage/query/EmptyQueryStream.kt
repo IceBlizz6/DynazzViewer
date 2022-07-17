@@ -47,12 +47,6 @@ class EmptyQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> :
         return this
     }
 
-    override fun filterBuildAny(
-        transform: (PredicateBuilder<QTEntity, TEntity>) -> List<BooleanExpression>
-    ): QueryStream<QTEntity, TEntity> {
-        return this
-    }
-
     override fun <QT : EntityPathBase<T>, T> map(
         transform: (QTEntity) -> QT
     ): QueryStream<QT, T> {
