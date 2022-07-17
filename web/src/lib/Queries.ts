@@ -1,34 +1,47 @@
-import { MalYearSeason, ZeusHook } from '@/zeus'
+import { MalYearSeason, MediaUnitSort, SortOrder, ZeusHook } from '@/zeus'
 import { graphClient } from './GraphClient'
 
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 const queries = () => {
-	const listMediaUnits = () => {
+	const listMediaUnits = (
+		skip: number,
+		take: number,
+		order: SortOrder,
+		sort: MediaUnitSort
+	) => {
 		return graphClient.query({
-			listMediaUnits: {
-				id: true,
-				name: true,
-				images: {
-					url: true
+			listMediaUnits: [
+				{
+					skip: skip,
+					take: take,
+					order: order,
+					sort: sort
 				},
-				children: {
+				{
 					id: true,
 					name: true,
-					seasonNumber: true,
-					sortOrder: true,
+					images: {
+						url: true
+					},
 					children: {
 						id: true,
-						episodeNumber: true,
 						name: true,
-						status: true,
+						seasonNumber: true,
 						sortOrder: true,
-						aired: true,
-						mediaFile: {
+						children: {
 							id: true,
+							episodeNumber: true,
+							name: true,
+							status: true,
+							sortOrder: true,
+							aired: true,
+							mediaFile: {
+								id: true,
+							}
 						}
 					}
 				}
-			}
+			]
 		})
 	}
 	const listVideoFiles = () => {

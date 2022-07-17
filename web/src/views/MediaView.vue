@@ -97,12 +97,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from "vue"
-import { ViewStatus } from '@/zeus'
+import { onMounted, onUnmounted, reactive } from "vue"
+import { MediaUnitSort, SortOrder, ViewStatus } from '@/zeus'
 import MediaSeries from '@/components/MediaSeries.vue'
 import numeral from 'numeral'
 import queries, { MediaUnit, MediaPart } from "@/lib/Queries"
 import { graphClient } from "@/lib/GraphClient"
+import { BatchRequester } from "@/lib/BatchRequester"
+
+const mediaUnitBatchSize = 10
+const loadOnScrollBottomPercent = 90
 
 class State {
 	public source: MediaUnit[] = []
@@ -152,10 +156,39 @@ async function setEpisodeWatch(episode: MediaPart, status: ViewStatus): Promise<
 	}
 }
 
-onMounted(async() => {
-	const response = await queries.listMediaUnits()
-	state.source = response.listMediaUnits
+async function requestBatch(skip: number, take: number): Promise<MediaUnit[]> {
+	const response = await queries.listMediaUnits(skip, take, SortOrder.DESCENDING, MediaUnitSort.LAST_EPISODE_AIRED)
+	return response.listMediaUnits
+}
+
+const batchRequester = new BatchRequester<MediaUnit>(
+	mediaUnitBatchSize,
+	requestBatch,
+	(list) => {
+		state.source.push(...list)
+	}
+)
+
+function onScroll(ev: Event) {
+	const scrollingElement = document.scrollingElement
+	if (scrollingElement !== null) {
+		const current = scrollingElement.scrollTop
+		const max = scrollingElement.scrollHeight - scrollingElement.clientHeight
+		const percent = Math.floor((current / max) * 100)
+		if (percent >= loadOnScrollBottomPercent && batchRequester.isNextAvailable) {
+			batchRequester.fetchNext()
+		}
+	}
+}
+
+onMounted(() => {
+	batchRequester.fetchNext()
 	state.selected = null
+	document.addEventListener("scroll", onScroll)
+})
+
+onUnmounted(() => {
+	document.removeEventListener("scroll", onScroll)
 })
 </script>
 
