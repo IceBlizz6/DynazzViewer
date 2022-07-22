@@ -8,27 +8,25 @@
 				>
 				<span class="tree-item-name">{{ label }}</span>
 			</span>
-			<span
-				class="toolbar-action"
+			<ToolbarAction
+				label="Detect/Link"
 				@click="detectLink(parentNode)"
 			>
 				<img
 					class="tree-icon"
 					src="@/assets/Link.png"
 				>
-				Detect/Link
-			</span>
-			<span
+			</ToolbarAction>
+			<ToolbarAction
 				v-if="isRoot"
-				class="toolbar-action"
+				label="Remove"
 				@click="removeRoot"
 			>
 				<img
 					class="tree-icon"
 					src="@/assets/Remove.png"
 				>
-				Remove
-			</span>
+			</ToolbarAction>
 		</div>
 		<ul
 			v-if="state.showChildren"
