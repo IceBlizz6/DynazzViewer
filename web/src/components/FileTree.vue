@@ -74,76 +74,51 @@
 					>
 
 					<span class="tree-item-name">{{ node.videoFile.fileName.name }}</span>
-					<span
-						class="toolbar-action toolbar-action-play"
+					<ToolbarAction
+						label="Play video"
 						@click="playVideo(node)"
 					>
-						<o-tooltip
-							label="Play video"
-							position="top"
+						<img
+							class="tree-icon"
+							src="@/assets/videofiles/Play.png"
 						>
-							<img
-								class="tree-icon"
-								src="@/assets/videofiles/Play.png"
-							>
-						</o-tooltip>
-					</span>
-					<span
-						class="toolbar-action"
+					</ToolbarAction>
+					<ToolbarAction
+						label="Flag viewed"
 						@click="setStatusViewed(node)"
 					>
-						<o-tooltip
-							label="Flag viewed"
-							position="top"
+						<img
+							class="tree-icon"
+							src="@/assets/videofiles/Viewed.png"
 						>
-							<img
-								class="tree-icon"
-								src="@/assets/videofiles/Viewed.png"
-							>
-						</o-tooltip>
-					</span>
-					<span
-						class="toolbar-action"
+					</ToolbarAction>
+					<ToolbarAction
+						label="Flag skipped"
 						@click="setStatusSkipped(node)"
 					>
-						<o-tooltip
-							label="Flag skipped"
-							position="top"
+						<img
+							class="tree-icon"
+							src="@/assets/videofiles/Skipped.png"
 						>
-							<img
-								class="tree-icon"
-								src="@/assets/videofiles/Skipped.png"
-							>
-						</o-tooltip>
-					</span>
-					<span
-						class="toolbar-action"
+					</ToolbarAction>
+					<ToolbarAction
+						label="Reset status"
 						@click="setStatusNone(node)"
 					>
-						<o-tooltip
-							label="Reset status"
-							position="top"
+						<img
+							class="tree-icon"
+							src="@/assets/Undo.png"
 						>
-							<img
-								class="tree-icon"
-								src="@/assets/Undo.png"
-							>
-						</o-tooltip>
-					</span>
-					<span
-						class="toolbar-action toolbar-action-exporer"
+					</ToolbarAction>
+					<ToolbarAction
+						label="Show in explorer"
 						@click="showExplorer(node)"
 					>
-						<o-tooltip
-							label="Show in explorer"
-							position="top"
+						<img
+							class="tree-icon"
+							src="@/assets/FolderOpen.png"
 						>
-							<img
-								class="tree-icon"
-								src="@/assets/FolderOpen.png"
-							>
-						</o-tooltip>
-					</span>
+					</ToolbarAction>
 				</div>
 			</li>
 		</ul>
@@ -157,6 +132,7 @@ import { ViewStatus } from "@/zeus"
 import { VideoFile } from "@/lib/Queries"
 import { Tree } from "@/lib/Tree"
 import * as FileTree from "@/components/FileTree.vue"
+import ToolbarAction from "@/components/ToolbarAction.vue"
 
 interface Props {
 	label: string
@@ -261,19 +237,7 @@ const childrenFiles = computed((): TreeNode[] => {
 	background-color: var(--primary-invert-highlight);
 }
 
-:root {
-	--toolbar-item-margin: 10px;
-}
-
 .tree-item-name {
 	padding-left: 10px;
-}
-
-.toolbar-action-exporer {
-	margin-left: var(--toolbar-item-margin);
-}
-
-.toolbar-action-play {
-	margin-right: var(--toolbar-item-margin);
 }
 </style>
