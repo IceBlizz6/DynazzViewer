@@ -1,5 +1,13 @@
 <template>
 	<article>
+		<section>
+			<o-checkbox
+				v-model="state.filter.hideCompletedFolders"
+				@update:modelValue="onFilterUpdated"
+			>
+				Hide completed folders
+			</o-checkbox>
+		</section>
 		<section
 			v-for="root in state.tree.roots"
 			:key="root.name"
@@ -10,6 +18,7 @@
 					:label="root.name"
 					:nodes="root.children!"
 					:tree="state.tree"
+					:filter="state.filter"
 					:is-root="true"
 					:on-detect-link="detectLink"
 				/>
@@ -41,12 +50,16 @@ import { Tree, TreeImpl } from "@/lib/Tree"
 import { onMounted, reactive } from "vue"
 import { FileLinkRow } from '@/lib/FileLinkRow'
 import { graphClient } from "@/lib/GraphClient"
+import { TreeViewFilter } from "@/lib/TreeViewFilter"
+import { LocalStorageBox } from "@/lib/LocalStorageBox"
 
 class State {
 	public tree: Tree = new TreeImpl()
 	public activeModal = false
 	public detectedFileResults: FileLinkRow[] = []
+	public filter = filterStorage.getOrDefault(() => new TreeViewFilter())
 }
+const filterStorage = new LocalStorageBox<TreeViewFilter>("treeview-filter")
 const state = reactive(new State())
 
 function addRoot(): void {
@@ -57,6 +70,10 @@ function addRoot(): void {
 
 function closeModal(): void {
 	state.activeModal = false
+}
+
+function onFilterUpdated(): void {
+	filterStorage.set(state.filter)
 }
 
 async function detectLink(videoFiles: VideoFile[]): Promise<void> {

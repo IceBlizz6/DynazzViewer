@@ -38,16 +38,21 @@
 			v-if="state.showChildren"
 			class="tree-children-list"
 		>
-			<FileTree.default
+			<template
 				v-for="node in childrenDirectories"
 				:key="node.name"
-				:parent-node="node"
-				:nodes="node.children!"
-				:label="node.name"
-				:tree="tree"
-				:is-root="false"
-				:on-detect-link="onDetectLink"
-			/>
+			>
+				<FileTree.default
+					v-show="isChildDirectoryVisible(node)"
+					:parent-node="node"
+					:nodes="node.children!"
+					:label="node.name"
+					:tree="tree"
+					:filter="props.filter"
+					:is-root="false"
+					:on-detect-link="onDetectLink"
+				/>
+			</template>
 			<li
 				v-for="node in childrenFiles"
 				:key="node.localId"
@@ -137,12 +142,14 @@ import { VideoFile } from "@/lib/Queries"
 import { Tree } from "@/lib/Tree"
 import * as FileTree from "@/components/FileTree.vue"
 import ToolbarAction from "@/components/ToolbarAction.vue"
+import { TreeViewFilter } from "@/lib/TreeViewFilter"
 
 interface Props {
 	label: string
 	nodes: TreeNode[]
 	parentNode: TreeNode
 	tree: Tree
+	filter: TreeViewFilter
 	isRoot: boolean
 	onDetectLink(videoFiles: VideoFile[]): void
 }
@@ -163,6 +170,14 @@ const isFolderCompleted = computed(
 		.nodes
 		.every(isCompleted)
 )
+
+function isChildDirectoryVisible(node: TreeNode): boolean {
+	if (props.filter.hideCompletedFolders) {
+		return !isCompleted(node)
+	} else {
+		return true
+	}
+}
 
 function isCompleted(node: TreeNode): boolean {
 	if (node.videoFile !== null) {
