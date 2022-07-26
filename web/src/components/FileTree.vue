@@ -3,6 +3,12 @@
 		<div class="tree-item-header directory-node">
 			<span @click="toggleChildren">
 				<img
+					v-if="isFolderCompleted"
+					class="tree-icon"
+					src="@/assets/FolderContentComplete.png"
+				>
+				<img
+					v-else
 					class="tree-icon"
 					src="@/assets/FolderContentAvailable.png"
 				>
@@ -150,6 +156,22 @@ const state = reactive(new State())
 
 function removeRoot(): void {
 	props.tree.removeRoot(props.parentNode)
+}
+
+const isFolderCompleted = computed(
+	() => props
+		.nodes
+		.every(isCompleted)
+)
+
+function isCompleted(node: TreeNode): boolean {
+	if (node.videoFile !== null) {
+		return node.videoFile.viewStatus !== ViewStatus.None
+	} else if (node.children !== null) {
+		return node.children.every(e => isCompleted(e))
+	} else {
+		throw new Error("Node not recognized as file or folder")
+	}
 }
 
 function toggleChildren(): void {
