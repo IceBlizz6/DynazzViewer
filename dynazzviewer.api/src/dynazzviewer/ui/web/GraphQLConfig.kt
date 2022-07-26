@@ -58,7 +58,6 @@ open class GraphQLConfig {
         val fileController = FileSystemController(
             storage = storage,
             fileConfiguration = configuration,
-            userConfiguration = configuration,
             fileRepository = fileRepository
         )
         val webClient = HttpWebClient(secondsThrottleDelay = 2)
@@ -84,7 +83,6 @@ open class GraphQLConfig {
         return GraphQLSchemaGenerator()
             .withAdditionalTypes(listOf(localDateScalar))
             .withOperationsFromSingleton(FileSystemGraph(fileController))
-            .withOperationsFromSingleton(ConfigGraph(configuration))
             .withOperationsFromSingleton(MediaListGraph(storage))
             .withOperationsFromSingleton(DataManagementGraph(storage))
             .withOperationsFromSingleton(

@@ -54,7 +54,7 @@ class FileSystemGraph(
 
     @GraphQLMutation
     fun playVideo(path: String) {
-        controller.playVideos(listOf(path))
+        controller.playVideo(path)
     }
 
     @GraphQLQuery

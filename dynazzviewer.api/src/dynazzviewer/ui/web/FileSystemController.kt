@@ -9,14 +9,12 @@ import dynazzviewer.files.hierarchy.FilePath
 import dynazzviewer.files.hierarchy.RootDirectory
 import dynazzviewer.files.hierarchy.VideoFile
 import dynazzviewer.storage.Storage
-import dynazzviewer.ui.config.UserConfiguration
 import java.awt.Desktop
 import java.io.File
 
 class FileSystemController(
     private val storage: Storage,
     private val fileConfiguration: FileConfiguration,
-    private val userConfiguration: UserConfiguration,
     private val fileRepository: FileRepository
 ) : UpdateListener {
     private val desktop: Desktop = Desktop.getDesktop()
@@ -59,15 +57,8 @@ class FileSystemController(
         }
     }
 
-    fun playVideos(videoFilePaths: List<String>): Boolean {
-        val applicationPath: String? = userConfiguration.mediaPlayerApplicationPath
-        if (applicationPath != null) {
-            val videoPaths = videoFilePaths.joinToString(" ") { "\"" + it + "\"" }
-            Runtime.getRuntime().exec("$applicationPath $videoPaths")
-            return true
-        } else {
-            return false
-        }
+    fun playVideo(videoFilePath: String) {
+        Desktop.getDesktop().open(File(videoFilePath))
     }
 
     fun showExplorer(path: String) {
@@ -93,9 +84,6 @@ class FileSystemController(
             mediaPartId = mediaPartId
         )
     }
-
-    val playVideoEnabled: Boolean
-        get() = userConfiguration.mediaPlayerApplicationPath != null
 
     override fun updateMediaUnit(id: Int, recursive: Boolean) = Unit
 

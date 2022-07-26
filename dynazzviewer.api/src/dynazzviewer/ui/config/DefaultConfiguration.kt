@@ -6,7 +6,7 @@ import java.io.File
 
 class DefaultConfiguration(
     private val config: SettingController
-) : FileConfiguration, UserConfiguration {
+) : FileConfiguration {
     companion object {
         const val cacheDirectory = "cache"
         const val userDirectory = "user"
@@ -14,13 +14,6 @@ class DefaultConfiguration(
         const val clientOrigin: String = "http://localhost:3000"
         private const val listSeparator = "|"
     }
-
-    override var mediaPlayerApplicationPath: String?
-        get() = config.string("mediaPlayerApplicationPath")
-        set(value) {
-            assignNullIfEmpty("mediaPlayerApplicationPath", value)
-            config.save()
-        }
 
     override var videoExtensions: Set<String>
         get() = readSet("VideoExtensions", setOf("mkv", "avi", "mp4"))
@@ -42,15 +35,6 @@ class DefaultConfiguration(
     init {
         ensureDirectoryExists(cacheDirectoryPath)
         ensureDirectoryExists(userDirectory)
-    }
-
-    private fun assignNullIfEmpty(key: String, value: String?) {
-        val assignableValue = nullIfEmpty(value)
-        if (assignableValue == null) {
-            config.remove(key)
-        } else {
-            config.set("mediaPlayerApplicationPath", assignableValue)
-        }
     }
 
     private fun nullIfEmpty(value: String?): String? {
