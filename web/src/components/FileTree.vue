@@ -15,6 +15,15 @@
 				<span class="tree-item-name">{{ label }}</span>
 			</span>
 			<ToolbarAction
+				label="Refresh"
+				@click="refresh"
+			>
+				<img
+					class="tree-icon"
+					src="@/assets/Refresh.png"
+				>
+			</ToolbarAction>
+			<ToolbarAction
 				label="Detect/Link"
 				@click="detectLink(parentNode)"
 			>
@@ -191,6 +200,10 @@ function isCompleted(node: TreeNode): boolean {
 
 function toggleChildren(): void {
 	state.showChildren = !state.showChildren
+}
+
+async function refresh(): Promise<void> {
+	return props.tree.refreshDirectory(props.parentNode)
 }
 
 function isLinked(videoFile: VideoFile): boolean {

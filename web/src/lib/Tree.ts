@@ -6,23 +6,22 @@ import { graphClient } from './GraphClient'
 
 export interface Tree {
 	roots: TreeNode[]
-	videoFiles: VideoFile[]
 
 	load(response: VideoFileResponse): void
 	setViewed(node: TreeNode, updatedViewStatus: ViewStatus): Promise<void>
 	removeRoot(node: TreeNode): Promise<void>
+	refreshDirectory(node: TreeNode): Promise<void>
 	showExplorer(node: VideoFile): Promise<void>
 	playVideo(node: VideoFile): Promise<void>
 }
 
 export class TreeImpl implements Tree {
 	public roots: TreeNode[] = []
-	public videoFiles: VideoFile[] = []
 
 	public load(response: VideoFileResponse): void {
 		const sourceVideoFiles = response.listVideoFiles
-		this.roots = sourceVideoFiles.map(el => this.filePathsToTree(el.root, el.files))
-		this.videoFiles = sourceVideoFiles.flatMap(el => el.files)
+		const factory = new TreeNodeFactory()
+		this.roots = sourceVideoFiles.map(el => factory.buildRoot(el.root, el.files))
 	}
 
 	public async setViewed(node: TreeNode, updatedViewStatus: ViewStatus): Promise<void> {
@@ -68,8 +67,66 @@ export class TreeImpl implements Tree {
 				throw new Error("Unable to remove root directory")
 			} else {
 				ListFunc.remove(this.roots, node)
-				const videoFiles = this.videoFilesFromParent(node)
-				this.videoFiles = this.videoFiles.filter(e => !videoFiles.includes(e))
+			}
+		}
+	}
+
+	private refreshSubDirectory(rootNode: TreeNode, refreshedPath: string, files: VideoFile[]): void {
+		const node = rootNode.childByPath(refreshedPath)
+		const parent = node.parent
+		if (parent === null) {
+			throw new Error("Child node must have a parent")
+		} else if (parent.children === null) {
+			throw new Error("Parent must support children")
+		} else {
+			const factory = new TreeNodeFactory()
+			const createdNode = factory.buildSubDirectory(parent, node.name, files)
+			ListFunc.remove(parent.children, node)
+			parent.children.push(createdNode)
+		}
+	}
+
+	private refreshRoot(rootNode: TreeNode, files: VideoFile[]): void {
+		const factory = new TreeNodeFactory()
+		const createdNode = factory.buildRoot(rootNode.name, files)
+		ListFunc.remove(this.roots, rootNode)
+		this.roots.push(createdNode)
+	}
+
+	public async refreshDirectory(node: TreeNode): Promise<void> {
+		const { refreshDirectory } = await graphClient.mutation({
+			refreshDirectory: [
+				{
+					path: node.fullPath
+				},
+				{
+					root: true,
+					files: {
+						fileName: {
+							name: true
+						},
+						filePath: {
+							path: true
+						},
+						mediaFileId: true,
+						viewStatus: true,
+						linkedMediaPartId: true,
+					}
+				}
+			]
+		})
+		const relevantRoots = refreshDirectory.filter(root => node.fullPath.startsWith(root.root)) 
+		for (const root of relevantRoots) {
+			const rootNode = this.roots.find(e => e.fullPath === root.root)
+			if (rootNode === undefined) {
+				throw new Error("No match for root path " + root.root)
+			} else {
+				const isRootNode = (rootNode.name === node.fullPath)
+				if (isRootNode) {
+					this.refreshRoot(rootNode, root.files)
+				} else {
+					this.refreshSubDirectory(rootNode, node.fullPath, root.files)
+				}
 			}
 		}
 	}
@@ -112,58 +169,75 @@ export class TreeImpl implements Tree {
 		}
 	}
 
-	private filePathsToTree(rootPath: string, filePaths: VideoFile[]): TreeNode {
-		const rootNode = TreeNode.directoryNode(rootPath)
-		for (let i = 0;i<filePaths.length;i++) {
-			const paths = this.resolvePath(rootPath, filePaths[i].filePath.path)
-			this.pushNode(rootNode, paths, filePaths[i])
-		}
+	private videoFilesByName(nodeName: string): VideoFile[] {
+		return this.roots
+			.flatMap(e => this.videoFilesFromParent(e))
+			.filter(el => el.fileName.name == nodeName)
+	}
+}
+
+class TreeNodeFactory {
+	/**
+	 * @param rootPath Full path of root directory that was selected by user
+	 * @param files List of all video files detected
+	 */
+	public buildRoot(rootPath: string, files: VideoFile[]): TreeNode {
+		const rootNode = TreeNode.directoryNode(null, rootPath)
+		this.insertFilesToParent(rootNode, files)
 		return rootNode
 	}
 
-		
-	private pushNode(treeRoot: TreeNode, pathList: string[], childObject: VideoFile): void {
-		let current = treeRoot
-		for (let i = 1;i<pathList.length - 1;i++) {
-			current = this.lookupChildren(current, pathList[i])
-		}
-		const videoFileNode = TreeNode.videoFileNode(childObject)
-		if (current.children == null) {
-			throw new Error("Node does not support children")
-		} else {
-			current.children.push(videoFileNode)
+	public buildSubDirectory(directoryParent: TreeNode, directoryName: string, files: VideoFile[]): TreeNode {
+		const directory = TreeNode.directoryNode(directoryParent, directoryName)
+		this.insertFilesToParent(directory, files)
+		return directory
+	}
+
+	private insertFilesToParent(ancestor: TreeNode, files: VideoFile[]): void {
+		for (const file of files) {
+			const pathSegments = TreeNode.resolvePathSegments(ancestor.fullPath, file.filePath.path)
+			const pathSegmentsToDirectory = pathSegments.slice(1, pathSegments.length - 1)
+			const parent = this.getOrCreateSubDirectory(ancestor, pathSegmentsToDirectory)
+			if (parent.children == null) {
+				throw new Error("Node does not support children")
+			} else {
+				const videoFileNode = TreeNode.videoFileNode(parent, file)
+				parent.children.push(videoFileNode)
+			}
 		}
 	}
 
-	private lookupChildren(parent: TreeNode, childName: string): TreeNode {
+	/**
+	 * 
+	 * @param rootNode Root node to search through
+	 * @param pathSegments List of names that follows to sub directory
+	 */
+	private getOrCreateSubDirectory(rootNode: TreeNode, pathSegments: string[]): TreeNode {
+		let node = rootNode
+		for (const segment of pathSegments) {
+			node = this.getOrCreateChildDirectory(node, segment)
+		}
+		return node
+	}
+
+	/**
+	 * 
+	 * @param parent Direct parent node of directory
+	 * @param directoryName Name of directory to retrieve
+	 */
+	private getOrCreateChildDirectory(parent: TreeNode, directoryName: string): TreeNode {
 		const children = parent.children
 		if (children == null) {
 			throw new Error("Node does not support children")
 		} else {
-			for (let i = 0;i<children.length;i++) {
-				if (children[i].name == childName) {
-					return children[i]
-				}
+			const child = children.find(e => e.name === directoryName)
+			if (child === undefined) {
+				const newChild = TreeNode.directoryNode(parent, directoryName)
+				children.push(newChild)
+				return newChild
+			} else {
+				return child
 			}
-			const newChild = TreeNode.directoryNode(childName)
-			children.push(newChild)
-			return newChild
 		}
-	}
-
-		
-	private resolvePath(rootPath: string, filePath: string): string[] {
-		if (filePath.startsWith(rootPath)) {
-			const pathList = []
-			pathList.push(rootPath)
-			filePath.substring(rootPath.length).split("/").forEach(el => { if (el.length > 0) {pathList.push(el) } })
-			return pathList
-		} else {
-			throw new Error(filePath + " does not start with " + rootPath)
-		}
-	}
-
-	private videoFilesByName(nodeName: string): VideoFile[] {
-		return this.videoFiles.filter(el => el.fileName.name == nodeName)
 	}
 }

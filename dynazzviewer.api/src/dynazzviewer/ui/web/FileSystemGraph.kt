@@ -2,6 +2,8 @@ package dynazzviewer.ui.web
 
 import dynazzviewer.entities.ViewStatus
 import dynazzviewer.files.FileNameDetector
+import dynazzviewer.files.hierarchy.RootDirectory
+import dynazzviewer.files.hierarchy.VideoFile
 import io.leangen.graphql.annotations.GraphQLMutation
 import io.leangen.graphql.annotations.GraphQLQuery
 import javax.swing.JFileChooser
@@ -43,8 +45,10 @@ class FileSystemGraph(
     }
 
     @GraphQLMutation
-    fun refreshRootDirectory(rootPath: String) {
-        controller.refreshDirectory(rootPath)
+    fun refreshDirectory(path: String): Set<RootEntry> {
+        return controller.refreshDirectory(path)
+            .map { RootEntry(it.key.rootPath, it.value) }
+            .toSet()
     }
 
     @GraphQLMutation
