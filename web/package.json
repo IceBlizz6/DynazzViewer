@@ -55,6 +55,13 @@
         "error",
         "tab"
       ],
+      "vue/v-on-event-hyphenation": [
+        "error",
+        "never",
+        {
+          "ignore": []
+        }
+      ],
       "@typescript-eslint/no-non-null-assertion": "error",
       "@typescript-eslint/explicit-function-return-type": [
         "error"

@@ -1,24 +1,24 @@
 <template>
-    <span
-        class="toolbar-action"
-        @click="emit('click')"
-    >
-        <o-tooltip
-            :label="props.label"
-            position="top"
-        >
-            <slot />
-        </o-tooltip>
-    </span>
+	<span
+		class="toolbar-action"
+		@click="emit('click')"
+	>
+		<o-tooltip
+			:label="props.label"
+			position="top"
+		>
+			<slot />
+		</o-tooltip>
+	</span>
 </template>
 
 <script setup lang="ts">
 interface Props {
-    label: string
+	label: string
 }
 
 interface Emits {
-    (event: "click"): void
+	(event: "click"): void
 }
 
 const props = defineProps<Props>()

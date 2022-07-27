@@ -169,7 +169,7 @@ const batchRequester = new BatchRequester<MediaUnit>(
 	}
 )
 
-function onScroll(ev: Event) {
+function onScroll(): void {
 	const scrollingElement = document.scrollingElement
 	if (scrollingElement !== null) {
 		const current = scrollingElement.scrollTop
