@@ -1,7 +1,7 @@
 import { Chain } from '@/zeus'
 
 export class GraphClient {
-	private graphClient = Chain("http://localhost:8080/graphql")
+	private graphClient = Chain("/graphql")
 
 	public query = this.graphClient(
 		"query", 
