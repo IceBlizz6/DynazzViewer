@@ -12,21 +12,6 @@ class HomeController {
     @Autowired
     private lateinit var schema: GraphQLSchema
 
-    @GetMapping("/")
-    fun index(): String {
-        return "fileview"
-    }
-
-    @GetMapping("/fileview")
-    fun fileView(): String {
-        return "fileview"
-    }
-
-    @GetMapping("/mediaview")
-    fun mediaView(): String {
-        return "mediaview"
-    }
-
     @ResponseBody
     @GetMapping(value = ["/schema"], produces = ["text/plain"])
     fun schemaDisplay(): String? {
