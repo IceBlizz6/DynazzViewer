@@ -42,7 +42,9 @@ interface JsonDumper {
             fun from(source: dynazzviewer.entities.MediaUnit): MediaSeries {
                 return MediaSeries(
                     name = source.name,
-                    extDb = source.databaseEntry?.let { ExternalDbEntry(it.mediaDatabase, it.code) },
+                    extDb = source.databaseEntry?.let {
+                        ExternalDbEntry(it.mediaDatabase, it.code)
+                    },
                     uniqueKey = source.uniqueKey,
                     tags = source.tags.map { it.name },
                     images = source.images.map { it.url },
@@ -65,7 +67,9 @@ interface JsonDumper {
             fun from(source: dynazzviewer.entities.MediaPartCollection): MediaSeason {
                 return MediaSeason(
                     name = source.name,
-                    extDb = source.databaseEntry?.let { ExternalDbEntry(it.mediaDatabase, it.code) },
+                    extDb = source.databaseEntry?.let {
+                        ExternalDbEntry(it.mediaDatabase, it.code)
+                    },
                     sortOrder = source.sortOrder,
                     seasonNumber = source.seasonNumber,
                     alternativeTitles = source.alternativeTitles.map { it.name },

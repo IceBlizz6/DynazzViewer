@@ -37,7 +37,7 @@ class ServiceDescriptorController(
     }
 
     private fun insertOrUpdate(description: DescriptionUnit): Int {
-        return storage.readWrite {context ->
+        return storage.readWrite { context ->
             val match = match(description, context)
             if (match == null) {
                 val mediaUnit = insert(description, context)

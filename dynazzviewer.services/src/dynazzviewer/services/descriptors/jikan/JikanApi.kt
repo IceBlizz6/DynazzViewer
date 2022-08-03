@@ -65,7 +65,10 @@ class JikanApi(
         }
     }
 
-    private fun autoFillEpisodes(episodes: List<AnimeEpisode>, numberOfEpisodes: Int): List<AnimeEpisode> {
+    private fun autoFillEpisodes(
+        episodes: List<AnimeEpisode>,
+        numberOfEpisodes: Int
+    ): List<AnimeEpisode> {
         if (episodes.count() != numberOfEpisodes) {
             val mutableEpisodes = mutableListOf<AnimeEpisode>()
             mutableEpisodes.addAll(episodes)

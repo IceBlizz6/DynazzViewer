@@ -2,8 +2,6 @@ package dynazzviewer.ui.web
 
 import dynazzviewer.entities.ViewStatus
 import dynazzviewer.files.FileNameDetector
-import dynazzviewer.files.hierarchy.RootDirectory
-import dynazzviewer.files.hierarchy.VideoFile
 import io.leangen.graphql.annotations.GraphQLMutation
 import io.leangen.graphql.annotations.GraphQLQuery
 import javax.swing.JFileChooser
@@ -18,7 +16,10 @@ class FileSystemGraph(
     }
 
     @GraphQLMutation
-    fun setViewStatus(videoFilePaths: Set<String>, status: ViewStatus): List<MediaFileIdentification> {
+    fun setViewStatus(
+        videoFilePaths: Set<String>,
+        status: ViewStatus
+    ): List<MediaFileIdentification> {
         return controller.setViewStatus(videoFilePaths, status)
             .map { MediaFileIdentification(it.key, it.value) }
     }

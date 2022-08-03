@@ -19,10 +19,12 @@ class DescriptionUnit(
         val mediaUnit = MediaUnit(
             uniqueKey = uniqueKey,
             name = name,
-            databaseEntry = extDatabase?.let { context.mediaEntryGetOrCreate(
-                extDatabase,
-                extDatabaseCode!!
-            ) }
+            databaseEntry = extDatabase?.let {
+                context.mediaEntryGetOrCreate(
+                    extDatabase,
+                    extDatabaseCode!!
+                )
+            }
         )
         context.save(mediaUnit)
         imageUrls

@@ -159,7 +159,8 @@ internal open class DataContext(
         return stream(QMediaUnit.mediaUnit)
             .let { stream ->
                 when (sort) {
-                    MediaUnitSort.LAST_EPISODE_AIRED -> stream.orderByWithBuilder { builder: QueryBuilder<QMediaUnit, MediaUnit, OrderSpecifier<*>> ->
+                    MediaUnitSort.LAST_EPISODE_AIRED -> stream.orderByWithBuilder {
+                            builder: QueryBuilder<QMediaUnit, MediaUnit, OrderSpecifier<*>> ->
                         builder
                             .flatMap { it.children }
                             .flatMap { it.children }
