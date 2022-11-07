@@ -1,8 +1,13 @@
 package dynazzviewer.storage.sqlite
 
-import dynazzviewer.entities.*
+import dynazzviewer.entities.AnimeSeasonFlag
 import dynazzviewer.entities.AnimeSeasonFlagState
+import dynazzviewer.entities.EntityModel
 import dynazzviewer.entities.ExtDatabase
+import dynazzviewer.entities.MediaDatabaseEntry
+import dynazzviewer.entities.MediaUnitTag
+import dynazzviewer.entities.QAnimeSeasonFlag
+import dynazzviewer.entities.QMediaDatabaseEntry
 import dynazzviewer.storage.ReadWriteOperation
 import javax.persistence.EntityTransaction
 

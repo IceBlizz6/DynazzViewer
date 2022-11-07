@@ -6,7 +6,13 @@ import com.querydsl.core.types.Expression
 import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.Path
 import com.querydsl.core.types.Predicate
-import com.querydsl.core.types.dsl.*
+import com.querydsl.core.types.dsl.BooleanExpression
+import com.querydsl.core.types.dsl.DateExpression
+import com.querydsl.core.types.dsl.DatePath
+import com.querydsl.core.types.dsl.EntityPathBase
+import com.querydsl.core.types.dsl.ListPath
+import com.querydsl.core.types.dsl.NumberExpression
+import com.querydsl.core.types.dsl.NumberPath
 import kotlin.reflect.KClass
 
 class EmptyQueryStream<QTEntity : EntityPathBase<TEntity>, TEntity> :

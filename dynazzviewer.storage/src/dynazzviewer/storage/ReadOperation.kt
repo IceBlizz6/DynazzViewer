@@ -1,6 +1,12 @@
 package dynazzviewer.storage
 
-import dynazzviewer.entities.*
+import dynazzviewer.entities.AlternativeTitle
+import dynazzviewer.entities.AnimeSeasonFlagState
+import dynazzviewer.entities.ExtDatabase
+import dynazzviewer.entities.MediaFile
+import dynazzviewer.entities.MediaPart
+import dynazzviewer.entities.MediaPartCollection
+import dynazzviewer.entities.MediaUnit
 import java.io.Closeable
 
 interface ReadOperation : Closeable {

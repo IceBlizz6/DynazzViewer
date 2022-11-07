@@ -1,6 +1,8 @@
 package dynazzviewer.storage.sqlite
 
-import dynazzviewer.entities.*
+import dynazzviewer.entities.QAnimeSeasonFlag
+import dynazzviewer.entities.QMediaFile
+import dynazzviewer.entities.QMediaUnit
 import dynazzviewer.storage.JsonDumper
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

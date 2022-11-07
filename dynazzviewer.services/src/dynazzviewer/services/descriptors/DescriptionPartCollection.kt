@@ -1,6 +1,10 @@
 package dynazzviewer.services.descriptors
 
-import dynazzviewer.entities.*
+import dynazzviewer.entities.AlternativeTitle
+import dynazzviewer.entities.ExtDatabase
+import dynazzviewer.entities.MediaPartCollection
+import dynazzviewer.entities.MediaUnit
+import dynazzviewer.entities.UniqueKey
 import dynazzviewer.services.KeyMatcher
 import dynazzviewer.storage.ReadWriteOperation
 

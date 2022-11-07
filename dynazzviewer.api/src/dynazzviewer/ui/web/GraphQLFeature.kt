@@ -3,8 +3,9 @@ package dynazzviewer.ui.web
 import com.apurebase.kgraphql.GraphQL
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import dynazzviewer.storage.Storage
-import io.ktor.server.application.*
-import io.ktor.util.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.Plugin
+import io.ktor.util.AttributeKey
 
 class GraphQLFeature(
     private val connection: Storage,
