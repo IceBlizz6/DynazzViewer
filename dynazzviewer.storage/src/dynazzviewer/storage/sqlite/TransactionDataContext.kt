@@ -9,7 +9,7 @@ import dynazzviewer.entities.MediaUnitTag
 import dynazzviewer.entities.QAnimeSeasonFlag
 import dynazzviewer.entities.QMediaDatabaseEntry
 import dynazzviewer.storage.ReadWriteOperation
-import javax.persistence.EntityTransaction
+import jakarta.persistence.EntityTransaction
 
 internal class TransactionDataContext(
     storage: SqlLiteStorage

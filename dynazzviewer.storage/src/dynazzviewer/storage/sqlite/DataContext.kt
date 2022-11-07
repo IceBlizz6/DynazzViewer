@@ -24,8 +24,8 @@ import dynazzviewer.storage.ReadOperation
 import dynazzviewer.storage.SortOrder
 import dynazzviewer.storage.query.QueryBuilder
 import dynazzviewer.storage.query.QueryStream
+import jakarta.persistence.EntityManager
 import java.io.Closeable
-import javax.persistence.EntityManager
 
 internal open class DataContext(
     private val storage: SqlLiteStorage
@@ -173,7 +173,7 @@ internal open class DataContext(
             .let { stream ->
                 when (sort) {
                     MediaUnitSort.LAST_EPISODE_AIRED -> stream.orderByWithBuilder {
-                            builder: QueryBuilder<QMediaUnit, MediaUnit, OrderSpecifier<*>> ->
+                        builder: QueryBuilder<QMediaUnit, MediaUnit, OrderSpecifier<*>> ->
                         builder
                             .flatMap { it.children }
                             .flatMap { it.children }

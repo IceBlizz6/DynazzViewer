@@ -17,7 +17,7 @@ import com.querydsl.core.types.dsl.ListPath
 import com.querydsl.core.types.dsl.NumberExpression
 import com.querydsl.core.types.dsl.NumberPath
 import com.querydsl.jpa.impl.JPAQuery
-import javax.persistence.EntityManager
+import jakarta.persistence.EntityManager
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.javaType
 

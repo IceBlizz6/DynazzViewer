@@ -17,11 +17,11 @@ class MediaListGraph(
         builder.apply {
             query("listMediaUnits") {
                 resolver {
-                        context: Context,
-                        skip: Int,
-                        take: Int,
-                        sort: MediaUnitSort,
-                        order: SortOrder ->
+                    context: Context,
+                    skip: Int,
+                    take: Int,
+                    sort: MediaUnitSort,
+                    order: SortOrder ->
                     context.read().mediaUnits(skip, take, sort, order)
                 }
             }

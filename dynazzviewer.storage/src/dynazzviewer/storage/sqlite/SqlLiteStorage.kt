@@ -7,6 +7,8 @@ import dynazzviewer.storage.Storage
 import dynazzviewer.storage.StorageMode
 import dynazzviewer.storage.query.JpaQueryStream
 import dynazzviewer.storage.query.QueryStream
+import jakarta.persistence.EntityManager
+import jakarta.persistence.EntityManagerFactory
 import org.hibernate.cfg.AvailableSettings.DIALECT
 import org.hibernate.cfg.AvailableSettings.GENERATE_STATISTICS
 import org.hibernate.cfg.AvailableSettings.JPA_JDBC_DRIVER
@@ -20,8 +22,6 @@ import org.hibernate.cfg.AvailableSettings.USE_SECOND_LEVEL_CACHE
 import org.hibernate.cfg.AvailableSettings.USE_STRUCTURED_CACHE
 import org.hibernate.jpa.HibernatePersistenceProvider
 import java.io.File
-import javax.persistence.EntityManager
-import javax.persistence.EntityManagerFactory
 
 class SqlLiteStorage(
     storageMode: StorageMode
@@ -38,7 +38,7 @@ class SqlLiteStorage(
         map[JPA_JDBC_DRIVER] = "org.sqlite.JDBC"
         map[JPA_JDBC_URL] = CONNECTION_PREFIX + storageMode.path
         map["hibernate.hbm2ddl.auto"] = storageMode.initOperation.opName
-        map[DIALECT] = "org.sqlite.hibernate.dialect.SQLiteDialect"
+        map[DIALECT] = "org.hibernate.community.dialect.SQLiteDialect"
         map[SHOW_SQL] = false
         map[QUERY_STARTUP_CHECKING] = false
         map[GENERATE_STATISTICS] = false
