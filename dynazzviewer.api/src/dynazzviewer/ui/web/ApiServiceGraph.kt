@@ -1,75 +1,78 @@
 package dynazzviewer.ui.web
 
+import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import dynazzviewer.controllers.AnimeSeasonController
 import dynazzviewer.controllers.ServiceDescriptorController
 import dynazzviewer.entities.AnimeSeasonFlagState
 import dynazzviewer.entities.ExtDatabase
-import dynazzviewer.services.descriptors.DescriptionUnit
 import dynazzviewer.services.descriptors.ResultHeader
 import dynazzviewer.services.descriptors.jikan.MalYearSeason
 import dynazzviewer.storage.Storage
-import io.leangen.graphql.annotations.GraphQLMutation
-import io.leangen.graphql.annotations.GraphQLQuery
 
 class ApiServiceGraph(
-    val service: ServiceDescriptorController,
-    val storage: Storage,
-    val controller: AnimeSeasonController
+    builder: SchemaBuilder,
+    private val service: ServiceDescriptorController,
+    private val storage: Storage,
+    private val controller: AnimeSeasonController
 ) {
-    @GraphQLQuery
-    fun externalMediaSearch(db: ExtDatabase, name: String): List<MediaSearchResultItem> {
-        val result: List<ResultHeader> = service.queryDescriptors(db, name)
-        return storage.read { context ->
-            val storedState = context.mediaUnitExist(result)
-            result.map {
-                MediaSearchResultItem(
-                    name = it.name,
-                    saved = storedState[it]!!,
-                    extDb = it.extDb,
-                    extDbCode = it.extDbCode,
-                    imageUrl = it.imageUrl
-                )
+    init {
+        builder.apply {
+            query("externalMediaSearch") {
+                resolver { db: ExtDatabase, name: String ->
+                    val result: List<ResultHeader> = service.queryDescriptors(db, name)
+                    storage.read { context ->
+                        val storedState = context.mediaUnitExist(result)
+                        result.map {
+                            MediaSearchResultItem(
+                                name = it.name,
+                                saved = storedState[it]!!,
+                                extDb = it.extDb,
+                                extDbCode = it.extDbCode,
+                                imageUrl = it.imageUrl
+                            )
+                        }
+                    }
+                }
+            }
+            query("externalMediaLookup") {
+                resolver { db: ExtDatabase, code: String ->
+                    service.queryDescriptor(db, code)
+                }
+            }
+            mutation("externalMediaAdd") {
+                resolver { db: ExtDatabase, code: String ->
+                    val description = service.queryDescriptor(db, code)
+                    if (description == null) {
+                        false
+                    } else {
+                        service.add(description)
+                        true
+                    }
+                }
+            }
+            query("animeSeasonList") {
+                resolver<List<AnimeSeasonController.MalSeasonIdentifier>> {
+                    controller.list()
+                }
+            }
+            query("animeSeason") {
+                resolver { year: Int, season: MalYearSeason ->
+                    controller.load(year, season)
+                }
+            }
+            mutation("animeSeasonAdd") {
+                resolver { year: Int, season: MalYearSeason ->
+                    controller.addAnimeSeason(year, season)
+                    true
+                }
+            }
+            mutation("animeSeasonMark") {
+                resolver { malId: Int, flag: AnimeSeasonFlagState ->
+                    controller.markSeries(malId, flag)
+                    true
+                }
             }
         }
-    }
-
-    @GraphQLQuery
-    fun externalMediaLookup(db: ExtDatabase, code: String): DescriptionUnit? {
-        return service.queryDescriptor(db, code)
-    }
-
-    @GraphQLMutation
-    fun externalMediaAdd(db: ExtDatabase, code: String): Boolean {
-        val description = service.queryDescriptor(db, code)
-        if (description == null) {
-            return false
-        } else {
-            service.add(description)
-            return true
-        }
-    }
-
-    @GraphQLQuery
-    fun animeSeasonList(): List<AnimeSeasonController.MalSeasonIdentifier> {
-        return controller.list()
-    }
-
-    @GraphQLQuery
-    fun animeSeason(
-        year: Int,
-        season: MalYearSeason
-    ): List<AnimeSeasonController.AnimeSeasonSeries> {
-        return controller.load(year, season)
-    }
-
-    @GraphQLMutation
-    fun animeSeasonAdd(year: Int, season: MalYearSeason) {
-        return controller.addAnimeSeason(year, season)
-    }
-
-    @GraphQLMutation
-    fun animeSeasonMark(malId: Int, flag: AnimeSeasonFlagState) {
-        controller.markSeries(malId, flag)
     }
 
     class MediaSearchResultItem(
