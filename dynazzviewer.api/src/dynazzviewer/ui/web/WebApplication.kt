@@ -22,9 +22,13 @@ import dynazzviewer.storage.SortOrder
 import dynazzviewer.storage.Storage
 import dynazzviewer.storage.sqlite.SqlLiteStorage
 import dynazzviewer.ui.config.DefaultConfiguration
+import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.engine.embeddedServer
+import io.ktor.server.http.content.singlePageApplication
+import io.ktor.server.http.content.vue
 import io.ktor.server.netty.Netty
+import io.ktor.server.routing.routing
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDate
@@ -40,6 +44,11 @@ class WebApplication {
                 install(plugin) {
                     playground = true
                 }
+				routing {
+					singlePageApplication {
+						vue("static")
+					}
+				}
             }
             server.start(wait = true)
         }
