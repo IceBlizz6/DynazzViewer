@@ -16,8 +16,8 @@
     </modules>
 
     <properties>
-        <kotlin.version>1.7.10</kotlin.version>
-        <kotlin-coroutines.version>1.6.3</kotlin-coroutines.version>
+        <kotlin.version>1.7.20</kotlin.version>
+        <kotlin-coroutines.version>1.6.4</kotlin-coroutines.version>
         <kotlin-serialization.version>1.4.1</kotlin-serialization.version>
         <ktlint.version>1.14.0</ktlint.version>
         <querydsl.version>5.0.0</querydsl.version>
