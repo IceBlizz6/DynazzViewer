@@ -39,9 +39,9 @@ class WebApplication {
         @JvmStatic
         fun main(args: Array<String>) {
             System.setProperty("java.awt.headless", "false")
-            val plugin = buildPlugin()
+            val graphQL = buildPlugin()
             val server = embeddedServer(Netty, 7111) {
-                install(plugin) {
+                install(graphQL) {
                     playground = true
                 }
 				routing {
