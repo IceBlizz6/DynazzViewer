@@ -36,7 +36,7 @@ class WebApplication {
         fun main(args: Array<String>) {
             System.setProperty("java.awt.headless", "false")
             val plugin = buildPlugin()
-            val server = embeddedServer(Netty, 8080) {
+            val server = embeddedServer(Netty, 7111) {
                 install(plugin) {
                     playground = true
                 }

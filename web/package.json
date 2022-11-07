@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vite",
     "build": "vite build",
-    "generate": "zeus http://localhost:8080/graphql src",
+    "generate": "zeus http://localhost:7111/graphql src",
     "lint:ts": "eslint src/*.ts src/*.vue src/**/*.ts src/**/*.vue --fix",
     "lint:css": "stylelint src/*.vue src/**/*.vue --fix",
     "lint:vue": "npx vue-tsc --noEmit",
